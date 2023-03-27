@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.9.5)
+cmake_minimum_required(VERSION 3.8)
 project(rplidar_ros)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD 14)
 endif()
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -pedantic)
@@ -26,6 +26,11 @@ set(req_deps
 
 find_package(ament_cmake_auto REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(builtin_interfaces REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 ament_auto_find_build_dependencies(REQUIRED ${req_deps})
 
@@ -34,6 +39,7 @@ include_directories(
   ${RPLIDAR_SDK_PATH}/src
   include
 )
+
 
 # build composition node
 add_library(rplidar_composition_node SHARED
@@ -64,6 +70,10 @@ install(
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY launch rviz sdk
+  DESTINATION share/${PROJECT_NAME}/
 )
 
 # TODO(hallen): port this

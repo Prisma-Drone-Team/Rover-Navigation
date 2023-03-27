@@ -168,6 +168,7 @@ install(FILES include/TimeoutSerial.h include/diffdrive_roscore.h include/robocl
 DESTINATION lib/${PROJECT_NAME}
 )
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
