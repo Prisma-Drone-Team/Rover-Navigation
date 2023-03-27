@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop
+FROM ros:humble
 
 #Uncomment the following line if you get the "release file is not valid yet" error during apt-get
 #	(solution from: https://stackoverflow.com/questions/63526272/release-file-is-not-valid-yet-docker)
@@ -14,6 +14,7 @@ RUN apt install ros-humble-rviz2 -y
 RUN apt install ros-humble-rqt* -y
 RUN apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
+RUN apt install ros-humble-slam-toolbox -y
 RUN apt install ros-humble-turtlebot3-gazebo -y
 RUN apt install minicom -y
 RUN apt install screen -y
@@ -31,6 +32,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV DISPLAY=:0
 ENV HOME /home/user
 ENV ROS_DISTRO=humble
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 #Add non root user using UID and GID passed as argument
 ARG USER_ID

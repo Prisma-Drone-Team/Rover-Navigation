@@ -20,7 +20,7 @@ def generate_launch_description():
         )
     )
 
-    "rover_description_pkg/urdf/rover.xacro"
+
 #    declared_arguments.append(
 #        DeclareLaunchArgument(
 #            "rviz_config_file",
@@ -61,7 +61,7 @@ def generate_launch_description():
             " ",
             rover_description,
             " ",
-            "frame_prefix:=",
+            "frame_prefix:=",  
             frame_prefix,
         ]
     )
