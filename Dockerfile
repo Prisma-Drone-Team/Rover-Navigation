@@ -4,16 +4,25 @@ FROM osrf/ros:humble-desktop
 #	(solution from: https://stackoverflow.com/questions/63526272/release-file-is-not-valid-yet-docker)
 #RUN echo "Acquire::Check-Valid-Until \"false\";\nAcquire::Check-Date \"false\";" | cat > /etc/apt/apt.conf.d/10no--check-valid-until
 
+RUN echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
 #Install essential
 RUN apt-get update && apt-get install -y
 
 ##You may add additional apt-get here
+RUN apt-get install dialog apt-utils -y
+RUN apt install ros-humble-rviz2 -y
+RUN apt install ros-humble-rqt* -y
 RUN apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
 RUN apt install ros-humble-turtlebot3-gazebo -y
 RUN apt install minicom -y
 RUN apt install screen -y
 RUN apt install ros-humble-xacro -y
+RUN apt install ros-humble-librealsense2* -y
+RUN apt install ros-humble-realsense2-* -y
+RUN apt install ros-humble-rmw-cyclonedds-cpp -y
+RUN apt install ros-humble-joint-state-publisher-gui -y
+
 
 
 
