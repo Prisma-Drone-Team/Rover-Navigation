@@ -37,18 +37,23 @@ namespace roboclaw {
         std::string serial_port;
         int baudrate;
         int num_roboclaws;
- 
-        Node::declare_parameter<std::string>("serial_port","/dev/ttyACM1");
-        Node::declare_parameter<int>("baud_rate", 115200);
-        Node::declare_parameter<int>("roboclaws", 1);
-        if(!(Node::get_parameter("serial_port", serial_port)))
-            throw std::runtime_error("Must specify serial port");
 
+        Node::declare_parameter("serial_port", rclcpp::PARAMETER_STRING);
+        Node::declare_parameter("baudrate", rclcpp::PARAMETER_INTEGER);
+        Node::declare_parameter("roboclaws", rclcpp::PARAMETER_INTEGER);
+ 
+        if(!(Node::get_parameter("serial_port", serial_port)))
+           throw std::runtime_error("Must specify serial port");
+        
         if(!(Node::get_parameter("baudrate", baudrate)))
-            baudrate = (int) driver::DEFAULT_BAUDRATE;
+           baudrate = (int) driver::DEFAULT_BAUDRATE;
+
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n", baudrate);
+
         if(!(Node::get_parameter("roboclaws", num_roboclaws)))
-            num_roboclaws = 1;
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 1.0");
+             num_roboclaws = 1;
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n", num_roboclaws);
+
         roboclaw_mapping = std::map<int, unsigned char>();
 
         // Create address map
@@ -62,9 +67,9 @@ namespace roboclaw {
 
             roboclaw_mapping.insert(std::pair<int, unsigned char>(0, driver::BASE_ADDRESS));
         }
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2.0");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2.0");
         roboclaw = new driver(serial_port, baudrate);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 3.0");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 3.0");
         for (int r = 0; r < roboclaw_mapping.size(); r++){
          RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n",roboclaw_mapping[r]);
             roboclaw->reset_encoders(roboclaw_mapping[r]);

@@ -39,17 +39,18 @@ namespace roboclaw {
 
     diffdrive_roscore::diffdrive_roscore() : Node("diffdrive_node") {
 
-        Node::declare_parameter<bool>("use_runge_kutta",true);
-        Node::declare_parameter<double>("base_width", 0.48);
-        Node::declare_parameter<double>("steps_per_meter", 4100);
-        Node::declare_parameter<bool>("swap_motors", false);
-        Node::declare_parameter<bool>("invert_motor_1", false);
-        Node::declare_parameter<bool>("invert_motor_2", false);
-        Node::declare_parameter<double>("var_pos_x", 0.01);
-        Node::declare_parameter<double>("var_pos_y", 0.01);
-        Node::declare_parameter<double>("var_pos_z", 0.01);
-        Node::declare_parameter<std::string>("odom_tf_name","rover/odom");
-        Node::declare_parameter<std::string>("base_tf_name","rover/base_footprint");
+        Node::declare_parameter("use_runge_kutta",rclcpp::PARAMETER_BOOL);
+        Node::declare_parameter("base_width", rclcpp::PARAMETER_DOUBLE);
+        Node::declare_parameter("steps_per_meter", rclcpp::PARAMETER_DOUBLE);
+        Node::declare_parameter("swap_motors", rclcpp::PARAMETER_BOOL);
+        Node::declare_parameter("invert_motor_1", rclcpp::PARAMETER_BOOL);
+        Node::declare_parameter("invert_motor_2", rclcpp::PARAMETER_BOOL);
+        Node::declare_parameter("var_pos_x", rclcpp::PARAMETER_DOUBLE);
+        Node::declare_parameter("var_pos_y", rclcpp::PARAMETER_DOUBLE);
+        Node::declare_parameter("var_pos_z", rclcpp::PARAMETER_DOUBLE);
+        Node::declare_parameter("odom_tf_name",rclcpp::PARAMETER_STRING);
+        Node::declare_parameter("base_tf_name",rclcpp::PARAMETER_STRING);
+
 
         //odom_pub = nh.advertise<nav_msgs::Odometry>(std::string("odom"), 10);
         odom_pub = create_publisher<nav_msgs::msg::Odometry>("odom", 10);
