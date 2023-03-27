@@ -23,9 +23,11 @@
 
 #ifndef PROJECT_ROBOCLAW_ROSCORE_H
 #define PROJECT_ROBOCLAW_ROSCORE_H
-
+#pragma once
 //#include "ros/ros.h"
 #include "rclcpp/rclcpp.hpp"
+#include <boost/shared_ptr.hpp>
+#include <chrono>
 
 // #include "ros/package.h"
 
@@ -36,32 +38,35 @@
 
 namespace roboclaw {
 
-    class roboclaw_roscore {
+    class roboclaw_roscore : public rclcpp::Node {
     public:
-        roboclaw_roscore(std::shared_ptr<rclcpp::Node>  nh, std::shared_ptr<rclcpp::Node>  nh_private);
+        //rclcpp::executors::MultiThreadedExecutor executor;
+        //roboclaw_roscore(std::shared_ptr<rclcpp::Node>  nh, std::shared_ptr<rclcpp::Node>  nh_private);
+        roboclaw_roscore();
         ~roboclaw_roscore();
 
-        void run();
+        //void run(std::shared_ptr<roboclaw::roboclaw_roscore> rover_node);
+        
 
     private:
+
         driver *roboclaw;
 
         std::map<int, unsigned char> roboclaw_mapping;
 
         //ros::NodeHandle nh;
-        std::shared_ptr<rclcpp::Node> nh;
         //ros::NodeHandle nh_private;
-        std::shared_ptr<rclcpp::Node>  nh_private ;
+        rclcpp::TimerBase::SharedPtr timer_;
 
-        //rclcpp::Publisher encoder_pub;
         rclcpp::Publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>::SharedPtr encoder_pub;
-        //rclcpp::Subscription velocity_sub;
+
         rclcpp::Subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>::SharedPtr velocity_sub;
 
 
         rclcpp::Time last_message;
 
         void velocity_callback(const roboclaw_ros2::msg::RoboclawMotorVelocity &msg);
+        void run_callback();
     };
 
 

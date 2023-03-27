@@ -24,6 +24,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <rclcpp/rclcpp.hpp>
 
 #include "diffdrive_roscore.h"
 #include "geometry_msgs/msg/quaternion.hpp"
@@ -36,37 +37,46 @@
 
 namespace roboclaw {
 
-    diffdrive_roscore::diffdrive_roscore(std::shared_ptr<rclcpp::Node>  nh, std::shared_ptr<rclcpp::Node> nh_private) {
+    diffdrive_roscore::diffdrive_roscore() : Node("diffdrive_node") {
 
-        this->nh = nh;
-        this->nh_private = nh_private;
+        Node::declare_parameter<bool>("use_runge_kutta",true);
+        Node::declare_parameter<double>("base_width", 0.48);
+        Node::declare_parameter<double>("steps_per_meter", 4100);
+        Node::declare_parameter<bool>("swap_motors", false);
+        Node::declare_parameter<bool>("invert_motor_1", false);
+        Node::declare_parameter<bool>("invert_motor_2", false);
+        Node::declare_parameter<double>("var_pos_x", 0.01);
+        Node::declare_parameter<double>("var_pos_y", 0.01);
+        Node::declare_parameter<double>("var_pos_z", 0.01);
+        Node::declare_parameter<std::string>("odom_tf_name","rover/odom");
+        Node::declare_parameter<std::string>("base_tf_name","rover/base_footprint");
 
         //odom_pub = nh.advertise<nav_msgs::Odometry>(std::string("odom"), 10);
-        odom_pub = nh->create_publisher<nav_msgs::msg::Odometry>(std::string("odom"), 10);
+        odom_pub = create_publisher<nav_msgs::msg::Odometry>("odom", 10);
         //motor_pub = nh.advertise<roboclaw::RoboclawMotorVelocity>(std::string("motor_cmd_vel"), 10);
-         motor_pub = nh->create_publisher<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10);
+        motor_pub = create_publisher<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10);
         
-        if(!nh_private->get_parameter("use_runge_kutta", use_runge_kutta)){
+        if(Node::get_parameter("use_runge_kutta", use_runge_kutta)){
             use_runge_kutta = false;
         }
 
         if(use_runge_kutta)
         {
             //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback_runge_kutta, this); //Runge kutta 2 order integration
-            encoder_sub = nh->create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback_runge_kutta, this,std::placeholders::_1));
+            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback_runge_kutta, this,std::placeholders::_1));
             //ROS_INFO("Odometry with Runge-Kutta integration method");
-            RCLCPP_INFO(nh->get_logger(),"Odometry with Runge-Kutta integration method");
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Runge-Kutta integration method");
         }
         else
         {
             //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback, this); //Forward euler integration
-            encoder_sub = nh->create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback, this,std::placeholders::_1));
+            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback, this,std::placeholders::_1));
             //ROS_INFO("Odometry with Forward Euler integration method");
-            RCLCPP_INFO(nh->get_logger(),"Odometry with Forward Euler integration method");
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Forward Euler integration method");
         }
         
         //twist_sub = nh.subscribe(std::msg:string("cmd_vel"), 10, &diffdrive_roscore::twist_callback, this);
-        twist_sub = nh->create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 10,std::bind(&diffdrive_roscore::twist_callback, this,std::placeholders::_1));
+        twist_sub = create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 10,std::bind(&diffdrive_roscore::twist_callback, this,std::placeholders::_1));
         
         last_x = 0.0;
         last_y = 0.0;
@@ -74,33 +84,33 @@ namespace roboclaw {
         last_steps_1 = 0;
         last_steps_2 = 0;
 
-        if(!nh_private->get_parameter("base_width", base_width)){
+        if(!Node::get_parameter("base_width", base_width)){
             throw std::runtime_error("Must specify base_width!");
         }
-        if(!nh_private->get_parameter("steps_per_meter", steps_per_meter)) {
+        if(!Node::get_parameter("steps_per_meter", steps_per_meter)) {
             throw std::runtime_error("Must specify steps_per_meter!");
         }
 
-        if(!nh_private->get_parameter("swap_motors", swap_motors))
+        if(!Node::get_parameter("swap_motors", swap_motors))
             swap_motors = true;
-        if(!nh_private->get_parameter("invert_motor_1", invert_motor_1))
+        if(!Node::get_parameter("invert_motor_1", invert_motor_1))
             invert_motor_1 = false;
-        if(!nh_private->get_parameter("invert_motor_2", invert_motor_2))
+        if(!Node::get_parameter("invert_motor_2", invert_motor_2))
             invert_motor_2 = false;
 
-        if(!nh_private->get_parameter("var_pos_x", var_pos_x)){
+        if(!Node::get_parameter("var_pos_x", var_pos_x)){
             var_pos_x = 0.01;
         }
-        if(!nh_private->get_parameter("var_pos_y", var_pos_y)){
+        if(!Node::get_parameter("var_pos_y", var_pos_y)){
             var_pos_y = 0.01;
         }
-        if(!nh_private->get_parameter("var_theta_z", var_theta_z)){
+        if(!Node::get_parameter("var_theta_z", var_theta_z)){
             var_theta_z = 0.01;
         }
-        if(!nh_private->get_parameter("odom_tf_name", odom_tf_name)){
+        if(!Node::get_parameter("odom_tf_name", odom_tf_name)){
             odom_tf_name = "odom";
         }
-        if(!nh_private->get_parameter("base_tf_name", base_tf_name)){
+        if(!Node::get_parameter("base_tf_name", base_tf_name)){
             base_tf_name = "base_link";
         }
 
@@ -146,9 +156,10 @@ namespace roboclaw {
 
         // static tf::TransformBroadcaster br;
         std::unique_ptr<tf2_ros::TransformBroadcaster> br;
-
+        br = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
         int delta_1 = msg.mot1_enc_steps - last_steps_1;
         int delta_2 = msg.mot2_enc_steps - last_steps_2;
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Motor1 enc: %d\n",delta_1);
 
         last_steps_1 = msg.mot1_enc_steps;
         last_steps_2 = msg.mot2_enc_steps;
@@ -180,6 +191,7 @@ namespace roboclaw {
 
         odom.header.frame_id = odom_tf_name;
         odom.child_frame_id = base_tf_name;
+        
 
         // Time
         //odom.header.stamp = ros::Time::now();
@@ -206,6 +218,7 @@ namespace roboclaw {
         odom.pose.pose.orientation.x = quaternion.x();
         odom.pose.pose.orientation.y = quaternion.y();
         odom.pose.pose.orientation.z = quaternion.z();
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Quaternione settato");
 
         // Pos_x Variance
         odom.pose.covariance[0] = var_pos_x;
@@ -218,6 +231,7 @@ namespace roboclaw {
         tf2::Transform transform;
         transform.setOrigin(tf2::Vector3(last_x, last_y, 0.0));
         transform.setRotation(quaternion);
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Rotazione settata ");
 
         //br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), odom_tf_name, base_tf_name));
         geometry_msgs::msg::TransformStamped transformStamped;
@@ -227,15 +241,17 @@ namespace roboclaw {
         transformStamped.transform.translation.x = transform.getOrigin().getX();
         transformStamped.transform.translation.y = transform.getOrigin().getY();
         transformStamped.transform.translation.z = transform.getOrigin().getZ();
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF lineare settata ");
 
         quaternion.setRPY(0, 0, cur_theta);
         transformStamped.transform.rotation.x = quaternion.x();
         transformStamped.transform.rotation.y = quaternion.y();
         transformStamped.transform.rotation.z = quaternion.z();
         transformStamped.transform.rotation.w = quaternion.w();
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF angolare settata ");
 
         br->sendTransform(transformStamped);
-
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Pulish odom");
         odom_pub->publish(odom);
 
         last_x = cur_x;

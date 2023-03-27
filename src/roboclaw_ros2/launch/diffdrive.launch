@@ -1,6 +1,6 @@
 <launch>
 
-    <include file="$(find-pkg-share roboclaw_ros2)/launch/roboclaw_single.launch"/>
+    <include file="$(find-pkg-share roboclaw_ros2)/launch/roboclaw_single.launch.xml"/>
 
     <node pkg="roboclaw_ros2" exec="diffdrive_node" name="diffdrive" output="screen">
         <param name="~roboclaws" value="1"/>

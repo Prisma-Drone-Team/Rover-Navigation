@@ -155,13 +155,19 @@ add_library(diffdrive_roscore STATIC
 add_executable(diffdrive_node
         src/diffdrive_node.cpp
         )
-
+        add_library(TimeoutSerial STATIC
+        src/TimeoutSerial.cpp
+        )     
 
 install(TARGETS
 roboclaw_node
 diffdrive_node
 DESTINATION lib/${PROJECT_NAME}
 )
+install(FILES include/TimeoutSerial.h include/diffdrive_roscore.h include/roboclaw_driver.h include/roboclaw_roscore.h
+DESTINATION lib/${PROJECT_NAME}
+)
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -189,7 +195,11 @@ ament_target_dependencies(roboclaw_driver
         std_msgs
         nav_msgs
         )
-    
+        target_link_libraries(roboclaw_driver
+        roboclaw_roscore
+        )
+        rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+        target_link_libraries(roboclaw_roscore "${cpp_typesupport_target}")   
 
 ament_target_dependencies(roboclaw_roscore
         rclcpp
@@ -219,11 +229,11 @@ ament_target_dependencies(roboclaw_node
 
 ament_target_dependencies(diffdrive_roscore
         rclcpp
-  std_msgs
-  nav_msgs
-  tf2
-  tf2_ros
-  tf2_geometry_msgs
+        std_msgs
+        nav_msgs
+        tf2
+        tf2_ros
+        tf2_geometry_msgs
         )
         rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
         target_link_libraries(diffdrive_roscore "${cpp_typesupport_target}")  

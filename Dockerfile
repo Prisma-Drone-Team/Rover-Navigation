@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y
 RUN apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
 RUN apt install ros-humble-turtlebot3-gazebo -y
+RUN apt install minicom -y
+RUN apt install screen -y
+
 
 #Environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -25,6 +28,10 @@ RUN addgroup --gid $GROUP_ID user
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID user
 RUN echo "user:user" | chpasswd
 RUN echo "user ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+RUN sudo adduser user dialout
+RUN sudo adduser user video
+
 USER user
 
 #ROS2 workspace creation and compilation

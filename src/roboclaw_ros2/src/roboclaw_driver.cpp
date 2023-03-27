@@ -26,6 +26,7 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/bind.hpp>
 #include <boost/array.hpp>
+#include "rclcpp/rclcpp.hpp"
 
 namespace roboclaw {
 
@@ -78,14 +79,12 @@ namespace roboclaw {
         // Header
         packet[0] = address;
         packet[1] = command;
-
         crc16_reset();
         crc16(&packet[0], 2);
 
         // Data
         if (tx_length > 0 && tx_data != nullptr)
             memcpy(&packet[2], tx_data, tx_length);
-
         // CRC
         if (tx_crc) {
             unsigned int crc = crc16(&packet[2], tx_length);
@@ -95,7 +94,8 @@ namespace roboclaw {
             packet[tx_length + 2 + 1] = (unsigned char) (crc & 0xFF);
 
         }
-
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"address: %d\n",address);
+         std::cout<<"write start "<<(int*)packet[0]<<std::endl;
         serial->write((char*)&packet[0], packet.size());
 
         size_t want_bytes;
@@ -105,9 +105,9 @@ namespace roboclaw {
             want_bytes = rx_length;
 
         std::vector<char> response_vector;
-
+         std::cout<<"read start "<<rx_length<<std::endl;
         response_vector = serial->read(want_bytes);
-
+           std::cout<<"read end "<<std::endl;
         size_t bytes_received = response_vector.size();
 
         unsigned char* response = (unsigned char*) &response_vector[0];
@@ -127,7 +127,7 @@ namespace roboclaw {
             if (crc_calculated != crc_received) {
                 throw roboclaw::crc_exception("Roboclaw CRC mismatch");
             }
-
+        std::cout<<"mem start "<<std::endl;
             memcpy(rx_data, &response[0], bytes_received - 2);
         } else {
             memcpy(rx_data, &response[0], bytes_received);
@@ -203,8 +203,10 @@ namespace roboclaw {
     }
 
     void driver::reset_encoders(unsigned char address) {
+         std::cout<<"reset start "<<std::endl;
         unsigned char rx_buffer[1];
         txrx(address, 20, nullptr, 0, rx_buffer, sizeof(rx_buffer), true, false);
+        std::cout<<"reset end "<<std::endl;
     }
 
     void driver::set_velocity(unsigned char address, std::pair<int, int> speed) {

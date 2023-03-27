@@ -36,17 +36,14 @@
 
 namespace roboclaw {
 
-    class diffdrive_roscore {
+    class diffdrive_roscore : public rclcpp::Node {
     public:
-        diffdrive_roscore(std::shared_ptr<rclcpp::Node>  nh, std::shared_ptr<rclcpp::Node>  nh_private);
+        diffdrive_roscore();
     private:
 
         //ros::NodeHandle nh;
-        std::shared_ptr<rclcpp::Node> nh;
         //ros::NodeHandle nh_private;
-        std::shared_ptr<rclcpp::Node>  nh_private ;
 
-        //rclcpp::Publisher odom_pub;
         rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub;
 
         rclcpp::Publisher<roboclaw_ros2::msg::RoboclawMotorVelocity>::SharedPtr motor_pub;

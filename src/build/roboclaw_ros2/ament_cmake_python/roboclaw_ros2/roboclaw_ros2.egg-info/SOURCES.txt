@@ -1,9 +1,0 @@
-setup.py
-roboclaw_ros2/__init__.py
-roboclaw_ros2.egg-info/PKG-INFO
-roboclaw_ros2.egg-info/SOURCES.txt
-roboclaw_ros2.egg-info/dependency_links.txt
-roboclaw_ros2.egg-info/top_level.txt
-roboclaw_ros2/msg/__init__.py
-roboclaw_ros2/msg/_roboclaw_encoder_steps.py
-roboclaw_ros2/msg/_roboclaw_motor_velocity.py

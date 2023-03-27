@@ -26,25 +26,30 @@
 
 #include "roboclaw_roscore.h"
 
+
+
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv ) ;
-    std::shared_ptr<rclcpp::Node>  nh;
-    std::shared_ptr<rclcpp::Node>  nh_private;
 
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 0");
    // roboclaw::roboclaw_roscore node(nh, nh_private);
    // node.run();
     try {
+    std::shared_ptr<roboclaw::roboclaw_roscore> rover_node = std::make_shared<roboclaw::roboclaw_roscore>();
+ 
     // Codice che potrebbe generare un'eccezione std::runtime_error
-    roboclaw::roboclaw_roscore node(nh, nh_private);
-    node.run();
-} catch (const std::runtime_error& e) {
-    // Gestione dell'eccezione
-    std::cerr << "Errore durante l'esecuzione del programma: " << e.what() << std::endl;
-    // Altre operazioni di recupero o terminazione del programma
-    return EXIT_FAILURE; // Ritorna un codice di uscita che indica un fallimento
-}
+    //node.executor.add_node(rover_node);
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 1");
+    //rover_node->run(rover_node);
+    rclcpp::spin(rover_node);
 
-
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2");
+    } catch (const std::runtime_error& e) {
+        // Gestione dell'eccezione
+        std::cerr << "Errore durante l'esecuzione del programma: " << e.what() << std::endl;
+        // Altre operazioni di recupero o terminazione del programma
+        return EXIT_FAILURE; // Ritorna un codice di uscita che indica un fallimento
+    }
     return 0;
 }
 

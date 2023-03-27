@@ -27,6 +27,7 @@
 #include <string>
 #include <map>
 #include <exception>
+#include <iostream>
 
 #include <boost/thread/mutex.hpp>
 #include "TimeoutSerial.h"

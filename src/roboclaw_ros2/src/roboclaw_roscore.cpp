@@ -29,26 +29,26 @@
 #include <iostream>
 
 namespace roboclaw {
+    using namespace std::chrono_literals;
 
-    roboclaw_roscore::roboclaw_roscore(std::shared_ptr<rclcpp::Node> nh, std::shared_ptr<rclcpp::Node>  nh_private) {
-    if (!nh || !nh_private) {
-        throw std::invalid_argument("Invalid node pointers");
-    }
+   // roboclaw_roscore::roboclaw_roscore(std::shared_ptr<rclcpp::Node> nh, std::shared_ptr<rclcpp::Node>  nh_private) {
+    roboclaw_roscore::roboclaw_roscore() :Node("roboclaw_node") {
+
         std::string serial_port;
         int baudrate;
         int num_roboclaws;
-
-        this->nh = nh;
-        this->nh_private = nh_private;
-
-        if(!nh_private->get_parameter("serial_port", serial_port))
+ 
+        Node::declare_parameter<std::string>("serial_port","/dev/ttyACM1");
+        Node::declare_parameter<int>("baud_rate", 115200);
+        Node::declare_parameter<int>("roboclaws", 1);
+        if(!(Node::get_parameter("serial_port", serial_port)))
             throw std::runtime_error("Must specify serial port");
 
-        if(!nh_private->get_parameter("baudrate", baudrate))
+        if(!(Node::get_parameter("baudrate", baudrate)))
             baudrate = (int) driver::DEFAULT_BAUDRATE;
-        if(!nh_private->get_parameter("roboclaws", num_roboclaws))
+        if(!(Node::get_parameter("roboclaws", num_roboclaws)))
             num_roboclaws = 1;
-
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 1.0");
         roboclaw_mapping = std::map<int, unsigned char>();
 
         // Create address map
@@ -62,17 +62,21 @@ namespace roboclaw {
 
             roboclaw_mapping.insert(std::pair<int, unsigned char>(0, driver::BASE_ADDRESS));
         }
-
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2.0");
         roboclaw = new driver(serial_port, baudrate);
-
-        for (int r = 0; r < roboclaw_mapping.size(); r++)
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 3.0");
+        for (int r = 0; r < roboclaw_mapping.size(); r++){
+         RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n",roboclaw_mapping[r]);
             roboclaw->reset_encoders(roboclaw_mapping[r]);
-
+        }
+        timer_= timer_ = this->create_wall_timer(100ms, std::bind(&roboclaw_roscore::run_callback, this));
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 4.0");
         //encoder_pub = nh.advertise<roboclaw::RoboclawEncoderSteps>(std::string("motor_enc"), 10);
-        auto encoder_pub = nh->create_publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>(std::string("motor_enc"), 10);
+        encoder_pub = create_publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10);
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 5.0");
         //velocity_sub = nh.subscribe(std::string("motor_cmd_vel"), 10, &roboclaw_roscore::velocity_callback, this);
-        velocity_sub = nh->create_subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10,std::bind(&roboclaw_roscore::velocity_callback, this,std::placeholders::_1));
-
+        velocity_sub = Node::create_subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10,std::bind(&roboclaw_roscore::velocity_callback, this,std::placeholders::_1));
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 6.0");
     }
 
     roboclaw_roscore::~roboclaw_roscore() {
@@ -82,43 +86,86 @@ namespace roboclaw {
 
     void roboclaw_roscore::velocity_callback(const roboclaw_ros2::msg::RoboclawMotorVelocity &msg) {
        // last_message = ros::Time.now();
+       RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock start");
         rclcpp::Clock steady_clock = rclcpp::Clock(RCL_STEADY_TIME);
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock running ");
         last_message = steady_clock.now();
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock end ");
 
         try {
             roboclaw->set_velocity(roboclaw_mapping[msg.index], std::pair<int, int>(msg.mot1_vel_sps, msg.mot2_vel_sps));
         } catch(roboclaw::crc_exception &e){
-            RCLCPP_ERROR(nh->get_logger(),"RoboClaw CRC error during set velocity!");
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw CRC error during set velocity!");
         } catch(timeout_exception &e){
-            RCLCPP_ERROR(nh->get_logger(),"RoboClaw timout during set velocity!");
+            RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw timout during set velocity!");
         }
 
     }
 
-    void roboclaw_roscore::run() {
+    /*void roboclaw_roscore::run(std::shared_ptr<roboclaw::roboclaw_roscore> rover_node ) {
 
         //last_message = ros::Time.now();
         rclcpp::Clock steady_clock = rclcpp::Clock(RCL_STEADY_TIME);
         last_message = steady_clock.now();
-
         rclcpp::Rate update_rate(10);
-
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Inizio ciclo");
         while (rclcpp::ok()) {
-
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"sto nel ciclo");
             //ros::spinOnce();
-            rclcpp::spin_some(nh);
+            //rclcpp::spin(rover_node);
+            //executor.spin();
             update_rate.sleep();
 
             // Publish encoders
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Publish encoders");
             for (int r = 0; r < roboclaw_mapping.size(); r++) {
                 std::pair<int, int> encs = std::pair<int, int>(0, 0);
                 try {
                     encs = roboclaw->get_encoders(roboclaw_mapping[r]);
                 } catch(roboclaw::crc_exception &e){
-                    RCLCPP_ERROR(nh->get_logger(),"RoboClaw CRC error during getting encoders!");
+                    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw CRC error during getting encoders!");
                     continue;
                 } catch(timeout_exception &e){
-                    RCLCPP_ERROR(nh->get_logger(),"RoboClaw timout during getting encoders!");
+                    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw timout during getting encoders!");
+                    continue;
+                }
+
+                //RoboclawEncoderSteps enc_steps;
+                roboclaw_ros2::msg::RoboclawEncoderSteps enc_steps;
+                enc_steps.index = r;
+                enc_steps.mot1_enc_steps = enc  : Node("turtle_tf2_frame_publisher")s.first;
+                enc_steps.mot2_enc_steps = encs.second;
+                encoder_pub->publish(enc_steps);
+
+            }
+
+            if (steady_clock.now() - last_message > rclcpp::Duration(std::chrono::seconds(5))) {
+                for (int r = 0; r < roboclaw_mapping.size(); r++) {
+                    try {
+                        roboclaw->set_duty(roboclaw_mapping[r], std::pair<int, int>(0, 0));
+                    } catch(roboclaw::crc_exception &e){
+                        RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw CRC error setting duty cyrcle!");
+                    } catch(timeout_exception &e) {
+                        RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw timout during setting duty cycle!");
+                    }
+                }
+            }
+
+        }
+    }*/
+    void roboclaw_roscore::run_callback() {
+
+            // Publish encoders
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Publish encoders");
+            for (int r = 0; r < roboclaw_mapping.size(); r++) {
+                std::pair<int, int> encs = std::pair<int, int>(0, 0);
+                try {
+                    encs = roboclaw->get_encoders(roboclaw_mapping[r]);
+                } catch(roboclaw::crc_exception &e){
+                    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw CRC error during getting encoders!");
+                    continue;
+                } catch(timeout_exception &e){
+                    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),"RoboClaw timout during getting encoders!");
                     continue;
                 }
 
@@ -131,19 +178,7 @@ namespace roboclaw {
 
             }
 
-            if (steady_clock.now() - last_message > rclcpp::Duration(std::chrono::seconds(5))) {
-                for (int r = 0; r < roboclaw_mapping.size(); r++) {
-                    try {
-                        roboclaw->set_duty(roboclaw_mapping[r], std::pair<int, int>(0, 0));
-                    } catch(roboclaw::crc_exception &e){
-                        RCLCPP_ERROR(nh->get_logger(),"RoboClaw CRC error setting duty cyrcle!");
-                    } catch(timeout_exception &e) {
-                        RCLCPP_ERROR(nh->get_logger(),"RoboClaw timout during setting duty cycle!");
-                    }
-                }
-            }
-
-        }
+        
     }
 
 }

@@ -1,7 +1,0 @@
-{
-  "package_name": "roboclaw_ros2",
-  "non_idl_tuples": [
-    "/home/user/ros2_ws/src/roboclaw_ros2:msg/RoboclawMotorVelocity.msg",
-    "/home/user/ros2_ws/src/roboclaw_ros2:msg/RoboclawEncoderSteps.msg"
-  ]
-}

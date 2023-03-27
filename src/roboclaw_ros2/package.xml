@@ -71,6 +71,7 @@
   <exec_depend>tf2</exec_depend>
   <exec_depend>message_generation</exec_depend>
   <exec_depend>message_runtime</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
 
 
   <member_of_group>rosidl_interface_packages</member_of_group> 

@@ -98,7 +98,7 @@ void TimeoutSerial::read(char *data, size_t size)
         size-=toRead;
         if(size==0) return;//If read data was enough, just return
     }
-
+        std::cout<<"qui 1 "<<std::endl;
     setupParameters=ReadSetupParameters(data,size);
     performReadSetup(setupParameters);
 
@@ -115,6 +115,7 @@ void TimeoutSerial::read(char *data, size_t size)
     for(;;)
     {
         io.run_one();
+        std::cout<<result<<std::endl;
         switch(result)
         {
             case resultSuccess:
@@ -134,7 +135,7 @@ void TimeoutSerial::read(char *data, size_t size)
 }
 
 std::vector<char> TimeoutSerial::read(size_t size)
-{
+{      std::cout<<"qui 2 "<<std::endl;
     vector<char> result(size,'\0');//Allocate a vector with the desired size
     read(&result[0],size);//Fill it with values
     return result;

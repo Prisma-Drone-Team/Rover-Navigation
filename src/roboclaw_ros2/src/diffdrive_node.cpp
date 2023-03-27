@@ -28,10 +28,10 @@
 
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
-    std::shared_ptr<rclcpp::Node>  nh, nh_private;
+    std::shared_ptr<roboclaw::diffdrive_roscore> nh = std::make_shared<roboclaw::diffdrive_roscore>();
 
-    roboclaw::diffdrive_roscore node(nh, nh_private);
-    rclcpp::spin_some(nh);
+    //roboclaw::diffdrive_roscore node;
+    rclcpp::spin(nh);
 
 
     return 0;
