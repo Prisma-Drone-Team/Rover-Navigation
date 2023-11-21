@@ -23,12 +23,12 @@ RUN apt install ros-humble-librealsense2* -y
 RUN apt install ros-humble-realsense2-* -y
 RUN apt install ros-humble-rmw-cyclonedds-cpp -y
 RUN apt install ros-humble-joint-state-publisher-gui -y
-RUN apt install ros-humble-librealsense2* -y
-RUN apt install ros-humble-realsense2-* -y
 RUN apt install ros-humble-rtabmap -y
 RUN apt install ros-humble-rtabmap-ros -y
 RUN apt install ros-humble-rviz-visual-tools -y
 RUN apt install ros-humble-imu-tools -y
+RUN apt install ros-humble-octomap-rviz-plugins -y
+
 
 
 

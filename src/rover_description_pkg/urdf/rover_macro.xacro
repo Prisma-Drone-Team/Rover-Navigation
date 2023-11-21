@@ -80,7 +80,7 @@
 
         <xacro:sensor_d435i parent="${camera_base_frame}" use_nominal_extrinsics="true">
             <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:sensor_d435i>
+        </xacro:sensor_d435i>      
 
         <joint name="rover_camera_joint" type="fixed">
             <origin xyz="${chassis_length/2 - 0.02} 0.0 ${chassis_height - 0.01}" rpy="0.0 0.0 0.0"/>
@@ -92,14 +92,6 @@
 
         <!-- IMU Integration -->
 
-        <joint name="camera_imu_joint" type="fixed">
-            <origin xyz="0 0 0" rpy="0 0 0"/>        
-            <parent link="${camera_base_frame}"/>
-            <child link="camera_imu_frame"/>
-        </joint>          
-
-        <link name="camera_imu_frame"/>
-        
     </xacro:macro>
 
 </robot>

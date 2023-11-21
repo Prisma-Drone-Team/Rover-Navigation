@@ -54,24 +54,17 @@
         <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:sensor_d435i>
 
+
     <joint name="rover_camera_joint" type="fixed">
         <origin xyz="${chassis_length/2 - 0.02} 0.0 ${chassis_height - 0.01}" rpy="0.0 0.0 0.0"/>
         <parent link="base_link"/>
         <child link="${camera_base_frame}"/>
     </joint>
 
-    <link name="${camera_base_frame}">
-        
+    <link name="${camera_base_frame}">        
     </link>    
 
-    <!-- IMU Integration -->
-   <joint name="camera_imu_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0"/>        
-        <parent link="${camera_base_frame}"/>
-        <child link="camera_imu_frame"/>
-    </joint>          
-
-    <link name="camera_imu_frame"/>   
+    <!-- IMU Integration --> 
 
     <gazebo reference="camera_depth_frame">
         <sensor name="${camera_base_frame}" type="depth">
@@ -114,38 +107,6 @@
             </plugin>
         </sensor>
     </gazebo>
-
-    <gazebo reference="camera_imu_frame">
-            <sensor name="camera_imu_sensor" type="imu">
-                <always_on>true</always_on>
-                <update_rate>100.0</update_rate>
-                <imu>
-                    <angular_velocity>
-                        <noise>
-                            <type>gaussian</type>
-                            <mean>0.0</mean>
-                            <stddev>0.02</stddev>
-                        </noise>
-                    </angular_velocity>
-                    <linear_acceleration>
-                        <noise>
-                            <type>gaussian</type>
-                            <mean>0.0</mean>
-                            <stddev>0.02</stddev>
-                        </noise>
-                    </linear_acceleration>
-                </imu>
-                <plugin name="camera_imu_sensor" filename="libgazebo_ros_imu.so">
-                    <ros>
-                        <namespace>/</namespace>
-                        <remapping>imu/data_raw:=/camera/imu</remapping>
-                    </ros>
-                    <update_rate>100.0</update_rate>
-                    <topicName>imu</topicName>
-                    <frameName>camera_imu_optical_frame</frameName>
-                </plugin>
-            </sensor>
-        </gazebo>
 </xacro:macro>
 
 
