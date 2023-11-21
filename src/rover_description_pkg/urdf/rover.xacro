@@ -3,8 +3,8 @@
 
 <xacro:include filename="$(find rover_description_pkg)/urdf/rover_macro.xacro"/>
 <xacro:include filename="$(find rover_description_pkg)/urdf/utilities.xacro"/>
-<xacro:include filename="$(find rover_description_pkg)/urdf/rover_gazebo.xacro"/>
-<xacro:include filename="$(find rover_turret_cameras)/urdf/rover_turret_macro.xacro"/>
+<!-- <xacro:include filename="$(find rover_description_pkg)/urdf/rover_gazebo.xacro"/>
+<xacro:include filename="$(find rover_turret_cameras)/urdf/rover_turret_macro.xacro"/> -->
 
 
 <xacro:arg name="is_sim" default="false"/>
@@ -23,7 +23,7 @@
 
 <xacro:rover_base_frame parent_link="base_footprint"/>
 
-<xacro:rover_turret parent_link="rover_turret_plate"/>
+<!-- <xacro:rover_turret parent_link="rover_turret_plate"/> -->
 
 <!-- if it is in simulation -->
 <xacro:if value="$(arg is_sim)">

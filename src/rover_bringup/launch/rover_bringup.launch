@@ -8,7 +8,14 @@
 
   <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py"/>
   <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py"/>
- 
+
+  <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
+  
+  <!--
+  <include file="$(find-pkg-share rover_bringup)/launch/aruco_pose_estimation.launch.py"/>
+  -->
+
+
 
 <!--
   <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py"/>

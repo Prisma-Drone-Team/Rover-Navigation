@@ -33,6 +33,9 @@ RUN apt install ros-humble-rviz-visual-tools -y
 RUN apt install ros-humble-imu-tools -y
 RUN apt install ros-humble-octomap-rviz-plugins -y
 
+RUN sudo apt install pip -y
+RUN pip3 install opencv-python opencv-contrib-python transforms3d
+RUN apt-get update && apt install ros-humble-tf-transformations -y
 
 
 #Environment variables
@@ -41,6 +44,7 @@ ENV DISPLAY=:0
 ENV HOME=/home/user
 ENV ROS_DISTRO=humble
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV ROS_DOMAIN_ID=77
 
 #Add non root user using UID and GID passed as argument
 ARG USER_ID
@@ -56,7 +60,6 @@ RUN sudo groupadd iio
 RUN sudo adduser user iio
 RUN sudo adduser user plugdev
 
-
 USER user
 
 #ROS2 workspace creation and compilation
@@ -66,11 +69,11 @@ COPY --chown=user ./src ${HOME}/ros2_ws/src
 SHELL ["/bin/bash", "-c"] 
 WORKDIR ${HOME}/ros2_ws/src
 
-# Clone the required repositories first
-RUN git clone https://github.com/unitreerobotics/unilidar_sdk.git
-
-# Optional: Clean up unnecessary files if needed
-RUN rm -rf unilidar_sdk/unitree_lidar_ros/src/unitree_lidar_ros
+#[RC] this is removed as the directory is already here... to be adjusted
+## Clone the required repositories first
+#RUN git clone https://github.com/unitreerobotics/unilidar_sdk.git
+## Optional: Clean up unnecessary files if needed
+#RUN rm -rf unilidar_sdk/unitree_lidar_ros/src/unitree_lidar_ros
 
 # Return to the workspace root
 WORKDIR ${HOME}/ros2_ws

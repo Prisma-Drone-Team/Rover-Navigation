@@ -61,7 +61,7 @@
         <joint name="lidar_joint" type="fixed">
             <parent link="base_footprint"/>
             <child link="${laser_frame}"/>
-            <origin xyz="0.0 0.0 0.23" rpy="0.0 0.0 0 "/> <!-- rpy had a 180 deg rotation on y and 0 on z -->
+            <origin xyz="0.0 0.0 0.23" rpy="0.0 3.14 0 "/> <!-- RP_lidar has a 180 deg rotation on y and 0 on z -->
         </joint>
 
 
@@ -74,7 +74,7 @@
         </link>
         
     </xacro:macro>
-
+<!--
     <xacro:macro name="rover_camera_realsense_d435i" params="camera_base_frame">
         <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
@@ -90,8 +90,8 @@
 
         <link name="${camera_base_frame}"/>  
 
-        <!-- IMU Integration -->
 
     </xacro:macro>
+-->
 
 </robot>

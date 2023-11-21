@@ -22,13 +22,13 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 
 
-configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
+configurable_parameters = [{'name': 'camera_name',                  'default': 'rover_camera', 'description': 'camera unique name'},
                            {'name': 'camera_namespace',             'default': '', 'description': 'namespace for camera'},
                            {'name': 'depth_qos',                    'default': 'SENSOR_DATA', 'description': 'depth_qos'},
-                           {'name': 'color_qos',                    'default': 'SENSOR_DATA', 'description': 'color_qos'},
+                           {'name': 'color_qos',                    'default': 'DEFAULT', 'description': 'color_qos'},
                            {'name': 'gyro_qos',                     'default': 'SENSOR_DATA', 'description': 'depth_qos'},
                            {'name': 'accel_qos',                    'default': 'SENSOR_DATA', 'description': 'color_qos'},
-                           {'name': 'pointcloud.pointcloud_qos',    'default': 'SENSOR_DATA', 'description': 'pointcloud_qos'},
+                           {'name': 'pointcloud.pointcloud_qos',    'default': 'DEFAULT', 'description': 'pointcloud_qos'},
                            {'name': 'serial_no',                    'default': "''", 'description': 'choose device by serial number'},
                            {'name': 'usb_port_id',                  'default': "''", 'description': 'choose device by usb port id'},
                            {'name': 'device_type',                  'default': "''", 'description': 'choose device by type'},
@@ -47,7 +47,7 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'enable_infra',                 'default': 'false', 'description': 'enable infra0 stream'},
                            {'name': 'enable_infra1',                'default': 'false', 'description': 'enable infra1 stream'},
                            {'name': 'enable_infra2',                'default': 'false', 'description': 'enable infra2 stream'},
-                           {'name': 'depth_module.depth_profile',   'default': '0,0,0', 'description': 'depth stream profile'},
+                           {'name': 'depth_module.depth_profile',   'default': '640,480,30', 'description': 'depth stream profile'},
                            {'name': 'depth_module.depth_format',    'default': 'Z16', 'description': 'depth stream format'},
                            {'name': 'depth_module.infra_profile',   'default': '0,0,0', 'description': 'infra streams (0/1/2) profile'},
                            {'name': 'depth_module.infra_format',    'default': 'RGB8', 'description': 'infra0 stream format'},
@@ -77,7 +77,7 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'pointcloud.enable',            'default': 'true', 'description': ''},
                            {'name': 'pointcloud.stream_filter',     'default': '2', 'description': 'texture stream for pointcloud'},
                            {'name': 'pointcloud.stream_index_filter','default': '0', 'description': 'texture stream index for pointcloud'},
-                           {'name': 'pointcloud.ordered_pc',        'default': 'false', 'description': ''},
+                           {'name': 'pointcloud.ordered_pc',        'default': 'true', 'description': ''},
                            {'name': 'pointcloud.allow_no_texture_points', 'default': 'false', 'description': "''"},
                            {'name': 'align_depth.enable',           'default': 'true', 'description': 'enable align depth filter'},
                            {'name': 'colorizer.enable',             'default': 'false', 'description': 'enable colorizer filter'},
@@ -129,7 +129,7 @@ tf_publisher_node = Node(
                 package='tf2_ros',
                 executable='static_transform_publisher',
                 name="footprint_to_rover_camera",
-                arguments=["0.14", "0.0", "0.145", "0.0", "0.0", "0.0", "rover/base_footprint", "camera_link"],
+                arguments=["0.14", "0.0", "0.145", "0.0", "0.0", "0.0", "rover/base_footprint", "rover_camera_link"],
             )
 nodes_to_start = [
         tf_publisher_node,
