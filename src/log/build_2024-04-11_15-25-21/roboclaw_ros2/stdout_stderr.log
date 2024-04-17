@@ -1,0 +1,50 @@
+[  2%] Built target roboclaw_ros2__cpp
+[ 10%] Built target roboclaw_ros2__rosidl_generator_c
+[ 10%] Built target ament_cmake_python_copy_roboclaw_ros2
+[ 16%] Built target roboclaw_driver
+[ 24%] Built target roboclaw_ros2__rosidl_typesupport_introspection_cpp
+[ 32%] Built target roboclaw_ros2__rosidl_typesupport_cpp
+[ 40%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_cpp
+[ 48%] Built target roboclaw_ros2__rosidl_typesupport_c
+[ 56%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c
+[ 64%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c
+[ 66%] [32mBuilding CXX object CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o[0m
+[ 68%] [32mBuilding CXX object CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o[0m
+[ 68%] Built target roboclaw_ros2
+[ 70%] Built target roboclaw_ros2__py
+[ 72%] [32mBuilding C object CMakeFiles/roboclaw_ros2__rosidl_generator_py.dir/rosidl_generator_py/roboclaw_ros2/msg/_roboclaw_motor_velocity_s.c.o[0m
+[ 74%] [32mBuilding C object CMakeFiles/roboclaw_ros2__rosidl_generator_py.dir/rosidl_generator_py/roboclaw_ros2/msg/_roboclaw_encoder_steps_s.c.o[0m
+[ 76%] [32m[1mLinking C shared library rosidl_generator_py/roboclaw_ros2/libroboclaw_ros2__rosidl_generator_py.so[0m
+[ 76%] Built target roboclaw_ros2__rosidl_generator_py
+[ 78%] [32mBuilding C object CMakeFiles/roboclaw_ros2__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/roboclaw_ros2/_roboclaw_ros2_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[ 80%] [32mBuilding C object CMakeFiles/roboclaw_ros2__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/roboclaw_ros2/_roboclaw_ros2_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[ 82%] [32mBuilding C object CMakeFiles/roboclaw_ros2__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/roboclaw_ros2/_roboclaw_ros2_s.ep.rosidl_typesupport_c.c.o[0m
+running egg_info
+writing roboclaw_ros2.egg-info/PKG-INFO
+writing dependency_links to roboclaw_ros2.egg-info/dependency_links.txt
+writing top-level names to roboclaw_ros2.egg-info/top_level.txt
+reading manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+writing manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+[ 82%] Built target ament_cmake_python_build_roboclaw_ros2_egg
+In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/diffdrive_roscore.cpp:28[m[K:
+[01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/diffdrive_roscore.h:32:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/RoboclawEncoderSteps.hpp: No such file or directory
+   32 | #include [01;31m[K"roboclaw_ros2/RoboclawEncoderSteps.hpp"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/diffdrive_roscore.dir/build.make:76: CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:684: CMakeFiles/diffdrive_roscore.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[ 84%] [32m[1mLinking C shared library rosidl_generator_py/roboclaw_ros2/roboclaw_ros2_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[ 84%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c__pyext
+[ 88%] [32m[1mLinking C shared library rosidl_generator_py/roboclaw_ros2/roboclaw_ros2_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[ 88%] [32m[1mLinking C shared library rosidl_generator_py/roboclaw_ros2/roboclaw_ros2_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[ 88%] Built target roboclaw_ros2__rosidl_typesupport_c__pyext
+[ 88%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c__pyext
+In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/roboclaw_roscore.cpp:24[m[K:
+[01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/roboclaw_roscore.h:34:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/RoboclawEncoderSteps.hpp: No such file or directory
+   34 | #include [01;31m[K"roboclaw_ros2/RoboclawEncoderSteps.hpp"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/roboclaw_roscore.dir/build.make:76: CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:628: CMakeFiles/roboclaw_roscore.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

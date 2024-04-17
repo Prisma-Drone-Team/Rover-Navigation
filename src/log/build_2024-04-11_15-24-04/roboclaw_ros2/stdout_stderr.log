@@ -1,0 +1,46 @@
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_generator_c[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_driver[0m
+[  2%] Built target roboclaw_ros2__cpp
+[ 10%] Built target roboclaw_ros2__rosidl_generator_c
+[ 10%] Built target ament_cmake_python_copy_roboclaw_ros2
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_fastrtps_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_c[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_introspection_cpp[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_fastrtps_c[0m
+[35m[1mConsolidate compiler generated dependencies of target roboclaw_ros2__rosidl_typesupport_introspection_c[0m
+[ 18%] Built target roboclaw_ros2__rosidl_typesupport_cpp
+[ 26%] Built target roboclaw_ros2__rosidl_typesupport_c
+[ 34%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c
+[ 42%] Built target roboclaw_ros2__rosidl_typesupport_introspection_cpp
+[ 50%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c
+[ 58%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_cpp
+[ 64%] Built target roboclaw_driver
+[ 66%] [32mBuilding CXX object CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o[0m
+[ 66%] Built target roboclaw_ros2
+[ 68%] [32mBuilding CXX object CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o[0m
+[ 70%] [34m[1mGenerating Python code for ROS interfaces[0m
+running egg_info
+writing roboclaw_ros2.egg-info/PKG-INFO
+writing dependency_links to roboclaw_ros2.egg-info/dependency_links.txt
+writing top-level names to roboclaw_ros2.egg-info/top_level.txt
+reading manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+writing manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+[ 70%] Built target ament_cmake_python_build_roboclaw_ros2_egg
+In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/diffdrive_roscore.cpp:28[m[K:
+[01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/diffdrive_roscore.h:32:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/RoboclawEncoderSteps.hpp: No such file or directory
+   32 | #include [01;31m[K"roboclaw_ros2/RoboclawEncoderSteps.hpp"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/diffdrive_roscore.dir/build.make:76: CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:684: CMakeFiles/diffdrive_roscore.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[ 70%] Built target roboclaw_ros2__py
+In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/roboclaw_roscore.cpp:24[m[K:
+[01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/roboclaw_roscore.h:34:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/RoboclawEncoderSteps.hpp: No such file or directory
+   34 | #include [01;31m[K"roboclaw_ros2/RoboclawEncoderSteps.hpp"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/roboclaw_roscore.dir/build.make:76: CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:628: CMakeFiles/roboclaw_roscore.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

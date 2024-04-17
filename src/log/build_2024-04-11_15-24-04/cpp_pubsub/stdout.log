@@ -1,0 +1,20 @@
+[35m[1mConsolidate compiler generated dependencies of target talker[0m
+[100%] Built target talker
+-- Install configuration: ""
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/lib/cpp_pubsub/talker
+-- Set runtime path of "/home/user/ros2_ws/src/install/cpp_pubsub/lib/cpp_pubsub/talker" to ""
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/package_run_dependencies/cpp_pubsub
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/parent_prefix_path/cpp_pubsub
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/ament_prefix_path.sh
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/ament_prefix_path.dsv
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/path.sh
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/path.dsv
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.bash
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.sh
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.zsh
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.dsv
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/package.dsv
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/packages/cpp_pubsub
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/cmake/cpp_pubsubConfig.cmake
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/cmake/cpp_pubsubConfig-version.cmake
+-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/package.xml

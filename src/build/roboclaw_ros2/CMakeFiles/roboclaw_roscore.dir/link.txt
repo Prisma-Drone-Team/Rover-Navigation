@@ -1,0 +1,2 @@
+/usr/bin/ar qc libroboclaw_roscore.a CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o
+/usr/bin/ranlib libroboclaw_roscore.a

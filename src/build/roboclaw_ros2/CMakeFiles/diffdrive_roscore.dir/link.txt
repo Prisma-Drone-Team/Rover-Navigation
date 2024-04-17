@@ -1,0 +1,2 @@
+/usr/bin/ar qc libdiffdrive_roscore.a CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o
+/usr/bin/ranlib libdiffdrive_roscore.a

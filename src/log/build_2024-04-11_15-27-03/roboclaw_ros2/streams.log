@@ -1,0 +1,43 @@
+[0.071s] Invoking command in '/home/user/ros2_ws/src/build/roboclaw_ros2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/user/ros2_ws/src/build/roboclaw_ros2 -- -j12 -l12
+[0.125s] [  2%] Built target roboclaw_ros2__cpp
+[0.127s] [ 10%] Built target roboclaw_ros2__rosidl_generator_c
+[0.138s] [ 10%] Built target ament_cmake_python_copy_roboclaw_ros2
+[0.155s] [ 16%] Built target roboclaw_driver
+[0.164s] [ 24%] Built target roboclaw_ros2__rosidl_typesupport_cpp
+[0.168s] [ 32%] Built target roboclaw_ros2__rosidl_typesupport_c
+[0.169s] [ 40%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c
+[0.172s] [ 48%] Built target roboclaw_ros2__rosidl_typesupport_introspection_cpp
+[0.174s] [ 56%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_cpp
+[0.181s] [ 64%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c
+[0.192s] [ 66%] [32mBuilding CXX object CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o[0m
+[0.194s] [ 68%] [32mBuilding CXX object CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o[0m
+[0.204s] [ 68%] Built target roboclaw_ros2
+[0.227s] [ 70%] Built target roboclaw_ros2__py
+[0.256s] [ 76%] Built target roboclaw_ros2__rosidl_generator_py
+[0.284s] [ 80%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c__pyext
+[0.287s] [ 84%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c__pyext
+[0.289s] [ 88%] Built target roboclaw_ros2__rosidl_typesupport_c__pyext
+[0.545s] running egg_info
+[0.547s] writing roboclaw_ros2.egg-info/PKG-INFO
+[0.548s] writing dependency_links to roboclaw_ros2.egg-info/dependency_links.txt
+[0.548s] writing top-level names to roboclaw_ros2.egg-info/top_level.txt
+[0.552s] reading manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+[0.552s] writing manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'
+[0.585s] In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/diffdrive_roscore.cpp:28[m[K:
+[0.585s] [01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/diffdrive_roscore.h:32:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/msg/RoboclawEncoderSteps.h: No such file or directory
+[0.585s]    32 | #include [01;31m[K"roboclaw_ros2/msg/RoboclawEncoderSteps.h"[m[K
+[0.585s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.586s] compilation terminated.
+[0.592s] gmake[2]: *** [CMakeFiles/diffdrive_roscore.dir/build.make:76: CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o] Error 1
+[0.593s] gmake[1]: *** [CMakeFiles/Makefile2:684: CMakeFiles/diffdrive_roscore.dir/all] Error 2
+[0.593s] gmake[1]: *** Waiting for unfinished jobs....
+[0.596s] [ 88%] Built target ament_cmake_python_build_roboclaw_ros2_egg
+[1.255s] In file included from [01m[K/home/user/ros2_ws/src/roboclaw_ros2/src/roboclaw_roscore.cpp:24[m[K:
+[1.255s] [01m[K/home/user/ros2_ws/src/roboclaw_ros2/include/roboclaw_roscore.h:34:10:[m[K [01;31m[Kfatal error: [m[Kroboclaw_ros2/msg/RoboclawEncoderSteps.h: No such file or directory
+[1.255s]    34 | #include [01;31m[K"roboclaw_ros2/msg/RoboclawEncoderSteps.h"[m[K
+[1.255s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[1.255s] compilation terminated.
+[1.260s] gmake[2]: *** [CMakeFiles/roboclaw_roscore.dir/build.make:76: CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o] Error 1
+[1.261s] gmake[1]: *** [CMakeFiles/Makefile2:628: CMakeFiles/roboclaw_roscore.dir/all] Error 2
+[1.261s] gmake: *** [Makefile:146: all] Error 2
+[1.263s] Invoked command in '/home/user/ros2_ws/src/build/roboclaw_ros2' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/user/ros2_ws/src/build/roboclaw_ros2 -- -j12 -l12

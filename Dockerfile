@@ -8,7 +8,9 @@ FROM osrf/ros:humble-desktop
 RUN apt-get update && apt-get install -y
 
 ##You may add additional apt-get here
-
+RUN apt install ros-humble-navigation2 -y
+RUN apt install ros-humble-nav2-bringup -y
+RUN apt install ros-humble-turtlebot3-gazebo -y
 
 #Environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -35,6 +37,7 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash; rosdep update; rosdep install -i -
 #Add script source to .bashrc
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash;" >>  ${HOME}/.bashrc
 RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
+
 
 #Clean image
 USER root

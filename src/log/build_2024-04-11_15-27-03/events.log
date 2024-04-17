@@ -1,0 +1,93 @@
+[0.000000] (-) TimerEvent: {}
+[0.000131] (cpp_pubsub) JobQueued: {'identifier': 'cpp_pubsub', 'dependencies': OrderedDict()}
+[0.000227] (roboclaw_ros2) JobQueued: {'identifier': 'roboclaw_ros2', 'dependencies': OrderedDict()}
+[0.000517] (cpp_pubsub) JobStarted: {'identifier': 'cpp_pubsub'}
+[0.082315] (roboclaw_ros2) JobStarted: {'identifier': 'roboclaw_ros2'}
+[0.099543] (-) TimerEvent: {}
+[0.146333] (cpp_pubsub) JobProgress: {'identifier': 'cpp_pubsub', 'progress': 'cmake'}
+[0.147449] (cpp_pubsub) JobProgress: {'identifier': 'cpp_pubsub', 'progress': 'build'}
+[0.147522] (cpp_pubsub) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/user/ros2_ws/src/build/cpp_pubsub', '--', '-j12', '-l12'], 'cwd': '/home/user/ros2_ws/src/build/cpp_pubsub', 'env': OrderedDict([('HOSTNAME', 'stefano-GF63-Thin-9SC'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/user'), ('OLDPWD', '/home/user/ros2_ws/src/roboclaw_ros2'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/user/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':0'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('PWD', '/home/user/ros2_ws/src/build/cpp_pubsub'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble')]), 'shell': False}
+[0.150385] (roboclaw_ros2) JobProgress: {'identifier': 'roboclaw_ros2', 'progress': 'cmake'}
+[0.151837] (roboclaw_ros2) JobProgress: {'identifier': 'roboclaw_ros2', 'progress': 'build'}
+[0.151887] (roboclaw_ros2) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/user/ros2_ws/src/build/roboclaw_ros2', '--', '-j12', '-l12'], 'cwd': '/home/user/ros2_ws/src/build/roboclaw_ros2', 'env': OrderedDict([('HOSTNAME', 'stefano-GF63-Thin-9SC'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/user'), ('OLDPWD', '/home/user/ros2_ws/src/roboclaw_ros2'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/user/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':0'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('PWD', '/home/user/ros2_ws/src/build/roboclaw_ros2'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble')]), 'shell': False}
+[0.199666] (-) TimerEvent: {}
+[0.206337] (cpp_pubsub) StdoutLine: {'line': b'[100%] Built target talker\n'}
+[0.206887] (roboclaw_ros2) StdoutLine: {'line': b'[  2%] Built target roboclaw_ros2__cpp\n'}
+[0.209474] (roboclaw_ros2) StdoutLine: {'line': b'[ 10%] Built target roboclaw_ros2__rosidl_generator_c\n'}
+[0.219591] (roboclaw_ros2) StdoutLine: {'line': b'[ 10%] Built target ament_cmake_python_copy_roboclaw_ros2\n'}
+[0.224382] (cpp_pubsub) CommandEnded: {'returncode': 0}
+[0.236769] (roboclaw_ros2) StdoutLine: {'line': b'[ 16%] Built target roboclaw_driver\n'}
+[0.246086] (roboclaw_ros2) StdoutLine: {'line': b'[ 24%] Built target roboclaw_ros2__rosidl_typesupport_cpp\n'}
+[0.250379] (roboclaw_ros2) StdoutLine: {'line': b'[ 32%] Built target roboclaw_ros2__rosidl_typesupport_c\n'}
+[0.251624] (roboclaw_ros2) StdoutLine: {'line': b'[ 40%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c\n'}
+[0.253824] (roboclaw_ros2) StdoutLine: {'line': b'[ 48%] Built target roboclaw_ros2__rosidl_typesupport_introspection_cpp\n'}
+[0.255479] (roboclaw_ros2) StdoutLine: {'line': b'[ 56%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_cpp\n'}
+[0.262902] (roboclaw_ros2) StdoutLine: {'line': b'[ 64%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c\n'}
+[0.267690] (cpp_pubsub) JobProgress: {'identifier': 'cpp_pubsub', 'progress': 'install'}
+[0.274404] (roboclaw_ros2) StdoutLine: {'line': b'[ 66%] \x1b[32mBuilding CXX object CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o\x1b[0m\n'}
+[0.275227] (roboclaw_ros2) StdoutLine: {'line': b'[ 68%] \x1b[32mBuilding CXX object CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o\x1b[0m\n'}
+[0.276993] (cpp_pubsub) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/user/ros2_ws/src/build/cpp_pubsub'], 'cwd': '/home/user/ros2_ws/src/build/cpp_pubsub', 'env': OrderedDict([('HOSTNAME', 'stefano-GF63-Thin-9SC'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/user'), ('OLDPWD', '/home/user/ros2_ws/src/roboclaw_ros2'), ('ROS_PYTHON_VERSION', '3'), ('COLCON_PREFIX_PATH', '/home/user/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('DISPLAY', ':0'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble'), ('DEBIAN_FRONTEND', 'noninteractive'), ('PWD', '/home/user/ros2_ws/src/build/cpp_pubsub'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/user/ros2_ws/install/cpp_pubsub:/opt/ros/humble')]), 'shell': False}
+[0.285748] (roboclaw_ros2) StdoutLine: {'line': b'[ 68%] Built target roboclaw_ros2\n'}
+[0.286085] (cpp_pubsub) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[0.286334] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/lib/cpp_pubsub/talker\n'}
+[0.286563] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/package_run_dependencies/cpp_pubsub\n'}
+[0.286780] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/parent_prefix_path/cpp_pubsub\n'}
+[0.286916] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/ament_prefix_path.sh\n'}
+[0.287168] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/ament_prefix_path.dsv\n'}
+[0.287396] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/path.sh\n'}
+[0.287649] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/environment/path.dsv\n'}
+[0.287844] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.bash\n'}
+[0.288023] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.sh\n'}
+[0.288411] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.zsh\n'}
+[0.288586] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/local_setup.dsv\n'}
+[0.288794] (cpp_pubsub) StdoutLine: {'line': b'-- Installing: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/package.dsv\n'}
+[0.289327] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/ament_index/resource_index/packages/cpp_pubsub\n'}
+[0.289617] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/cmake/cpp_pubsubConfig.cmake\n'}
+[0.289838] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/cmake/cpp_pubsubConfig-version.cmake\n'}
+[0.289954] (cpp_pubsub) StdoutLine: {'line': b'-- Up-to-date: /home/user/ros2_ws/src/install/cpp_pubsub/share/cpp_pubsub/package.xml\n'}
+[0.290405] (cpp_pubsub) CommandEnded: {'returncode': 0}
+[0.299810] (-) TimerEvent: {}
+[0.309263] (roboclaw_ros2) StdoutLine: {'line': b'[ 70%] Built target roboclaw_ros2__py\n'}
+[0.338030] (roboclaw_ros2) StdoutLine: {'line': b'[ 76%] Built target roboclaw_ros2__rosidl_generator_py\n'}
+[0.366014] (roboclaw_ros2) StdoutLine: {'line': b'[ 80%] Built target roboclaw_ros2__rosidl_typesupport_introspection_c__pyext\n'}
+[0.368890] (roboclaw_ros2) StdoutLine: {'line': b'[ 84%] Built target roboclaw_ros2__rosidl_typesupport_fastrtps_c__pyext\n'}
+[0.371363] (roboclaw_ros2) StdoutLine: {'line': b'[ 88%] Built target roboclaw_ros2__rosidl_typesupport_c__pyext\n'}
+[0.399926] (-) TimerEvent: {}
+[0.500610] (-) TimerEvent: {}
+[0.510011] (cpp_pubsub) JobEnded: {'identifier': 'cpp_pubsub', 'rc': 0}
+[0.600707] (-) TimerEvent: {}
+[0.627021] (roboclaw_ros2) StdoutLine: {'line': b'running egg_info\n'}
+[0.629600] (roboclaw_ros2) StdoutLine: {'line': b'writing roboclaw_ros2.egg-info/PKG-INFO\n'}
+[0.630068] (roboclaw_ros2) StdoutLine: {'line': b'writing dependency_links to roboclaw_ros2.egg-info/dependency_links.txt\n'}
+[0.630423] (roboclaw_ros2) StdoutLine: {'line': b'writing top-level names to roboclaw_ros2.egg-info/top_level.txt\n'}
+[0.633749] (roboclaw_ros2) StdoutLine: {'line': b"reading manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'\n"}
+[0.634708] (roboclaw_ros2) StdoutLine: {'line': b"writing manifest file 'roboclaw_ros2.egg-info/SOURCES.txt'\n"}
+[0.666669] (roboclaw_ros2) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/user/ros2_ws/src/roboclaw_ros2/src/diffdrive_roscore.cpp:28\x1b[m\x1b[K:\n'}
+[0.667084] (roboclaw_ros2) StderrLine: {'line': b'\x1b[01m\x1b[K/home/user/ros2_ws/src/roboclaw_ros2/include/diffdrive_roscore.h:32:10:\x1b[m\x1b[K \x1b[01;31m\x1b[Kfatal error: \x1b[m\x1b[Kroboclaw_ros2/msg/RoboclawEncoderSteps.h: No such file or directory\n'}
+[0.667327] (roboclaw_ros2) StderrLine: {'line': b'   32 | #include \x1b[01;31m\x1b[K"roboclaw_ros2/msg/RoboclawEncoderSteps.h"\x1b[m\x1b[K\n'}
+[0.667543] (roboclaw_ros2) StderrLine: {'line': b'      |          \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[0.667751] (roboclaw_ros2) StderrLine: {'line': b'compilation terminated.\n'}
+[0.674377] (roboclaw_ros2) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/diffdrive_roscore.dir/build.make:76: CMakeFiles/diffdrive_roscore.dir/src/diffdrive_roscore.cpp.o] Error 1\n'}
+[0.674798] (roboclaw_ros2) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:684: CMakeFiles/diffdrive_roscore.dir/all] Error 2\n'}
+[0.675102] (roboclaw_ros2) StderrLine: {'line': b'gmake[1]: *** Waiting for unfinished jobs....\n'}
+[0.678532] (roboclaw_ros2) StdoutLine: {'line': b'[ 88%] Built target ament_cmake_python_build_roboclaw_ros2_egg\n'}
+[0.700835] (-) TimerEvent: {}
+[0.801105] (-) TimerEvent: {}
+[0.901362] (-) TimerEvent: {}
+[1.001619] (-) TimerEvent: {}
+[1.101877] (-) TimerEvent: {}
+[1.202133] (-) TimerEvent: {}
+[1.302409] (-) TimerEvent: {}
+[1.336977] (roboclaw_ros2) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/user/ros2_ws/src/roboclaw_ros2/src/roboclaw_roscore.cpp:24\x1b[m\x1b[K:\n'}
+[1.337137] (roboclaw_ros2) StderrLine: {'line': b'\x1b[01m\x1b[K/home/user/ros2_ws/src/roboclaw_ros2/include/roboclaw_roscore.h:34:10:\x1b[m\x1b[K \x1b[01;31m\x1b[Kfatal error: \x1b[m\x1b[Kroboclaw_ros2/msg/RoboclawEncoderSteps.h: No such file or directory\n'}
+[1.337227] (roboclaw_ros2) StderrLine: {'line': b'   34 | #include \x1b[01;31m\x1b[K"roboclaw_ros2/msg/RoboclawEncoderSteps.h"\x1b[m\x1b[K\n'}
+[1.337311] (roboclaw_ros2) StderrLine: {'line': b'      |          \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[1.337404] (roboclaw_ros2) StderrLine: {'line': b'compilation terminated.\n'}
+[1.342616] (roboclaw_ros2) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/roboclaw_roscore.dir/build.make:76: CMakeFiles/roboclaw_roscore.dir/src/roboclaw_roscore.cpp.o] Error 1\n'}
+[1.342834] (roboclaw_ros2) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:628: CMakeFiles/roboclaw_roscore.dir/all] Error 2\n'}
+[1.342971] (roboclaw_ros2) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[1.344786] (roboclaw_ros2) CommandEnded: {'returncode': 2}
+[1.402523] (-) TimerEvent: {}
+[1.502776] (-) TimerEvent: {}
+[1.533351] (roboclaw_ros2) JobEnded: {'identifier': 'roboclaw_ros2', 'rc': 2}
+[1.543942] (-) EventReactorShutdown: {}
