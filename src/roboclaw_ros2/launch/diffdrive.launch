@@ -1,8 +1,8 @@
 <launch>
 
-    <include file="$(find roboclaw)/launch/roboclaw_single.launch"/>
+    <include file="$(find roboclaw_ros2)/launch/roboclaw_single.launch"/>
 
-    <node pkg="roboclaw" type="diffdrive_node" name="diffdrive" output="screen">
+    <node pkg="roboclaw_ros2" type="diffdrive_node" name="diffdrive" output="screen">
         <param name="~roboclaws" value="1"/>
         <param name="~steps_per_meter" value="4100"/> <!-- 4288.382 -->
         <param name="~base_width" value="0.48"/>
