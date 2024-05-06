@@ -31,7 +31,9 @@
 namespace roboclaw {
 
     roboclaw_roscore::roboclaw_roscore(std::shared_ptr<rclcpp::Node> nh, std::shared_ptr<rclcpp::Node>  nh_private) {
-
+    if (!nh || !nh_private) {
+        throw std::invalid_argument("Invalid node pointers");
+    }
         std::string serial_port;
         int baudrate;
         int num_roboclaws;

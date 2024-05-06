@@ -28,10 +28,22 @@
 
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv ) ;
-    std::shared_ptr<rclcpp::Node>  nh, nh_private;
+    std::shared_ptr<rclcpp::Node>  nh;
+    std::shared_ptr<rclcpp::Node>  nh_private;
 
+   // roboclaw::roboclaw_roscore node(nh, nh_private);
+   // node.run();
+    try {
+    // Codice che potrebbe generare un'eccezione std::runtime_error
     roboclaw::roboclaw_roscore node(nh, nh_private);
     node.run();
+} catch (const std::runtime_error& e) {
+    // Gestione dell'eccezione
+    std::cerr << "Errore durante l'esecuzione del programma: " << e.what() << std::endl;
+    // Altre operazioni di recupero o terminazione del programma
+    return EXIT_FAILURE; // Ritorna un codice di uscita che indica un fallimento
+}
+
 
     return 0;
 }
