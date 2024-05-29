@@ -13,6 +13,8 @@ RUN apt install ros-humble-nav2-bringup -y
 RUN apt install ros-humble-turtlebot3-gazebo -y
 RUN apt install minicom -y
 RUN apt install screen -y
+RUN apt install ros-humble-xacro -y
+
 
 
 #Environment variables
@@ -50,6 +52,7 @@ RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
 USER root
 RUN rm -rf /var/lib/apt/lists/*
 USER user
+
 
 
 
