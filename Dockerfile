@@ -52,10 +52,3 @@ RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
 USER root
 RUN rm -rf /var/lib/apt/lists/*
 USER user
-
-
-
-
-
-
-
