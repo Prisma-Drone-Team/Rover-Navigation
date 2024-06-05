@@ -1,0 +1,19 @@
+obstacles_layer_g:
+  observation_sources: laser_scan_sensor 
+  laser_scan_sensor: {sensor_frame: laser, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+  #, min_obstacle_height: 0.0, max_obstacle_height: 5.0, obstacle_range: 3.0, raytrace_range: 3.0, inf_is_valid: true}
+#/depth_camera/depth/scan
+
+inflater_layer_g:
+  inflation_radius: 0.2 #0.25
+  cost_scaling_factor: 10.0
+  lethal_cost_threshold: 200
+
+plugins:
+- {name: static_map, type: "costmap_2d::StaticLayer"} 
+#- {name: obstacles_layer_g, type: "costmap_2d::ObstacleLayer"} #VoxelLayer"} ObstacleLayer
+- {name: inflater_layer_g, type: "costmap_2d::InflationLayer"}
+
+recovery_behaviors:
+  - name: conservative_reset
+    type: clear_costmap_recovery/ClearCostmapRecovery

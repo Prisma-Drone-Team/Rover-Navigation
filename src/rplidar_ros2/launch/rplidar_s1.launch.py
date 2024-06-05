@@ -12,8 +12,8 @@ def generate_launch_description():
             parameters=[{
                 'serial_port': '/dev/ttyUSB0',
                 'serial_baudrate': 256000,
-                'frame_id': 'rover/laser',
-                'inverted': True,
+                'frame_id': 'laser',
+                'inverted': False,
                 'angle_compensate': True,
             }],
         ),

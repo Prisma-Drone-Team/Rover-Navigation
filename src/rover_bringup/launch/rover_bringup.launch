@@ -1,0 +1,21 @@
+<launch>
+
+  <include file="$(find rover_description_pkg)/launch/robot_description.launch" />
+  <include file="$(find roboclaw_node)/launch/roboclaw.launch" /> 
+  <include file="$(find rplidar_ros)/launch/rplidar_s1.launch" />
+  <include file="$(find rover_gmapping)/launch/gmapping.launch" />
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen" >
+    <rosparam file="$(find rover_bringup)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rover_bringup)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rover_bringup)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rover_bringup)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find rover_bringup)/config/local_costmap_plugins.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find rover_bringup)/config/global_costmap_plugins.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find rover_bringup)/config/move_base_params.yaml" command="load" />
+    <rosparam file="$(find rover_bringup)/config/teb_local_planner_params.yaml" command="load" />
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+  </node>
+
+
+</launch>
