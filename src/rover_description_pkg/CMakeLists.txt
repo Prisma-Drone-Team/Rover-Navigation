@@ -152,6 +152,11 @@ include_directories(
 #############
 ## Install ##
 #############
+install(
+  DIRECTORY launch 
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_export_include_directories(include)
 
 ament_package()
