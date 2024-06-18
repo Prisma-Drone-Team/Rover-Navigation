@@ -31,7 +31,6 @@
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv ) ;
 
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 0");
    // roboclaw::roboclaw_roscore node(nh, nh_private);
    // node.run();
     try {
@@ -39,11 +38,11 @@ int main(int argc, char **argv) {
  
     // Codice che potrebbe generare un'eccezione std::runtime_error
     //node.executor.add_node(rover_node);
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 1");
+
     //rover_node->run(rover_node);
     rclcpp::spin(rover_node);
 
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2");
+
     } catch (const std::runtime_error& e) {
         // Gestione dell'eccezione
         std::cerr << "Errore durante l'esecuzione del programma: " << e.what() << std::endl;

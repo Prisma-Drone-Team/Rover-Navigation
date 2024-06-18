@@ -94,7 +94,7 @@ namespace roboclaw {
             packet[tx_length + 2 + 1] = (unsigned char) (crc & 0xFF);
 
         }
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"address: %d\n",address);
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"address: %d\n",address);
          std::cout<<"write start "<<(int*)packet[0]<<std::endl;
         serial->write((char*)&packet[0], packet.size());
 

@@ -46,13 +46,12 @@ namespace roboclaw {
            throw std::runtime_error("Must specify serial port");
         
         if(!(Node::get_parameter("baudrate", baudrate)))
-           baudrate = (int) driver::DEFAULT_BAUDRATE;
-
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n", baudrate);
+         //  baudrate = (int) driver::DEFAULT_BAUDRATE;
+        throw std::runtime_error("Must specify boud rate");
 
         if(!(Node::get_parameter("roboclaws", num_roboclaws)))
-             num_roboclaws = 1;
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n", num_roboclaws);
+        //     num_roboclaws = 1;
+        throw std::runtime_error("Must specify roboclas number");
 
         roboclaw_mapping = std::map<int, unsigned char>();
 
@@ -67,21 +66,19 @@ namespace roboclaw {
 
             roboclaw_mapping.insert(std::pair<int, unsigned char>(0, driver::BASE_ADDRESS));
         }
-        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 2.0");
         roboclaw = new driver(serial_port, baudrate);
-        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 3.0");
         for (int r = 0; r < roboclaw_mapping.size(); r++){
          RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n",roboclaw_mapping[r]);
             roboclaw->reset_encoders(roboclaw_mapping[r]);
         }
         timer_= timer_ = this->create_wall_timer(100ms, std::bind(&roboclaw_roscore::run_callback, this));
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 4.0");
+
         //encoder_pub = nh.advertise<roboclaw::RoboclawEncoderSteps>(std::string("motor_enc"), 10);
         encoder_pub = create_publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 5.0");
+  
         //velocity_sub = nh.subscribe(std::string("motor_cmd_vel"), 10, &roboclaw_roscore::velocity_callback, this);
         velocity_sub = Node::create_subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10,std::bind(&roboclaw_roscore::velocity_callback, this,std::placeholders::_1));
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Ci sono 6.0");
+ 
     }
 
     roboclaw_roscore::~roboclaw_roscore() {
@@ -91,11 +88,11 @@ namespace roboclaw {
 
     void roboclaw_roscore::velocity_callback(const roboclaw_ros2::msg::RoboclawMotorVelocity &msg) {
        // last_message = ros::Time.now();
-       RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock start");
+
         rclcpp::Clock steady_clock = rclcpp::Clock(RCL_STEADY_TIME);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock running ");
+
         last_message = steady_clock.now();
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"clock end ");
+   
 
         try {
             roboclaw->set_velocity(roboclaw_mapping[msg.index], std::pair<int, int>(msg.mot1_vel_sps, msg.mot2_vel_sps));
@@ -161,7 +158,7 @@ namespace roboclaw {
     void roboclaw_roscore::run_callback() {
 
             // Publish encoders
-            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Publish encoders");
+           // RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Publish encoders");
             for (int r = 0; r < roboclaw_mapping.size(); r++) {
                 std::pair<int, int> encs = std::pair<int, int>(0, 0);
                 try {

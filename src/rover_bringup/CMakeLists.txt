@@ -31,7 +31,7 @@ find_package(pluginlib REQUIRED)
 nav2_package()
 
 install(
-  DIRECTORY launch params maps
+  DIRECTORY launch params maps config
   DESTINATION share/${PROJECT_NAME}
 )
 

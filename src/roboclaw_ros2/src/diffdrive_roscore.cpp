@@ -109,10 +109,12 @@ namespace roboclaw {
             var_theta_z = 0.01;
         }
         if(!Node::get_parameter("odom_tf_name", odom_tf_name)){
-            odom_tf_name = "odom";
+            //odom_tf_name = "odom";
+            throw std::runtime_error("Must specify odom tf");
         }
         if(!Node::get_parameter("base_tf_name", base_tf_name)){
-            base_tf_name = "base_link";
+            //base_tf_name = "base_link";
+            throw std::runtime_error("Must specify base link tf");
         }
 
     }
@@ -219,7 +221,7 @@ namespace roboclaw {
         odom.pose.pose.orientation.x = quaternion.x();
         odom.pose.pose.orientation.y = quaternion.y();
         odom.pose.pose.orientation.z = quaternion.z();
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Quaternione settato");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Quaternione settato");
 
         // Pos_x Variance
         odom.pose.covariance[0] = var_pos_x;
@@ -232,7 +234,7 @@ namespace roboclaw {
         tf2::Transform transform;
         transform.setOrigin(tf2::Vector3(last_x, last_y, 0.0));
         transform.setRotation(quaternion);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Rotazione settata ");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Rotazione settata ");
 
         //br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), odom_tf_name, base_tf_name));
         geometry_msgs::msg::TransformStamped transformStamped;
@@ -242,17 +244,17 @@ namespace roboclaw {
         transformStamped.transform.translation.x = transform.getOrigin().getX();
         transformStamped.transform.translation.y = transform.getOrigin().getY();
         transformStamped.transform.translation.z = transform.getOrigin().getZ();
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF lineare settata ");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF lineare settata ");
 
         quaternion.setRPY(0, 0, cur_theta);
         transformStamped.transform.rotation.x = quaternion.x();
         transformStamped.transform.rotation.y = quaternion.y();
         transformStamped.transform.rotation.z = quaternion.z();
         transformStamped.transform.rotation.w = quaternion.w();
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF angolare settata ");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"TF angolare settata ");
 
         br->sendTransform(transformStamped);
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Pulish odom");
+        //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Pulish odom");
         odom_pub->publish(odom);
 
         last_x = cur_x;
