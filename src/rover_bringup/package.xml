@@ -41,6 +41,10 @@
   <build_depend>tf2</build_depend>
   <build_depend>nav2_map_server</build_depend>
 
+  <depend>realsense2_camera_msgs</depend>
+  <depend>librealsense2</depend>
+  <depend>diagnostic_updater</depend>
+
   <exec_depend>camera_info_manager</exec_depend>
   <exec_depend>nav2_costmap_2d</exec_depend>
   <exec_depend>cv_bridge</exec_depend>

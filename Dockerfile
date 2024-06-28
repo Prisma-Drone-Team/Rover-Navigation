@@ -23,6 +23,8 @@ RUN apt install ros-humble-librealsense2* -y
 RUN apt install ros-humble-realsense2-* -y
 RUN apt install ros-humble-rmw-cyclonedds-cpp -y
 RUN apt install ros-humble-joint-state-publisher-gui -y
+RUN apt install ros-humble-librealsense2* -y
+RUN apt install ros-humble-realsense2-* -y
 
 
 

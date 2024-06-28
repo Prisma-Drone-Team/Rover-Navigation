@@ -28,11 +28,40 @@ find_package(nav2_util REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(pluginlib REQUIRED)
 
+
+
+find_package(builtin_interfaces REQUIRED)
+find_package(realsense2_camera_msgs REQUIRED)
+find_package(realsense2 2.50.0)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(diagnostic_updater REQUIRED)
+
 nav2_package()
+
+
+
+
+    set(dependencies
+    cv_bridge
+    image_transport
+    rclcpp
+    rclcpp_components
+    realsense2_camera_msgs
+    std_msgs
+    std_srvs
+    sensor_msgs
+    nav_msgs
+    tf2
+    realsense2
+    tf2_ros
+    diagnostic_updater
+  )
 
 install(
   DIRECTORY launch params maps config
   DESTINATION share/${PROJECT_NAME}
 )
+
 
 ament_package()
