@@ -68,7 +68,7 @@ namespace roboclaw {
         }
         roboclaw = new driver(serial_port, baudrate);
         for (int r = 0; r < roboclaw_mapping.size(); r++){
-         RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n",roboclaw_mapping[r]);
+         //RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"%d\n",roboclaw_mapping[r]);
             roboclaw->reset_encoders(roboclaw_mapping[r]);
         }
         timer_= timer_ = this->create_wall_timer(100ms, std::bind(&roboclaw_roscore::run_callback, this));

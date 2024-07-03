@@ -162,7 +162,7 @@ namespace roboclaw {
         br = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
         int delta_1 = msg.mot1_enc_steps - last_steps_1;
         int delta_2 = msg.mot2_enc_steps - last_steps_2;
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Motor1 enc: %d\n",delta_1);
+        // RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Motor1 enc: %d\n",delta_1);
 
         last_steps_1 = msg.mot1_enc_steps;
         last_steps_2 = msg.mot2_enc_steps;

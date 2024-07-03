@@ -114,7 +114,6 @@ void TimeoutSerial::read(char *data, size_t size)
     for(;;)
     {
         io.run_one();
-        std::cout<<result<<std::endl;
         switch(result)
         {
             case resultSuccess:
