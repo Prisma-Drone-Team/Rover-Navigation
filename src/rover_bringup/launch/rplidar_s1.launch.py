@@ -1,7 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
-
 def generate_launch_description():
     return LaunchDescription([
         Node(
@@ -15,6 +14,10 @@ def generate_launch_description():
                 'frame_id': 'rover/laser',
                 'inverted': True,
                 'angle_compensate': True,
+                'scan_qos.reliability': 'SENSOR_DATA',
+                'scan_qos.history': 'keep_all',
+                'scan_qos.depth': 100,
+                'scan_qos.durability': 'volatile'
             }],
             remappings=[
                 ('scan', 'rover/scan')
