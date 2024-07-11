@@ -14,7 +14,7 @@ def generate_launch_description():
                 'frame_id': 'rover/laser',
                 'inverted': True,
                 'angle_compensate': True,
-                'scan_qos.reliability': 'SENSOR_DATA',
+                'scan_qos.reliability': 'SYSTEM_DEFAULT',
                 'scan_qos.history': 'keep_all',
                 'scan_qos.depth': 100,
                 'scan_qos.durability': 'volatile'

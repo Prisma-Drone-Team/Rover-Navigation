@@ -37,6 +37,8 @@ find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
 
+find_package(rtabmap_ros REQUIRED)
+
 nav2_package()
 
 
