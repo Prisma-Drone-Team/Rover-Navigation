@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y
 ##You may add additional apt-get here
 RUN apt-get install dialog apt-utils -y
 RUN apt install ros-humble-rviz2 -y
+RUN apt install ros-humble-rqt* -y
 RUN apt-get update && apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
 RUN apt install ros-humble-slam-toolbox -y
@@ -27,6 +28,8 @@ RUN apt install ros-humble-realsense2-* -y
 RUN apt install ros-humble-rtabmap -y
 RUN apt install ros-humble-rtabmap-ros -y
 RUN apt install ros-humble-rviz-visual-tools -y
+RUN apt install ros-humble-imu-tools -y
+
 
 
 

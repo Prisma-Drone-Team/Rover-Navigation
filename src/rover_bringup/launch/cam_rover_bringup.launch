@@ -6,9 +6,8 @@
 
   <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
 
-  <include file="$(find-pkg-share rover_bringup)/launch/rtabmap_ros_launch.py"/>
- <!-- <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py"/>
-  <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py"/> --> 
+  <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py"/>
+  <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py"/> 
 
  
 

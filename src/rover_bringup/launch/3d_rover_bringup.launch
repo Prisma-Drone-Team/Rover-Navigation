@@ -1,0 +1,22 @@
+<launch>
+
+  <include file="$(find-pkg-share rover_description_pkg)/launch/robot_description.launch.py"/>
+  <include file="$(find-pkg-share roboclaw_ros2)/launch/diffdrive.launch"/>
+  <include file="$(find-pkg-share rover_bringup)/launch/rplidar_s1.launch.py"/>
+
+  <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
+
+  <node pkg="imu_filter_madgwick" exec="imu_filter_madgwick_node" name="imu_filter" output="screen">
+      <param name="use_mag" value="false"/>
+      <param name="yaml_filename" value="$(find-pkg-share rover_bringup)/config/imu_filter.yaml"/>
+      <remap from="/imu/data_raw" to="/rover_camera/imu"/>
+  </node>
+    
+    <!-- Static transform publisher from camera_imu_optical_frame to camera_link --> 
+   <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 camera_imu_optical_frame rover_camera_link"/>
+    
+  <!-- Launch rtabmap for RGB-D odometry and mapping -->
+  <include file="$(find-pkg-share rtabmap_examples)/launch/realsense_d435i_color.launch.py"/>
+
+
+</launch>
