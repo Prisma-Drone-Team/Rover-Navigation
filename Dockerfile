@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y
 RUN apt-get install dialog apt-utils -y
 RUN apt install ros-humble-rviz2 -y
 RUN apt install ros-humble-rqt* -y
-RUN apt-get update && apt install ros-humble-navigation2 -y
+RUN apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
 RUN apt install ros-humble-slam-toolbox -y
 RUN apt install ros-humble-turtlebot3-gazebo -y

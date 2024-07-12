@@ -22,7 +22,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 
 
-configurable_parameters = [{'name': 'camera_name',                  'default': 'rover_camera', 'description': 'camera unique name'},
+configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
                            {'name': 'camera_namespace',             'default': '', 'description': 'namespace for camera'},
                            {'name': 'depth_qos',                    'default': 'SENSOR_DATA', 'description': 'depth_qos'},
                            {'name': 'color_qos',                    'default': 'SENSOR_DATA', 'description': 'color_qos'},
@@ -59,7 +59,7 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'depth_module.gain.1',          'default': '16', 'description': 'Depth module first gain value. Used for hdr_merge filter'},
                            {'name': 'depth_module.exposure.2',      'default': '1', 'description': 'Depth module second exposure value. Used for hdr_merge filter'},
                            {'name': 'depth_module.gain.2',          'default': '16', 'description': 'Depth module second gain value. Used for hdr_merge filter'},
-                           {'name': 'enable_sync',                  'default': 'false', 'description': "'enable sync mode'"},
+                           {'name': 'enable_sync',                  'default': 'true', 'description': "'enable sync mode'"},
                            {'name': 'enable_rgbd',                  'default': 'false', 'description': "'enable rgbd topic'"},
                            {'name': 'enable_gyro',                  'default': 'true', 'description': "'enable gyro stream'"},
                            {'name': 'enable_accel',                 'default': 'true', 'description': "'enable accel stream'"},
@@ -127,7 +127,7 @@ tf_publisher_node = Node(
                 package='tf2_ros',
                 executable='static_transform_publisher',
                 name="footprint_to_rover_camera",
-                arguments=["0.14", "0.0", "0.145", "0.0", "0.0", "0.0", "rover/base_footprint", "rover_camera_link"],
+                arguments=["0.14", "0.0", "0.145", "0.0", "0.0", "0.0", "rover/base_footprint", "camera_link"],
             )
 nodes_to_start = [
         tf_publisher_node,

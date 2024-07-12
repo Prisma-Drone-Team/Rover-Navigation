@@ -104,6 +104,54 @@
             <hackBaseline>0</hackBaseline>
             </plugin>
         </sensor>
+
+              <!-- IMU -->
+        <sensor name="${camera_base_frame}imu" type="imu">
+          <always_on>true</always_on>
+          <update_rate>400</update_rate>
+          <topic>${camera_base_frame}/imu/sample</topic>
+          <plugin name="{camera_base_frame}imu" filename="libgazebo_ros_imu_sensor.so">
+            <topicName>${camera_base_frame}/imu/sample</topicName>
+            <bodyName>${camera_base_frame}_link</bodyName>
+            <frameName>camera_imu_optical_frame</frameName>
+            <updateRateHZ>400</updateRateHZ>
+            <gaussianNoise>0.1</gaussianNoise>
+            <xyzOffset>0 0 0</xyzOffset>
+            <rpyOffset>0 0 0</rpyOffset>
+          </plugin>
+        </sensor>
+      <!-- Accel and gyro -->
+        <sensor name="{camera_base_frame}accel" type="imu">
+          <always_on>true</always_on>
+          <update_rate>20</update_rate>
+          <topic>${camera_base_frame}/accel/sample</topic>
+          <plugin name="camera_accel_plugin" filename="librealsense_gazebo_accel_sensor.so">
+            <topicName>${camera_base_frame}/accel/sample</topicName>
+            <bodyName>${camera_base_frame}_link</bodyName>
+            <updateRateHZ>20</updateRateHZ>
+            <gaussianNoise>0.1</gaussianNoise>
+            <xyzOffset>0 0 0</xyzOffset>
+            <rpyOffset>0 0 0</rpyOffset>
+            <frameName>camera_gyro_optical_frame</frameName>
+            <initialOrientationAsReference>false</initialOrientationAsReference>
+          </plugin>
+          <pose>0 0 0 0 0 0</pose>
+        </sensor>
+        <sensor name="{camera_base_frame}gyro" type="imu">
+          <always_on>true</always_on>
+          <update_rate>400</update_rate>
+          <topic>${camera_base_frame}/gyro/sample</topic>
+          <plugin name="camera_gyro_plugin" filename="librealsense_gazebo_gyro_sensor.so">
+            <topicName>${camera_base_frame}/gyro/sample</topicName>
+            <bodyName>${camera_base_frame}_link</bodyName>
+            <updateRateHZ>400</updateRateHZ>
+            <gaussianNoise>0.1</gaussianNoise>
+            <xyzOffset>0 0 0</xyzOffset>
+            <rpyOffset>0 0 0</rpyOffset>
+            <frameName>camera_gyro_optical_frame</frameName>
+            <initialOrientationAsReference>false</initialOrientationAsReference>
+          </plugin>
+        </sensor>
     </gazebo>
     
 </xacro:macro>

@@ -13,29 +13,32 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     parameters=[{
-          'frame_id':'rover_camera_link',
+          'frame_id':'rover/base_link',
           'subscribe_depth':True,
           'subscribe_odom_info':True,
-          'approx_sync':False,
-          'wait_imu_to_init':True}]
+          'approx_sync':True,
+          'wait_imu_to_init':True,
+          'odom_frame_id':'rover/odom',
+          'map_frame_id':'rover/map',
+          'qos':'2' }]
 
     remappings=[
           ('imu', '/imu/data'),
-          ('rgb/image', '/rover_camera/color/image_raw'),
-          ('rgb/camera_info', '/rover_camera/color/camera_info'),
-          ('depth/image', '/rover_camera/realigned_depth_to_color/image_raw'),]
+          ('rgb/image', '/camera/color/image_raw'),
+          ('rgb/camera_info', '/camera/color/camera_info'),
+          ('depth/image', '/camera/realigned_depth_to_color/image_raw'),]
 
     return LaunchDescription([
 
         # Nodes to launch       
         Node(
             package='rtabmap_odom', executable='rgbd_odometry', output='screen',
-            parameters=parameters,
+            parameters=[{'approx_sync':True,parameters}],
             remappings=remappings),
 
         Node(
             package='rtabmap_slam', executable='rtabmap', output='screen',
-            parameters=parameters,
+            parameters=[{'approx_sync':True,parameters}],
             remappings=remappings,
             arguments=['-d']),
 
@@ -48,10 +51,10 @@ def generate_launch_description():
         # Generate point cloud from not aligned depth
         Node(
             package='rtabmap_util', executable='point_cloud_xyz', output='screen',
-            parameters=[{'approx_sync':False}],
-            remappings=[('depth/image',       '/rover_camera/depth/image_rect_raw'),
-                        ('depth/camera_info', '/rover_camera/depth/camera_info'),
-                        ('cloud',             '/rover_camera/cloud_from_depth')]),
+            parameters=[{'approx_sync':True}],
+            remappings=[('depth/image',       '/camera/depth/image_rect_raw'),
+                        ('depth/camera_info', '/camera/depth/camera_info'),
+                        ('cloud',             '/camera/cloud_from_depth')]),
         
         # Generate aligned depth to color camera from the point cloud above       
         Node(
@@ -59,9 +62,9 @@ def generate_launch_description():
             parameters=[{ 'decimation':2,
                           'fixed_frame_id':'rover_camera_link',
                           'fill_holes_size':1}],
-            remappings=[('camera_info', '/rover_camera/color/camera_info'),
-                        ('cloud',       '/rover_camera/cloud_from_depth'),
-                        ('image_raw',   '/rover_camera/realigned_depth_to_color/image_raw')]),
+            remappings=[('camera_info', '/camera/color/camera_info'),
+                        ('cloud',       '/camera/cloud_from_depth'),
+                        ('image_raw',   '/camera/realigned_depth_to_color/image_raw')]),
         
         # Compute quaternion of the IMU
         Node(
@@ -69,7 +72,7 @@ def generate_launch_description():
             parameters=[{'use_mag': False, 
                          'world_frame':'rover/map', 
                          'publish_tf':False}],
-            remappings=[('imu/data_raw', '/rover_camera/imu')]),
+            remappings=[('imu/data_raw', '/camera/imu')]),
         
         # The IMU frame is missing in TF tree, add it:
         Node(
