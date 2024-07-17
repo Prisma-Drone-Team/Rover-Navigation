@@ -6,17 +6,46 @@
 
   <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
 
-  <node pkg="imu_filter_madgwick" exec="imu_filter_madgwick_node" name="imu_filter" output="screen">
+  <!--<node pkg="imu_filter_madgwick" exec="imu_filter_madgwick_node" name="imu_filter" output="screen">
       <param name="use_mag" value="false"/>
       <param name="yaml_filename" value="$(find-pkg-share rover_bringup)/config/imu_filter.yaml"/>
       <remap from="/imu/data_raw" to="/camera/imu"/>
+  </node>-->
+  <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 rover/map rover/odom"/>  
+
+
+  <node pkg="imu_filter_madgwick" exec="imu_filter_madgwick_node" name="ImuFilter">
+      <param name="_use_mag" type="bool" value="false" />
+      <param name="_publish_tf" type="bool" value="true" />
+      <param name="_world_frame" type="str" value="rover/map" />
+      <param name="_fixed_frame" type="str" value="rover/odom" />      
+      <remap from="/imu/data_raw" to="/camera/imu"/>
   </node>
-    
-    <!-- Static transform publisher from camera_imu_optical_frame to camera_link --> 
-   <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 camera_imu_optical_frame camera_link"/>
-    
+
+  <include file="$(find-pkg-share rtabmap_launch)/launch/rtabmap.launch.py">
+      <arg name="args" value="--delete_db_on_start"/>
+      <arg name="rgb_topic" value="/camera/color/image_raw"/>
+      <arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
+      <arg name="camera_info_topic" value="/camera/color/camera_info"/>
+      <arg name="depth_camera_info_topic" value="/camera/depth/camera_info"/>
+      <arg name="frame_id"  value="rover/base_link"/>
+      <arg name="odom_frame_id" value="rover/odom"/>    
+      <arg name="map_frame_id" value="rover/map"/>
+      <arg name="qos" value="2"/> 
+      <arg name="subscribe_scan" value="true"/>
+      <arg name="scan_topic" value="/rover/scan"/>
+      <arg name="imu_topic" value="/camera/imu"/>
+      <arg name="subscribe_scan_cloud" value="true"/>
+      <arg name="scan_cloud_topic" value="/camera/depth/color/points"/>
+      <arg name="visual_odometry" value="false"/>
+      <arg name="approx_sync" value="true"/>
+      <arg name="rtabmapviz" value="false"/>
+      <arg name="rviz" value="false"/>
+  </include>  
   <!-- Launch rtabmap for RGB-D odometry and mapping -->
-  <include file="$(find-pkg-share rtabmap_examples)/launch/realsense_d435i_color.launch.py"/>
+  <!--<include file="$(find-pkg-share rtabmap_examples)/launch/realsense_d435i_color.launch.py"/> -->
+
+  <!-- <include file="$(find-pkg-share rover_bringup)/launch/rover_scan.launch.py"/> -->
 
 
 </launch>
