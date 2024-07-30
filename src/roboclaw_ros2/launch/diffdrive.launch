@@ -13,7 +13,7 @@
         <param name="var_pos_x" value="0.01"/>
         <param name="var_pos_y" value="0.01"/>
         <param name="var_theta_z" value="0.01"/>
-        <param name="odom_tf_name" value="rover/odom"/>
+        <param name="odom_tf_name" value="odom"/>  
         <param name="base_tf_name" value="rover/base_footprint"/>
         <param name="use_runge_kutta" value="true"/>
 

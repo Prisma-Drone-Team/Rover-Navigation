@@ -1,0 +1,5 @@
+<launch>  
+
+  <!--<include file="$(find-pkg-share rover_bringup)/launch/3d_online_async_launch.py"/>-->
+  <include file="$(find-pkg-share rover_bringup)/launch/3d_navigation_launch.py"/>
+</launch>

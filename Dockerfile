@@ -5,22 +5,33 @@ FROM ros:humble
 #RUN echo "Acquire::Check-Valid-Until \"false\";\nAcquire::Check-Date \"false\";" | cat > /etc/apt/apt.conf.d/10no--check-valid-until
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+
 #Install essential
+RUN apt-get update && apt-get install -y
+RUN apt-get install software-properties-common dialog apt-utils apt-transport-https curl -y
+
+# Aggiunta il repository Intel RealSense
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null
+RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/librealsense.list
+
 RUN apt-get update && apt-get install -y
 
 ##You may add additional apt-get here
-RUN apt-get install dialog apt-utils -y
+RUN apt install kmod -y
 RUN apt install ros-humble-rviz2 -y
 RUN apt install ros-humble-rqt* -y
-RUN apt install ros-humble-navigation2 -y
-RUN apt install ros-humble-nav2-bringup -y
-RUN apt install ros-humble-slam-toolbox -y
-RUN apt install ros-humble-turtlebot3-gazebo -y
 RUN apt install minicom -y
 RUN apt install screen -y
 RUN apt install ros-humble-xacro -y
 RUN apt install ros-humble-librealsense2* -y
+RUN apt install librealsense2-dkms -y
+RUN apt install librealsense2-utils -y
 RUN apt install ros-humble-realsense2-* -y
+RUN apt install ros-humble-navigation2 -y
+RUN apt install ros-humble-nav2-bringup -y
+RUN apt install ros-humble-slam-toolbox -y
+RUN apt install ros-humble-turtlebot3-gazebo -y
 RUN apt install ros-humble-rmw-cyclonedds-cpp -y
 RUN apt install ros-humble-joint-state-publisher-gui -y
 RUN apt install ros-humble-rtabmap -y
@@ -38,7 +49,7 @@ RUN apt install ros-humble-octomap-rviz-plugins -y
 #Environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DISPLAY=:0
-ENV HOME /home/user
+ENV HOME=/home/user
 ENV ROS_DISTRO=humble
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
@@ -52,6 +63,10 @@ RUN echo "user ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 RUN sudo adduser user dialout
 RUN sudo adduser user video
+RUN sudo groupadd iio
+RUN sudo adduser user iio
+RUN sudo adduser user plugdev
+
 
 USER user
 
