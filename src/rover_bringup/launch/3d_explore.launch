@@ -2,4 +2,13 @@
 
   <!--<include file="$(find-pkg-share rover_bringup)/launch/3d_online_async_launch.py"/>-->
   <include file="$(find-pkg-share rover_bringup)/launch/3d_navigation_launch.py"/>
+
+  <!--<node pkg="rtabmap_slam" exec="rtabmap" name="rtabmap" output="screen">
+    <param name="Grid/RangeMax" value="5.0"/>
+    <param name="Grid/MaxObstacleHeight" value="1.0"/>
+    <param name="Grid/CellSize" value="0.05"/>  
+    <param name="Grid/NoiseFilteringMinNeighbors" value="2"/>
+    <param name="Grid/NoiseFilteringRadius" value="0.1"/>
+    <param name="Grid/NormalsSegmentation" value="true"/>
+  </node>  -->
 </launch>

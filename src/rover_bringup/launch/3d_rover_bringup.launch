@@ -24,33 +24,9 @@
       <remap from="/imu/data_raw" to="/camera/imu"/>
   </node> -->
 
-  <include file="$(find-pkg-share rtabmap_launch)/launch/rtabmap.launch.py">
+  <include file="$(find-pkg-share rover_bringup)/launch/rtabmap.launch.py">
       <arg name="args" value="--delete_db_on_start"/>
-      <arg name="visual_odometry" value="true"/>
-      <arg name="frame_id"  value="rover/base_footprint"/>
-     <!-- <arg name="odom_frame_id" value="odom"/>  -->
-      <arg name="map_frame_id" value="rover/map"/>
-    <!--  <arg name="subscribe_odom" value="false"/> -->
-      <arg name="subscribe_depth" value="true"/>
-      <arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
-      <arg name="subscribe_scan_cloud" value="true"/>
-      <arg name="scan_cloud_topic" value="/camera/depth/color/points"/>
-      <arg name="subscribe_rgb" value="true"/> 
-      <arg name="rgb_topic" value="/camera/color/image_raw"/> 
-      <arg name="camera_info_topic" value="/camera/color/camera_info"/>
-      <arg name="depth_camera_info_topic" value="/camera/aligned_depth_to_color/camera_info"/>
-      <arg name="qos" value="2"/>       
-      <arg name="subscribe_scan" value="false"/>
-    <!--  <arg name="scan_topic" value="/rover/scan"/> -->
-    <!--  <arg name="imu_topic" value="/rtabmap/imu"/> -->
-      <arg name="map_always_update" value="true"/>
-      <arg name="wait_imu_to_init" value="false"/>  
-      <arg name="use_action_for_goal" value="true"/>
-      <arg name="rgbd_sync" value="true"/>       
-      <arg name="approx_sync" value="true"/> 
-      <arg name="rtabmapviz" value="false"/>
-  </include>  
-
+  </include>    
 
 
   <!--<include file="$(find-pkg-share rover_bringup)/launch/3d_navigation_launch.py"/>
