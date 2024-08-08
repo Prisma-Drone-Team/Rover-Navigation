@@ -38,6 +38,8 @@ find_package(std_srvs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
 
 find_package(rtabmap_ros REQUIRED)
+find_package(teb_local_planner REQUIRED)
+
 
 nav2_package()
 
@@ -58,6 +60,7 @@ nav2_package()
     realsense2
     tf2_ros
     diagnostic_updater
+    teb_local_planner
   )
 
 install(

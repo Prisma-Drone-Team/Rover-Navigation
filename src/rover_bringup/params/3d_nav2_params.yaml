@@ -80,43 +80,73 @@ controller_server:
       yaw_goal_tolerance: 0.15
 
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: True
-      min_vel_x: 0.0
-      min_vel_y: 0.0
-      max_vel_x: 0.2
-      max_vel_y: 0.0
-      max_vel_theta: 0.2
-      min_speed_xy: 0.0
-      max_speed_xy: 0.1
-      min_speed_theta: 0.0
-      acc_lim_x: 0.2
-      acc_lim_y: 0.0
-      acc_lim_theta: 0.5
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -1.0
-      vx_samples: 20
-      vy_samples: 5
-      vtheta_samples: 20
-      sim_time: 1.7
-      linear_granularity: 0.05
-      angular_granularity: 0.025
-      transform_tolerance: 0.2
-      xy_goal_tolerance: 0.15
-      trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: True
-      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
-      PathAlign.forward_point_distance: 0.1
-      GoalAlign.scale: 24.0
-      GoalAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
-      RotateToGoal.lookahead_time: -1.0
+      plugin: "teb_local_planner::TebLocalPlannerROS"
+      odom_topic: /odom
+      map_frame: rover/map
+
+      # Trajectory
+      teb_autosize: 1.0  # deve rimanere un double
+      dt_ref: 0.5  # was 0.3
+      dt_hysteresis: 0.2  # was 0.1
+      global_plan_overwrite_orientation: True
+      max_global_plan_lookahead_dist: 2.0  # was 3.0
+      feasibility_check_no_poses: 5
+      publish_feedback: true
+
+      # Robot
+      max_vel_x: 0.15  # 0.1
+      max_vel_x_backwards: 0.05
+      max_vel_theta: 0.3  # 15deg more or less
+      acc_lim_x: 0.1  # was 1.0
+      acc_lim_theta: 0.3  # was 0.3
+      min_turning_radius: 0.0
+      footprint_model:
+        type: "circular"
+        radius: 0.3
+      # GoalTolerance
+      xy_goal_tolerance: 0.15  # was 0.1
+      yaw_goal_tolerance: 0.15  # was 0.1
+      free_goal_vel: False
+
+      # Obstacles
+      min_obstacle_dist: 0.1  # was 0.15
+      include_costmap_obstacles: True
+      costmap_obstacles_behind_robot_dist: 1.0
+      obstacle_poses_affected: 20  # was 30
+      costmap_converter_plugin: ""
+      costmap_converter_spin_thread: True
+      costmap_converter_rate: 5.0
+      inflation_dist: 0.1
+      include_dynamic_obstacles: True
+
+      # Optimization
+      no_inner_iterations: 3  # was 5
+      no_outer_iterations: 2  # was 4
+      optimization_activate: True
+      optimization_verbose: False
+      penalty_epsilon: 0.04  # was 0.1, must be less than the lower of the max vel x
+      weight_max_vel_x: 2.0
+      weight_max_vel_theta: 1.0
+      weight_acc_lim_x: 1.0
+      weight_acc_lim_theta: 1.0
+      weight_kinematics_nh: 1000.0
+      weight_kinematics_forward_drive: 200.0  # was 1
+      weight_kinematics_turning_radius: 1.0
+      weight_optimaltime: 1.0
+      weight_obstacle: 100.0  # was 50
+      weight_dynamic_obstacle: 10.0  # not in use yet
+      selection_alternative_time_cost: False  # not in use yet
+
+      # Homotopy Class Planner
+      enable_homotopy_class_planning: False  # was True, requires high computational effort
+      enable_multithreading: True
+      simple_exploration: False
+      max_number_classes: 4  # reduce this value to reduce the computational effort
+      roadmap_graph_no_samples: 15
+      roadmap_graph_area_width: 5.0
+      h_signature_prescaler: 0.5
+      h_signature_threshold: 0.1
+
 
 local_costmap:
   local_costmap:
@@ -142,7 +172,6 @@ local_costmap:
         cost_scaling_factor: 10.0
         inflation_radius: 0.3
       always_send_full_costmap: True
-
       qos_overrides:
         scan:
           reliability: SENSOR_DATA
@@ -258,9 +287,9 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.2, 0.0, 0.2]
+    max_velocity: [0.15, 0.0, 0.2]
     min_velocity: [0.0, 0.0, -0.2]
-    max_accel: [0.2, 0.0, 0.5]
+    max_accel: [0.15, 0.0, 0.2]
     max_decel: [-0.2, 0.0, -0.5]
     odom_topic: "odom"
     odom_duration: 0.1

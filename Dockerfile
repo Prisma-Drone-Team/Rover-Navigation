@@ -10,11 +10,6 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-sel
 RUN apt-get update && apt-get install -y
 RUN apt-get install software-properties-common dialog apt-utils apt-transport-https curl -y
 
-# Aggiunta il repository Intel RealSense
-RUN mkdir -p /etc/apt/keyrings
-RUN curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | tee /etc/apt/keyrings/librealsense.pgp > /dev/null
-RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/librealsense.list
-
 RUN apt-get update && apt-get install -y
 
 ##You may add additional apt-get here
@@ -25,8 +20,6 @@ RUN apt install minicom -y
 RUN apt install screen -y
 RUN apt install ros-humble-xacro -y
 RUN apt install ros-humble-librealsense2* -y
-RUN apt install librealsense2-dkms -y
-RUN apt install librealsense2-utils -y
 RUN apt install ros-humble-realsense2-* -y
 RUN apt install ros-humble-navigation2 -y
 RUN apt install ros-humble-nav2-bringup -y
@@ -39,10 +32,6 @@ RUN apt install ros-humble-rtabmap-ros -y
 RUN apt install ros-humble-rviz-visual-tools -y
 RUN apt install ros-humble-imu-tools -y
 RUN apt install ros-humble-octomap-rviz-plugins -y
-
-
-
-
 
 
 
@@ -76,7 +65,9 @@ WORKDIR ${HOME}/ros2_ws
 COPY --chown=user ./src ${HOME}/ros2_ws/src
 SHELL ["/bin/bash", "-c"] 
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash; rosdep update; rosdep install -i --from-path src --rosdistro humble -y; colcon build --symlink-install
-
+#RUN rosdep install teb_local_planner
+# Clone TEB local planner repository
+#RUN git clone https://github.com/rst-tu-dortmund/teb_local_planner.git -b ros2-master src/teb_local_planner
 #Add script source to .bashrc
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash;" >>  ${HOME}/.bashrc
 RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
