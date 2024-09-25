@@ -4,7 +4,8 @@
   <include file="$(find-pkg-share roboclaw_ros2)/launch/diffdrive.launch"/> 
 <!-- <include file="$(find-pkg-share rover_bringup)/launch/rplidar_s1.launch.py"/>  -->
 
-  <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 rover/map rover/odom"/> -->
+  
+  <!-- <node pkg="tf2_ros" exec="static_transform_publisher" name="static_transform_publisher" output="screen" args="0 0 0 0 0 0 odom rover/base_footprint"/> -->
 
   <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
 

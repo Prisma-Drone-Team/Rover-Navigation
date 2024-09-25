@@ -64,11 +64,21 @@ RUN mkdir -p ${HOME}/ros2_ws/src
 WORKDIR ${HOME}/ros2_ws
 COPY --chown=user ./src ${HOME}/ros2_ws/src
 SHELL ["/bin/bash", "-c"] 
+WORKDIR ${HOME}/ros2_ws/src
+
+# Clone the required repositories first
+RUN git clone https://github.com/unitreerobotics/unilidar_sdk.git
+
+# Optional: Clean up unnecessary files if needed
+RUN rm -rf unilidar_sdk/unitree_lidar_ros/src/unitree_lidar_ros
+
+# Return to the workspace root
+WORKDIR ${HOME}/ros2_ws
+
+# Now copy the local src files if needed (consider removing this if not necessary)
+COPY --chown=user ./src ${HOME}/ros2_ws/src
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash; rosdep update; rosdep install -i --from-path src --rosdistro humble -y; colcon build --symlink-install
-#RUN rosdep install teb_local_planner
-# Clone TEB local planner repository
-#RUN git clone https://github.com/rst-tu-dortmund/teb_local_planner.git -b ros2-master src/teb_local_planner
-#Add script source to .bashrc
+
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash;" >>  ${HOME}/.bashrc
 RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
 

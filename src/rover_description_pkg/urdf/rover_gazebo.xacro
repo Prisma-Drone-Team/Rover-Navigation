@@ -115,7 +115,7 @@
         <parent link="base_footprint"/>
         <child link="${laser_frame}"/>
         <!-- the lidar has been raised by 5mm with respect to its original position because of laser rays detecting ghost shapes -->
-        <origin xyz="0.0 0.0 ${0.22+0.005}" rpy="0.0 ${PI} 0.0"/>
+        <origin xyz="0.0 0.0 ${0.22+0.005}" rpy="0.0 0.0 0 "/> <!-- rpy had a 180 deg rotation on y and 0 on z -->
     </joint>
 
 
@@ -129,7 +129,7 @@
     
     <gazebo reference="${laser_frame}">
       <sensor type="ray" name="head_hokuyo_sensor">
-        <pose>0 0 0 0 -${PI} 0</pose>
+        <pose>0 0 0 0 0 0 </pose> <!-- rpy: y was -{PI} rotation on y and 0 on z-->
         <visualize>true</visualize>
         <update_rate>40</update_rate>
         <ray>
