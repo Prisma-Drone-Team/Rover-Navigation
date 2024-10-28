@@ -30,7 +30,23 @@ newgrp docker
 ```
 Then log out and log in.
 
-
+## Packages used in Dockerfile
+- kmod
+- minicom
+- screen
+- xacro
+- rviz2
+- librealsense2
+- realsense2
+- navigation2
+- nav2-bringup
+- slam-toolbox
+- rmw-cyclonedds-cpp
+- joint-state-publisher-gui
+External repositories included in this porject:
+- [TEB Local Planner([https://github.com/cra-ros-pkg/robot_localization)](https://github.com/rst-tu-dortmund/teb_local_planner/tree/ros2-master)
+- [Aruco Marker Pose Estimation([[https://github.com/cra-ros-pkg/robot_localization)](https://github.com/rst-tu-dortmund/teb_local_planner/tree/ros2-master](https://github.com/AIRLab-POLIMI/ros2-aruco-pose-estimation)
+- [Costmap Converter]([https://automaticaddison.com/sensor-fusion-using-the-robot-localization-package-ros-2](https://github.com/rst-tu-dortmund/costmap_converter/tree/ros2/)
 ## Compilation and execution
 
 1. Clone the repo (complete the command)
