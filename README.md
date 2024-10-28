@@ -13,7 +13,7 @@
 - All the branches of this package are relative to a specific Sensor integration.
 
 <div align="center">
-    <img src="docs/real_rover.png" width="100%"/>
+    <img src="docs/real_rover.png" width="75%"/>
 </div>
 
 ## Table of Contents
