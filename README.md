@@ -121,6 +121,8 @@ Launch files inside rover_bringup.launch: (1) The Robot Description, (2) The Rob
 2.  The Robot Differential Driver: motor controller driver, responsible for interfacing with the robot and handling velocity commands and publish wheel odometry
 3.  Sensors Launch: sensor particular launch file. 
 4.  SLAM and Navigation Launch: files to start the slam_toolbox to actuate SLAM and the nav2 pkg for the navigation stack, both files take as input a .yaml configuration file to setup the parameters.
+
+
 All this launch files are available separately in the launch folder of the rover_bringup package.
 
 ## Navigation2 and Slam Toolbox Configuration
