@@ -12,6 +12,10 @@
 
 - All the branches of this package are relative to a specific Sensor integration.
 
+<div align="center">
+    <img src="docs/real_rover.png" width="100%"/>
+</div>
+
 ## Table of Contents
 
 1. [Prerequisites](#Prerequisites)
