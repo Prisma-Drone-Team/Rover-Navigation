@@ -1,6 +1,25 @@
 <!-- GETTING STARTED -->
 ## Overview
-This repo contains a template for a ros2 project using Docker. The repo contains a Dockerfile, the scripts to build and run the image and the source code. The result will be a container in which a workspace is built, and the src folder of workspace is binded to the one in the repo. In this way the modifications done inside the container in src folder are reflected into the src folder of the repo, and viceversa. 
+- This package is being created to add necessary features and improvements for our robots, specifically for ros2. This package is a ros2 porting of a indoor navigation project and implement integration with Slam and Navigation ROS2 package.
+
+  
+
+- This package is exclusively built for ROS2. It is being tested on Ubuntu 20.04 with ROS2-Humble.
+
+  
+
+  
+
+- All the branches of this package are relative to a specific Sensor integration.
+
+## Table of Contents
+
+1. [Prerequisites](#Prerequisites)
+2. [Packages used in Dockerfile](#Packages-used-in-Dockerfile)
+3. [Image Compilation and Execution](#Image-Compilation-and-Execution)
+4. [Usage](#Usage)
+5. [What is launched with this?](#What-is-launched-with-this?)
+6. [Navigation2 and Slam Toolbox Configuration](#Navigation2-and-Slam-Toolbox-Configuration)
 
 
 ## Prerequisites
@@ -45,9 +64,9 @@ Then log out and log in.
 - joint-state-publisher-gui
 External repositories included in this porject:
 - [TEB Local Planner](https://github.com/rst-tu-dortmund/teb_local_planner/tree/ros2-master)
-- [Aruco Marker Pose Estimation](https://github.com/rst-tu-dortmund/teb_local_planner/tree/ros2-master](https://github.com/AIRLab-POLIMI/ros2-aruco-pose-estimation)
+- [Aruco Marker Pose Estimation](https://github.com/AIRLab-POLIMI/ros2-aruco-pose-estimation)
 - [Costmap Converter](https://github.com/rst-tu-dortmund/costmap_converter/tree/ros2/)
-## Compilation and execution
+## Image Compilation and Execution
 
 1. Clone the repo (complete the command)
 ```sh
@@ -72,17 +91,50 @@ where <IMAGE_NAME> is the name of the image you have just built, while <CONTAINE
 ```sh
 docker exec -it $(docker ps -aqf "name=<CONTAINER_NAME>") bash
 ```
-
-3. All apt-get performed inside the container will be removed one che container is closed. Please add all new dependacies to the Dockerfile and rebuild the image.
-
-## Run example code
-To run the ros2 example code (talker), just execute the following command
+3. It is recommended to check the correct time for successful image creation 
+4. All apt-get performed inside the container will be removed one che container is closed. Please add all new dependacies to the Dockerfile and rebuild the image.
+   
+## Usage
+1. Create a container using this project image on both rover PC an controller PC
+2. Set the same ROS domain ID on both rover PCs
 ```sh
-ros2 run cpp_pubsub talker
+export ROS_DOMAIN_ID=X #number
 ```
+3. Check if the containers times are synchronized, if not use:
+ ```sh
+sudo date --set="aa-dd-mm h:m:s.ms"
+```
+4. On the robot terminal source the workspace, compile the project and source the bash.rc:
+ ```sh
+colcon build --symlink-install
+source ./install/setup.bash
+```
+5. Launch all the nodes on the robot via:
+```bash
+ros2 launch rover_bringup rover_bringup.launch
+```
+6. On the controller PC terminal open rviz2
 
-## Development
-Once the container is running, you can develop from inside it using VsCode. Open VsCode from your host machine, install the extension Dev Containers, and in command bar select attach to running container. Open the folder /home/user/ros2_ws/src, which is the binded folder. 
+### What is launched with this?
+Launch files inside rover_bringup.launch: (1) The Robot Description, (2) The Robot Differential Driver, (3) Sensors Launch, and (4) SLAM and Navigation Launch.
+(1) The Robot Description: responsible for publishing to the /tf topic and providing transforms between the base_link, base_footprint, and sensor links. Edit the URDF for your robot to define new frames or remove links
+(1) The Robot Differential Driver: motor controller driver, responsible for interfacing with the robot and handling velocity commands and publish wheel odometry
+(3) Sensors Launch: sensor particular launch file. 
+(4) SLAM and Navigation Launch: files to start the slam_toolbox to actuate SLAM and the nav2 pkg for the navigation stack, both files take as input a .yaml configuration file to setup the parameters.
+All this launch files are available separately in the launch folder of the rover_bringup package.
+
+## Navigation2 and Slam Toolbox Configuration
+It has been provided launch files and configs for Navigation2 and Slam Toolbox. They are available in the ``rover_bringup`` package.
+
+They can be launched with the following launch commands:
+```
+ros2 launch rover_bringup online_async_launch.py
+ros2 launch rover_bringup  navigation_launch.py
+```
+To change the SLAM and Navigation parameters, work on:
+- mapper_params_online_async file in the confif folder.
+- nav2_params file in the params folder. 
+
    
    
    
