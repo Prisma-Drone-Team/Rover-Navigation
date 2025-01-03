@@ -32,6 +32,8 @@ RUN apt install ros-humble-rtabmap-ros -y
 RUN apt install ros-humble-rviz-visual-tools -y
 RUN apt install ros-humble-imu-tools -y
 RUN apt install ros-humble-octomap-rviz-plugins -y
+RUN apt install ros-humble-octomap-rviz-plugins -y
+
 
 RUN sudo apt install pip -y
 RUN pip3 install opencv-python opencv-contrib-python transforms3d
@@ -69,17 +71,19 @@ COPY --chown=user ./src ${HOME}/ros2_ws/src
 SHELL ["/bin/bash", "-c"] 
 WORKDIR ${HOME}/ros2_ws/src
 
-#[RC] this is removed as the directory is already here... to be adjusted
 ## Clone the required repositories first
-#RUN git clone https://github.com/unitreerobotics/unilidar_sdk.git
+#RUN git clone -b humble --single-branch https://github.com/ros-perception/vision_opencv.git
+RUN git clone -b humble --single-branch https://github.com/rst-tu-dortmund/costmap_converter.git
+RUN git clone -b humble-devel --single-branch https://github.com/rst-tu-dortmund/teb_local_planner.git
 ## Optional: Clean up unnecessary files if needed
 #RUN rm -rf unilidar_sdk/unitree_lidar_ros/src/unitree_lidar_ros
+
 
 # Return to the workspace root
 WORKDIR ${HOME}/ros2_ws
 
 # Now copy the local src files if needed (consider removing this if not necessary)
-COPY --chown=user ./src ${HOME}/ros2_ws/src
+#COPY --chown=user ./src ${HOME}/ros2_ws/src
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash; rosdep update; rosdep install -i --from-path src --rosdistro humble -y; colcon build --symlink-install
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash;" >>  ${HOME}/.bashrc
