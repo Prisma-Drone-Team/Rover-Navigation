@@ -38,6 +38,7 @@
 namespace roboclaw {
 
     diffdrive_roscore::diffdrive_roscore() : Node("diffdrive_node") {
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Inizio ciclo");
 
         Node::declare_parameter("use_runge_kutta",rclcpp::PARAMETER_BOOL);
         Node::declare_parameter("base_width", rclcpp::PARAMETER_DOUBLE);

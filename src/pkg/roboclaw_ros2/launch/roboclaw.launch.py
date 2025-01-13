@@ -21,7 +21,7 @@ def generate_launch_description():
             package='roboclaw_ros2',
             executable='roboclaw_node',
             parameters=[
-                {"serial_port": "/dev/ttyACM1"},
+                {"serial_port": "/dev/ttyACM0"},
                 {"baudrate": 115200},
                 {"roboclaws": 1}
             ],

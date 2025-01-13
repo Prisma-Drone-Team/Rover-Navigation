@@ -68,7 +68,7 @@ RUN mkdir -p ${HOME}/ros2_ws/src
 WORKDIR ${HOME}/ros2_ws
 COPY --chown=user ./src ${HOME}/ros2_ws/src
 SHELL ["/bin/bash", "-c"] 
-WORKDIR ${HOME}/ros2_ws/src
+WORKDIR ${HOME}/ros2_ws/src/git
 
 ## Clone the required repositories first
 #RUN git clone -b humble --single-branch https://github.com/ros-perception/vision_opencv.git
