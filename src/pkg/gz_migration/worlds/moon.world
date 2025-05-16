@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="moon">
+    <render_engine>ogre2</render_engine>
+    <include>
+      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/Apollo_14.sdf</uri>
+    </include>
+
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>    <!-- colore della luce -->
+      <specular>1 1 1 1</specular>  <!-- riflessi della luce sulla superficie -->
+      <direction>-0.5 0.5 -1</direction>  <!-- inclinazione della luce simulando il sole -->
+      <cast_shadows>false</cast_shadows>  <!-- no ombre -->
+    </light>
+
+    <gravity>0 0 -1.622</gravity>
+
+    <!-- <include>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
+      <cast_shadows>false</cast_shadows>
+    </include> -->
+
+    <plugin
+      filename="gz-sim-physics-system"
+      name="gz::sim::systems::Physics">
+    </plugin>
+    <plugin
+      filename="gz-sim-user-commands-system"
+      name="gz::sim::systems::UserCommands">
+    </plugin>
+    <plugin
+      filename="gz-sim-scene-broadcaster-system"
+      name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <!--plugin
+      filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+    <render_engine>ogre2</render_engine>
+    </plugin-->
+    <plugin
+      filename="gz-sim-imu-system"
+      name="gz::sim::systems::Imu">
+    </plugin>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>0.319654 -0.235002 9.29441 0 1.5138 0.009599</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>      
+        </camera>
+      <!-- <plugin filename="GzScene3D" name="3D View"> -->
+        <!-- <ignition-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </ignition-gui> -->
+
+          <engine>ogre2</engine>
+          <scene>scene</scene>
+          <background_color>0.0 0.0 0.0 1.0</background_color>
+          <camera_pose>-6 0 6 0 0.5 0</camera_pose>
+      <!-- </plugin> -->
+    </gui>
+
+    <!-- <scene>
+      <ambient>1.0 1.0 1.0</ambient>
+      <background>0.8 0.8 0.8 1</background>
+    </scene> -->
+    <scene>
+      <!-- <sky>
+        <color>0.7 0.7 1</color>
+      </sky> -->
+      <!-- <background>0 0 0 1</background>
+      <ambient>0 0 0 1</ambient>
+      <shadows>1</shadows> -->
+    </scene>
+
+
+    <physics type="ode">
+      <real_time_update_rate>1000.0</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>150</iters>
+          <precon_iters>0</precon_iters>
+          <sor>1.400000</sor>
+          <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0.00001</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>2000.000000</contact_max_correcting_vel>
+          <contact_surface_layer>0.01000</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+
+  </world>
+</sdf>

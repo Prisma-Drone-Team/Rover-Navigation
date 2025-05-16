@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>gz_migration</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="user@todo.todo">user</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  
+  <!--depend>nav2_bt_navigator_1</depend-->
+  <depend>rtabmap_ros</depend>
+  <depend>xacro</depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <depend>robot_state_publisher</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>ros_gz_image</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2</depend>
+  <depend>rclcpp</depend>
+  <depend>launch</depend>
+  <depend>launch_ros</depend>
+  <exec_depend>urdf_launch</exec_depend>
+  <!--exec_depend>realsense_gazebo_plugin</exec_depend-->
+  <exec_depend>ros2launch</exec_depend>
+  
+  <depend>tf2_ros</depend>
+  <depend>tf2_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>nav2_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <!--depend>ros_gz_interfaces</depend-->
+  <!--depend>ignition-transport12</depend>
+  <depend>ignition-msgs</depend-->
+
+
+  <exec_depend>rtabmap_conversions</exec_depend>
+  <exec_depend>rtabmap_demos</exec_depend>
+  <exec_depend>rtabmap_examples</exec_depend>
+  <exec_depend>rtabmap_launch</exec_depend>
+  <exec_depend>rtabmap_msgs</exec_depend>
+  <exec_depend>rtabmap_odom</exec_depend>
+  <exec_depend>rtabmap_python</exec_depend>
+  <exec_depend>rtabmap_rviz_plugins</exec_depend>
+  <exec_depend>rtabmap_slam</exec_depend>
+  <exec_depend>rtabmap_sync</exec_depend>
+  <exec_depend>rtabmap_util</exec_depend>
+  <exec_depend>rtabmap_viz</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <gazebo_ros gazebo_model_path="${prefix}/.." />
+  </export>
+</package>

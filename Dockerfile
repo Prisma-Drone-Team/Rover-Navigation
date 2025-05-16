@@ -107,6 +107,7 @@ WORKDIR ${HOME}/ros2_ws/src/git
 #RUN git clone -b humble --single-branch https://github.com/ros-perception/vision_opencv.git
 RUN git clone -b humble --single-branch https://github.com/rst-tu-dortmund/costmap_converter.git
 RUN git clone -b humble-devel --single-branch https://github.com/rst-tu-dortmund/teb_local_planner.git
+RUN git clone -b humble https://github.com/LeoRover/leo_simulator-ros2 
 ## Optional: Clean up unnecessary files if needed
 #RUN rm -rf unilidar_sdk/unitree_lidar_ros/src/unitree_lidar_ros
 

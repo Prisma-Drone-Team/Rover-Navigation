@@ -6,6 +6,8 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
+
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 
@@ -71,6 +73,18 @@ def generate_launch_description():
             "gz_args" : gz_world_arg 
         }.items()
     )
+
+    #Spawn Moon World
+    world_file_name = "moon.world"
+    world_file = os.path.join(get_package_share_directory('gz_migration'), "worlds", world_file_name)
+
+    gazebo_ign = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
+                                'launch',
+                                'gz_sim.launch.py'])]),
+            launch_arguments=[('gz_args', ['-r -v4 ', world_file])]
+    )
     
     # Spawn Rover Robot
     gz_spawn_entity = Node(
@@ -80,7 +94,7 @@ def generate_launch_description():
             "-topic", "/robot_description",
             "-name", "prisma_rover",
             "-allow_renaming", "true",
-            "-z", "0.1",
+            "-z", "10.5",
         ]
     )
     
@@ -99,6 +113,8 @@ def generate_launch_description():
             '/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo',
             '/color/image_raw@sensor_msgs/msg/Image@ignition.msgs.Image',
             '/depth/color/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
+            '/livox/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+            '/livox/scan/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
         ],
     )
 
@@ -120,8 +136,10 @@ def generate_launch_description():
     ld.add_action(declare_world_cmd)
 
     # Launch Gazebo
-    ld.add_action(gz_sim)
+#    ld.add_action(gz_sim)
+    ld.add_action(gazebo_ign)
     ld.add_action(gz_spawn_entity)
+    
     ld.add_action(gz_ros2_bridge)
 
     # Launch Robot State Publisher
