@@ -405,8 +405,8 @@
         <!--depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName-->
         <horizontal_fov>1.4870205226991688</horizontal_fov>
         <image>
-          <width>1280</width>
-          <height>720</height>
+          <width>640</width>
+          <height>480</height>
         </image>
         <clip>
           <near>0.1</near>
