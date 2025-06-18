@@ -65,9 +65,9 @@ install(DIRECTORY map/
   DESTINATION share/${PROJECT_NAME}/map
   )
 
-install(DIRECTORY include/
-  DESTINATION include/
-  )
+# install(DIRECTORY include/
+#   DESTINATION include/
+#   )
 	
 add_executable(robot1_odom_sim src/leo1_odometry.cpp)
 ament_target_dependencies(robot1_odom_sim rclcpp tf2 tf2_ros tf2_geometry_msgs tf2_msgs geometry_msgs nav_msgs)

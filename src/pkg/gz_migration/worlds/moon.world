@@ -15,6 +15,16 @@
     </light>
 
     <gravity>0 0 -1.622</gravity>
+    <!-- <collision name="collision">
+      <surface>
+        <friction>
+          <ode>
+            <mu>30.0</mu>
+            <mu2>30.0</mu2>
+          </ode>
+        </friction>
+      </surface>
+    </collision> -->
 
     <!-- <include>
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
@@ -49,18 +59,18 @@
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>      
         </camera>
-      <!-- <plugin filename="GzScene3D" name="3D View"> -->
-        <!-- <ignition-gui>
+      <plugin filename="GzScene3D" name="3D View">
+        <ignition-gui>
           <title>3D View</title>
           <property type="bool" key="showTitleBar">false</property>
           <property type="string" key="state">docked</property>
-        </ignition-gui> -->
+        </ignition-gui>
 
           <engine>ogre2</engine>
           <scene>scene</scene>
           <background_color>0.0 0.0 0.0 1.0</background_color>
           <camera_pose>-6 0 6 0 0.5 0</camera_pose>
-      <!-- </plugin> -->
+      </plugin>
     </gui>
 
     <!-- <scene>

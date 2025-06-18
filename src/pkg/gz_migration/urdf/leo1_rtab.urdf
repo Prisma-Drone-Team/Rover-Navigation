@@ -580,7 +580,7 @@
     <parent link="base_link"/>
     <child link="rocker_L_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100.0" lower="-0.24" upper="0.24" velocity="100.0"/>
+    <limit effort="100.0" lower="-0.5" upper="0.5" velocity="10.0"/>
     <dynamics damping="0.1" friction="1.0"/>
   </joint>
   <joint name="rocker_R_joint" type="revolute">
@@ -588,16 +588,16 @@
     <parent link="base_link"/>
     <child link="rocker_R_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100.0" lower="-0.24" upper="0.24" velocity="100.0"/>
+    <limit effort="100.0" lower="-0.5" upper="0.5" velocity="10.0"/>
     <dynamics damping="0.1" friction="1.0"/>
-    <mimic joint="rocker_L_joint"/>
+    <!-- <mimic joint="rocker_L_joint"/> -->
   </joint>
   <joint name="wheel_FL_joint" type="continuous">
     <origin rpy="0 0 0" xyz="-0.15256 -0.08214 -0.08802"/>
     <parent link="rocker_L_link"/>
     <child link="wheel_FL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="2.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RL_joint" type="continuous">
@@ -605,7 +605,7 @@
     <parent link="rocker_L_link"/>
     <child link="wheel_RL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="2.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_FR_joint" type="continuous">
@@ -613,7 +613,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_FR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="2.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RR_joint" type="continuous">
@@ -621,7 +621,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_RR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="2.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="antenna_joint" type="fixed">
@@ -712,92 +712,48 @@
     </collision>
   </gazebo>
   <!-- wheel ODE properties -->
-  <gazebo reference="wheel_FL_link">
-    <collision>
-      <surface>
-        <friction>
-          <ode>
-            <mu>0.5</mu>
-            <mu2>0.5</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
-          </ode>
-          <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
-          </bullet>
-        </friction>
-      </surface>
-    </collision>
-  </gazebo>
-  <gazebo reference="wheel_FR_link">
-    <collision>
-      <surface>
-        <friction>
-          <ode>
-            <mu>0.5</mu>
-            <mu2>0.5</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
-          </ode>
-          <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
-          </bullet>
-        </friction>
-      </surface>
-    </collision>
-  </gazebo>
-  <gazebo reference="wheel_RL_link">
-    <collision>
-      <surface>
-        <friction>
-          <ode>
-            <mu>0.5</mu>
-            <mu2>0.5</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
-          </ode>
-          <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
-          </bullet>
-        </friction>
-      </surface>
-    </collision>
-  </gazebo>
-  <gazebo reference="wheel_RR_link">
-    <collision>
-      <surface>
-        <friction>
-          <ode>
-            <mu>0.5</mu>
-            <mu2>0.5</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
-          </ode>
-          <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
-          </bullet>
-        </friction>
-      </surface>
-    </collision>
-  </gazebo>
+<gazebo reference="wheel_FL_link">
+  <kp>1e6</kp>
+  <kd>100.0</kd>
+  <mu1>3.0</mu1>
+  <mu2>2.0</mu2>
+  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
+  <minDepth>0.003</minDepth>
+</gazebo>
+
+<gazebo reference="wheel_FR_link">
+  <kp>1e6</kp>
+  <kd>100.0</kd>
+  <mu1>3.0</mu1>
+  <mu2>2.0</mu2>
+  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
+  <minDepth>0.003</minDepth>
+</gazebo>
+
+<gazebo reference="wheel_RL_link">
+  <kp>1e6</kp>
+  <kd>100.0</kd>
+  <mu1>3.0</mu1>
+  <mu2>2.0</mu2>
+  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
+  <minDepth>0.003</minDepth>
+</gazebo>
+
+<gazebo reference="wheel_RR_link">
+  <kp>1e6</kp>
+  <kd>100.0</kd>
+  <mu1>3.0</mu1>
+  <mu2>2.0</mu2>
+  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
+  <minDepth>0.003</minDepth>
+</gazebo>
+
   <!-- rocker differential -->
   <gazebo>
     <plugin name="leo_gz::DifferentialSystem" filename="libleo_gz_differential_plugin.so">
       <jointA>rocker_L_joint</jointA>
       <jointB>rocker_R_joint</jointB>
-      <forceConstant>100.0</forceConstant>
+      <forceConstant>10.0</forceConstant>
     </plugin>
   </gazebo>
   <gazebo>

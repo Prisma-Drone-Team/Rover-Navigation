@@ -11,7 +11,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
 
-        world_file_name = "moon.world"
+        world_file_name = "moon.world" #"empty_world.sdf"
         world_file = os.path.join(get_package_share_directory('gz_migration'), "worlds", world_file_name)
 
         gazebo_ign = IncludeLaunchDescription(
@@ -33,6 +33,7 @@ def generate_launch_description():
                 #'/world/default/dynamic_pose/info@geometry_msgs/msg/PoseArray@ignition.msgs.Pose_V',
                 "/clock@rosgraph_msgs/msg/Clock[ignition.msgs.Clock",
                 "/robot1/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist",
+                # "/robot1/cmd_vel@geometry_msgs/msg/TwistStamped@ignition.msgs.Twist",
                 '/robot2/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist',
                 #'odom@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
                 '/tf@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V',
