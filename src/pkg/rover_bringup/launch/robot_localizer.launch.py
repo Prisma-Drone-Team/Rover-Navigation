@@ -14,6 +14,14 @@ from math import pi
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
+    namespace = LaunchConfiguration('namespace') 
+
+
+    declare_namespace = DeclareLaunchArgument(
+        'namespace',
+        default_value='rover',
+        description='')
+
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
@@ -28,12 +36,13 @@ def generate_launch_description():
     	package='robot_localization',
     	executable='ekf_node',
     	name='ekf_filter_node',
+        namespace=namespace,
     	output='screen',
     	parameters=[robot_localization_file_path, {'use_sim_time': use_sim_time}]
     	)
     
     ld = LaunchDescription()
-
+    ld.add_action(declare_namespace)
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(localization_node)
 

@@ -1,0 +1,10 @@
+<launch>
+
+<!-- to use when the start container is already running -->
+  <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py"/>
+  <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py"/>
+
+  <node pkg="rover_description_pkg" exec="tf_to_pose_node" name="tf_to_pose" output="screen">
+  </node>  
+
+</launch>

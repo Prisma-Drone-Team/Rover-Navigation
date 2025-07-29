@@ -73,6 +73,7 @@ namespace roboclaw {
 
         std::string odom_tf_name;
         std::string base_tf_name;
+        std::string namespace_;
 
         void twist_callback(const geometry_msgs::msg::Twist &msg);
 

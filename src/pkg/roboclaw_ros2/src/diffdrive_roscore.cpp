@@ -51,34 +51,8 @@ namespace roboclaw {
         Node::declare_parameter("var_pos_z", rclcpp::PARAMETER_DOUBLE);
         Node::declare_parameter("odom_tf_name",rclcpp::PARAMETER_STRING);
         Node::declare_parameter("base_tf_name",rclcpp::PARAMETER_STRING);
+        Node::declare_parameter("namespace",rclcpp::PARAMETER_STRING);
 
-
-        //odom_pub = nh.advertise<nav_msgs::Odometry>(std::string("odom"), 10);
-        odom_pub = create_publisher<nav_msgs::msg::Odometry>("odom", 10);
-        //motor_pub = nh.advertise<roboclaw::RoboclawMotorVelocity>(std::string("motor_cmd_vel"), 10);
-        motor_pub = create_publisher<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10);
-        
-        if(Node::get_parameter("use_runge_kutta", use_runge_kutta)){
-            use_runge_kutta = false;
-        }
-
-        if(use_runge_kutta)
-        {
-            //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback_runge_kutta, this); //Runge kutta 2 order integration
-            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback_runge_kutta, this,std::placeholders::_1));
-            //ROS_INFO("Odometry with Runge-Kutta integration method");
-            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Runge-Kutta integration method");
-        }
-        else
-        {
-            //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback, this); //Forward euler integration
-            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback, this,std::placeholders::_1));
-            //ROS_INFO("Odometry with Forward Euler integration method");
-            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Forward Euler integration method");
-        }
-        
-        //twist_sub = nh.subscribe(std::msg:string("cmd_vel"), 10, &diffdrive_roscore::twist_callback, this);
-        twist_sub = create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 10,std::bind(&diffdrive_roscore::twist_callback, this,std::placeholders::_1));
         
         last_x = 0.0;
         last_y = 0.0;
@@ -117,6 +91,36 @@ namespace roboclaw {
             //base_tf_name = "base_link";
             throw std::runtime_error("Must specify base link tf");
         }
+        if(!Node::get_parameter("namespace", namespace_)){
+            throw std::runtime_error("Must specify namespace");
+        }
+
+        //odom_pub = nh.advertise<nav_msgs::Odometry>(std::string("odom"), 10);
+        odom_pub = create_publisher<nav_msgs::msg::Odometry>(namespace_ + "/odom", 10);
+        //motor_pub = nh.advertise<roboclaw::RoboclawMotorVelocity>(std::string("motor_cmd_vel"), 10);
+        motor_pub = create_publisher<roboclaw_ros2::msg::RoboclawMotorVelocity>(namespace_ + "/motor_cmd_vel", 10);
+
+        if(Node::get_parameter("use_runge_kutta", use_runge_kutta)){
+            use_runge_kutta = false;
+        }
+
+        if(use_runge_kutta)
+        {
+            //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback_runge_kutta, this); //Runge kutta 2 order integration
+            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>(namespace_ + "/motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback_runge_kutta, this,std::placeholders::_1));
+            //ROS_INFO("Odometry with Runge-Kutta integration method");
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Runge-Kutta integration method");
+        }
+        else
+        {
+            //encoder_sub = nh.subscribe(std::string("motor_enc"), 10, &diffdrive_roscore::encoder_callback, this); //Forward euler integration
+            encoder_sub = create_subscription<roboclaw_ros2::msg::RoboclawEncoderSteps>(namespace_ + "/motor_enc", 10,std::bind(&diffdrive_roscore::encoder_callback, this,std::placeholders::_1));
+            //ROS_INFO("Odometry with Forward Euler integration method");
+            RCLCPP_INFO(rclcpp::get_logger("rclcpp"),"Odometry with Forward Euler integration method");
+        }
+        
+        //twist_sub = nh.subscribe(std::msg:string("cmd_vel"), 10, &diffdrive_roscore::twist_callback, this);
+        twist_sub = create_subscription<geometry_msgs::msg::Twist>(namespace_ + "/cmd_vel", 10,std::bind(&diffdrive_roscore::twist_callback, this,std::placeholders::_1));
 
     }
 

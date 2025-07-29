@@ -6,6 +6,9 @@
 <xacro:include filename="$(find rover_description_pkg)/urdf/rover_gazebo.xacro"/>
 
 <xacro:arg name="is_sim" default="true"/>
+<xacro:arg name="namespace" default=""/>
+<xacro:arg name="frame_prefix" default=""/>
+<xacro:arg name="tf_prefix" default=""/>
 
 <link name="base_footprint">
 </link>
@@ -17,17 +20,17 @@
 <!-- if it is in simulation -->
 <xacro:if value="$(arg is_sim)">
     <xacro:rover_wheels_sim left_joint="diff_drive_l_joint" right_joint="diff_drive_r_joint"/>
-    <xacro:gazebo_diff_drive_controller left_joint="diff_drive_l_joint" right_joint="diff_drive_r_joint"/>
+    <xacro:gazebo_diff_drive_controller left_joint="diff_drive_l_joint" right_joint="diff_drive_r_joint" namespace="$(arg namespace)"/>
     <xacro:gazebo_wheel_contact/>
-    <xacro:lidar_gazebo_sensor laser_frame="lidar_link" laser_topic="scan"/>
+    <xacro:lidar_gazebo_sensor laser_frame="lidar_link" laser_topic="scan" namespace="$(arg namespace)"/>
     <!-- <xacro:rover_payload_frame payload_frame="payload_link"/> -->
 
-    <xacro:camera_gazebo camera_base_frame="camera_link" camera_topic="camera" camera_info_topic="camera_info"/>
+    <xacro:camera_gazebo camera_base_frame="camera_link" camera_topic="camera" camera_info_topic="camera_info" namespace="$(arg namespace)"/>
 </xacro:if>
 
 <!-- if it is not in simulation -->
 <xacro:unless value="$(arg is_sim)">
-    <xacro:rover_rplidar_s1 laser_frame="laser"/>
+    <xacro:lidar_gazebo_sensor laser_frame="lidar_link" laser_topic="scan" namespace="$(arg namespace)"/>
     <!-- <xacro:rover_camera_realsense_d435i camera_base_frame="camera_frame"/> -->
 </xacro:unless>
 

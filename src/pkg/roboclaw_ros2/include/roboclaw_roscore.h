@@ -62,7 +62,7 @@ namespace roboclaw {
 
         rclcpp::Subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>::SharedPtr velocity_sub;
 
-
+        std::string namespace_;
         rclcpp::Time last_message;
 
         void velocity_callback(const roboclaw_ros2::msg::RoboclawMotorVelocity &msg);

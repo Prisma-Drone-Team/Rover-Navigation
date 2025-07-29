@@ -65,17 +65,17 @@ RUN apt-get upgrade -y && apt-get update -y
 
 RUN apt-get install ros-humble-robot-localization -y
 
-RUN apt-get update && apt-get install -y
-RUN sudo apt install pip -y
-RUN pip3 install opencv-python opencv-contrib-python transforms3d
+# RUN apt-get update && apt-get install -y
+# RUN sudo apt install pip -y
+# RUN pip3 install opencv-python opencv-contrib-python transforms3d
 RUN apt-get update && apt install ros-humble-tf-transformations -y
-RUN pip3 install --no-cache-dir Cython
+# RUN pip3 install --no-cache-dir Cython
 
-RUN pip3 install --no-cache-dir lapx ultralytics open3d pyrealsense2 ros2-numpy shapely scikit-learn openvino-dev
+# RUN pip3 install --no-cache-dir lapx ultralytics open3d pyrealsense2 ros2-numpy shapely scikit-learn openvino-dev
 
-RUN pip3 install -q -U google-generativeai
+# RUN pip3 install -q -U google-generativeai
 
-RUN pip3 install "numpy<2.0"
+# RUN pip3 install "numpy<2.0"
 
 #RUN export GZ_SIM_RESOURCE_PATH=~/ros2_ws/src/ros2_iiwa/iiwa_description/gazebo/models
 ENV GZ_SIM_RESOURCE_PATH=~/ros2_ws/src/ros2_iiwa/iiwa_description/gazebo/models
@@ -86,7 +86,7 @@ ENV DISPLAY=:0
 ENV HOME=/home/user
 ENV ROS_DISTRO=humble
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-ENV ROS_DOMAIN_ID=42
+ENV ROS_DOMAIN_ID=41
 
 #Add non root user using UID and GID passed as argument
 ARG USER_ID

@@ -115,7 +115,7 @@
 
 
 
-<xacro:macro name="lidar_gazebo_sensor" params="laser_frame laser_topic">
+<xacro:macro name="lidar_gazebo_sensor" params="laser_frame laser_topic namespace">
 
         <joint name="lidar_to_payload" type="fixed">
             <parent link="payload_link"/>
@@ -143,8 +143,8 @@
         <gazebo reference="${laser_frame}">
         <sensor name='gpu_lidar' type='gpu_lidar'>
             <pose>0 0 0 0 0 0</pose>
-            <topic>${laser_topic}</topic>
-            <ignition_frame_id>rover/lidar_link</ignition_frame_id>
+            <topic>${namespace}/${laser_topic}</topic>
+            <ignition_frame_id>${namespace}/lidar_link</ignition_frame_id>
             <update_rate>30</update_rate>
             <lidar>
                 <scan>

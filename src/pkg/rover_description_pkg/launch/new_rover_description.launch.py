@@ -18,9 +18,18 @@ def generate_launch_description():
         'rover_description_pkg'), 'urdf', 'rover.xacro')
     world = LaunchConfiguration('world')
     frame_prefix = LaunchConfiguration("frame_prefix")
-    tf_prefix = LaunchConfiguration("tf_prefix")   
+    tf_prefix = LaunchConfiguration("tf_prefix")
+    namespace = LaunchConfiguration("namespace") 
 
     declared_arguments = []
+
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "namespace",
+            default_value='rover',
+            description="",
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             "tf_prefix",
@@ -43,12 +52,16 @@ def generate_launch_description():
 
     robot_desc = ParameterValue(Command(
             ['xacro ', urdf,
-             " ",            
-            "tf_prefix:=",  
-            tf_prefix,
-            " ",
+             " ",  
             "frame_prefix:=",  
-            frame_prefix]),value_type=str)
+            namespace, 
+            " ",          
+            "tf_prefix:=",  
+            namespace,
+            " ",
+            "namespace:=",  
+            namespace
+           ]),value_type=str)
     
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
@@ -56,11 +69,12 @@ def generate_launch_description():
         description='Use simulation (Gazebo) clock if true')
 
     # Robot state publisher
-    params = {'use_sim_time': use_sim_time, 'robot_description': robot_desc, "tf_prefix":tf_prefix,"frame_prefix":frame_prefix}
+    params = {'use_sim_time': use_sim_time, 'robot_description': robot_desc, "tf_prefix":[namespace, '/'], "frame_prefix":[namespace, '/']}
     start_robot_state_publisher_cmd = Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
             name='robot_state_publisher',
+            namespace=namespace,
             output='both',
             parameters=[params],
             arguments=[])
@@ -68,6 +82,7 @@ def generate_launch_description():
     start_joint_state_publisher_cmd = Node(
             package="joint_state_publisher",
             executable="joint_state_publisher",
+            namespace=namespace,
         )       
 
     # Create the launch description and populate

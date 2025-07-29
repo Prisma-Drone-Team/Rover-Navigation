@@ -41,6 +41,7 @@ namespace roboclaw {
         Node::declare_parameter("serial_port", rclcpp::PARAMETER_STRING);
         Node::declare_parameter("baudrate", rclcpp::PARAMETER_INTEGER);
         Node::declare_parameter("roboclaws", rclcpp::PARAMETER_INTEGER);
+        Node::declare_parameter("namespace", rclcpp::PARAMETER_STRING);
  
         if(!(Node::get_parameter("serial_port", serial_port)))
            throw std::runtime_error("Must specify serial port");
@@ -52,6 +53,10 @@ namespace roboclaw {
         if(!(Node::get_parameter("roboclaws", num_roboclaws)))
         //     num_roboclaws = 1;
         throw std::runtime_error("Must specify roboclas number");
+
+        if(!(Node::get_parameter("namespace", namespace_)))
+        //     num_roboclaws = 1;
+        throw std::runtime_error("Must specify namespace");
 
         roboclaw_mapping = std::map<int, unsigned char>();
 
@@ -74,10 +79,10 @@ namespace roboclaw {
         timer_= timer_ = this->create_wall_timer(100ms, std::bind(&roboclaw_roscore::run_callback, this));
 
         //encoder_pub = nh.advertise<roboclaw::RoboclawEncoderSteps>(std::string("motor_enc"), 10);
-        encoder_pub = create_publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>("motor_enc", 10);
+        encoder_pub = create_publisher<roboclaw_ros2::msg::RoboclawEncoderSteps>(namespace_ + "/motor_enc", 10);
   
         //velocity_sub = nh.subscribe(std::string("motor_cmd_vel"), 10, &roboclaw_roscore::velocity_callback, this);
-        velocity_sub = Node::create_subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>("motor_cmd_vel", 10,std::bind(&roboclaw_roscore::velocity_callback, this,std::placeholders::_1));
+        velocity_sub = Node::create_subscription<roboclaw_ros2::msg::RoboclawMotorVelocity>(namespace_ + "/motor_cmd_vel", 10,std::bind(&roboclaw_roscore::velocity_callback, this,std::placeholders::_1));
  
     }
 

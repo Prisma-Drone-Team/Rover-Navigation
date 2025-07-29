@@ -14,6 +14,12 @@ from launch_ros.actions import Node
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     slam_params_file = LaunchConfiguration('slam_params_file')
+    namespace=LaunchConfiguration('namespace')
+
+    declare_namespace_cmd = DeclareLaunchArgument(
+        'namespace',
+        default_value='rover',
+        description=' / ')
 
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time',
@@ -27,7 +33,8 @@ def generate_launch_description():
     
     rl_launch_path = os.path.join(get_package_share_directory("rover_bringup"), 'launch', 'robot_localizer.launch.py')
     robot_localizer_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(rl_launch_path),
-        launch_arguments={'use_sim_time': use_sim_time}.items())
+        launch_arguments={'use_sim_time': use_sim_time,
+                            'namespace':namespace}.items())
 
     start_async_slam_toolbox_node = Node(
         parameters=[
@@ -37,15 +44,29 @@ def generate_launch_description():
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
-        output='screen')
+        namespace=namespace,
+        output='screen',
+        
+        remappings=[
+            ('/odom', ['/',namespace,'/odom']),
+            ('/map', ['/',namespace,'/map']),
+            ('/pose', ['/',namespace,'/pose']),
+            ('/scan', ['/',namespace,'/scan']),
+            ('/set_pose', ['/',namespace,'/set_pose']),
+        ],
+        
+        
+        
+        )
 
     ld = LaunchDescription()
 
     # Add localization to launch description
-    ld.add_action(robot_localizer_launch)
+    # ld.add_action(robot_localizer_launch)
 
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_slam_params_file_cmd)
     ld.add_action(start_async_slam_toolbox_node)
-
+    ld.add_action(declare_namespace_cmd)
+    
     return ld
