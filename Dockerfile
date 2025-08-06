@@ -86,7 +86,7 @@ ENV DISPLAY=:0
 ENV HOME=/home/user
 ENV ROS_DISTRO=humble
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-ENV ROS_DOMAIN_ID=41
+ENV ROS_DOMAIN_ID=33
 
 #Add non root user using UID and GID passed as argument
 ARG USER_ID

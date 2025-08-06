@@ -23,7 +23,7 @@ from launch.substitutions import LaunchConfiguration
 
 
 configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
-                           {'name': 'camera_namespace',             'default': '', 'description': 'namespace for camera'},
+                           {'name': 'camera_namespace',             'default': 'rover', 'description': 'namespace for camera'},
                            {'name': 'depth_qos',                    'default': 'SENSOR_DATA', 'description': 'depth_qos'},
                            {'name': 'color_qos',                    'default': 'DEFAULT', 'description': 'color_qos'},
                            {'name': 'gyro_qos',                     'default': 'SENSOR_DATA', 'description': 'depth_qos'},
