@@ -15,7 +15,7 @@
   <link name="base_footprint"/>
   <link name="base_link">
     <inertial>
-      <mass value="10.584994"/>
+      <mass value="1.584994"/>
       <origin xyz="0.0 0.0 -0.031802"/>
       <!-- <inertia ixx="0.01042" ixy="0.001177" ixz="-0.0008871" iyy="0.01045" iyz="0.0002226" izz="0.01817"/> -->
       <inertia ixx="0.0292" ixy="0.001177" ixz="-0.0008871" iyy="0.0183" iyz="0.0002226" izz="0.0256"/>
@@ -219,7 +219,7 @@
   </joint>
   <link name="camera_bottom_screw_frame"/>
   <joint name="camera_link_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0.0175 0.0125"/>
+    <origin rpy="0 0 0" xyz="0 0.0175 0.0"/>
     <parent link="camera_bottom_screw_frame"/>
     <child link="camera_link"/>
   </joint>
@@ -457,6 +457,9 @@
         <mesh filename="package://gz_migration/meshes/livox_mid40.dae">
           </mesh>
       </geometry>
+      <material name="grey">
+        <color rgba="0.2350821 0.2106182 0.2557221 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.043 0 0"/>
@@ -641,9 +644,10 @@
         <origin rpy="0 0 1.5707"
                 xyz="0.0 0.4 0.3057"/>
     </joint-->
+
   <!-- base ODE properties -->
   <gazebo reference="base_footprint">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -657,10 +661,15 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <gazebo reference="base_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -674,11 +683,16 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <!-- rocker ODE properties -->
   <gazebo reference="rocker_L_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -692,10 +706,15 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <gazebo reference="rocker_R_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -709,51 +728,151 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <!-- wheel ODE properties -->
-<gazebo reference="wheel_FL_link">
-  <kp>1e6</kp>
-  <kd>100.0</kd>
-  <mu1>3.0</mu1>
-  <mu2>2.0</mu2>
-  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
-  <minDepth>0.003</minDepth>
-</gazebo>
+<xacro:macro name="gazebo_wheel_contact">
 
-<gazebo reference="wheel_FR_link">
-  <kp>1e6</kp>
-  <kd>100.0</kd>
-  <mu1>3.0</mu1>
-  <mu2>2.0</mu2>
-  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
-  <minDepth>0.003</minDepth>
-</gazebo>
+  <gazebo reference="wheel_FL_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+          <bullet>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+          </bullet>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
 
-<gazebo reference="wheel_RL_link">
-  <kp>1e6</kp>
-  <kd>100.0</kd>
-  <mu1>3.0</mu1>
-  <mu2>2.0</mu2>
-  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
-  <minDepth>0.003</minDepth>
-</gazebo>
+  <gazebo reference="wheel_FR_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+          <bullet>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+          </bullet>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
 
-<gazebo reference="wheel_RR_link">
-  <kp>1e6</kp>
-  <kd>100.0</kd>
-  <mu1>3.0</mu1>
-  <mu2>2.0</mu2>
-  <fdir1>1 0 0</fdir1> <!-- verso in cui rotola la ruota -->
-  <minDepth>0.003</minDepth>
-</gazebo>
+  <gazebo reference="wheel_RL_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+          <bullet>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+          </bullet>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+
+  <gazebo reference="wheel_RR_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
+    <collision>
+      <surface>
+        <friction>
+          <ode>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
+          </ode>
+          <bullet>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+          </bullet>
+        </friction>
+      </surface>
+    </collision>
+  </gazebo>
+
+  <gazebo reference="collision_f_l">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_f_r">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_b_l">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_b_r">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+</xacro:macro>
 
   <!-- rocker differential -->
   <gazebo>
     <plugin name="leo_gz::DifferentialSystem" filename="libleo_gz_differential_plugin.so">
       <jointA>rocker_L_joint</jointA>
       <jointB>rocker_R_joint</jointB>
-      <forceConstant>10.0</forceConstant>
+      <forceConstant>100.0</forceConstant>
     </plugin>
   </gazebo>
   <gazebo>

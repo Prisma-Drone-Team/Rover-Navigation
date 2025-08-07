@@ -14,7 +14,8 @@
       <cast_shadows>false</cast_shadows>  <!-- no ombre -->
     </light>
 
-    <gravity>0 0 -1.622</gravity>
+    <!-- <gravity>0 0 -1.622</gravity> -->
+    <gravity>0 0 -9.8</gravity>
     <!-- <collision name="collision">
       <surface>
         <friction>
@@ -87,7 +88,7 @@
     </scene>
 
 
-    <physics type="ode">
+    <!-- <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1</real_time_factor>
@@ -106,7 +107,7 @@
           <contact_surface_layer>0.01000</contact_surface_layer>
         </constraints>
       </ode>
-    </physics>
+    </physics> -->
 
   </world>
 </sdf>

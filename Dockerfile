@@ -6,6 +6,15 @@ FROM ros:humble
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
 
+
+# Aggiungi librerie NVIDIA 535 (compatibili col driver host 570)
+RUN apt update && apt install -y \
+    nvidia-cuda-toolkit \
+    libnvidia-encode-535 \
+    libnvidia-compute-535 \
+    libnvidia-decode-535 \
+    libnvidia-ml-dev
+
 #Install essential
 RUN apt-get update && apt-get install -y
 RUN apt-get install software-properties-common dialog apt-utils apt-transport-https curl -y

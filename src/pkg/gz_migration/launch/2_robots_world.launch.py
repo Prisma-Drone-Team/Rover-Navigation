@@ -26,7 +26,7 @@ def generate_launch_description():
             package = 'ros_gz_bridge',
             executable = 'parameter_bridge',
             arguments = [
-                #'robot1/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                'robot1/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry',
                 '/model/leo1/pose@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
                 '/model/leo2/pose@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
                 #'/world/default/pose/info@geometry_msgs/msg/PoseArray@ignition.msgs.Pose_V',

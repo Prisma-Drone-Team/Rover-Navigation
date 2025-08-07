@@ -29,6 +29,8 @@
   <exec_depend>urdf_launch</exec_depend>
   <!--exec_depend>realsense_gazebo_plugin</exec_depend-->
   <exec_depend>ros2launch</exec_depend>
+  <exec_depend>nav2_costmap_2d</exec_depend>
+
   
   <depend>tf2_ros</depend>
   <depend>tf2_msgs</depend>

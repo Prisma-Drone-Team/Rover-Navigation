@@ -16,6 +16,10 @@ find_package(tf2_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(nav2_costmap_2d REQUIRED)
+find_package(pluginlib REQUIRED)
+
+
 #find_package(ros_gz_interfaces REQUIRED)
 #find_package(ignition-transport12 REQUIRED)
 #find_package(ignition-msgs REQUIRED)

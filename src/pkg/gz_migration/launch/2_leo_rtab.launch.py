@@ -60,9 +60,10 @@ def generate_launch_description():
             arguments=[
                 '-name', 'leo2', 
                 '-topic', 'robot_description', 
-                '-x', '-24.0',
-                '-y', '10.0', #-10
-                '-z', '15.0',
+                '-x', '1.5',
+                '-y', '8.0',
+                '-z', '12',
+                '-Y', '1.2',
                 ],
             respawn=False,
         )

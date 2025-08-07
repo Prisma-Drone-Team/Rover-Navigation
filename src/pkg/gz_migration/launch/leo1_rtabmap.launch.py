@@ -64,7 +64,7 @@ def launch_setup(context, *args, **kwargs):
         DeclareLaunchArgument('rgbd_topic_relay',      default_value=ConditionalText(''.join(LaunchConfiguration('rgbd_topic').perform(context)), ''.join([LaunchConfiguration('rgbd_topic').perform(context), "_relay"]), LaunchConfiguration('rgbd_sync').perform(context)), description='Should not be modified manually!'),
 
         #Personalized Arguments for SLAM
-        DeclareLaunchArgument('map_always_update', default_value="true", description=''),
+        DeclareLaunchArgument('map_always_update', default_value="true", description=''),  
         DeclareLaunchArgument('Grid/Sensor', default_value='"true"', description=''),
         DeclareLaunchArgument('Grid/RangeMax', default_value='"150.0"', description=''),
         DeclareLaunchArgument('Grid/RangeMin', default_value='"0.3"', description=''),
@@ -94,8 +94,8 @@ def launch_setup(context, *args, **kwargs):
         DeclareLaunchArgument('MapUpdateRate', default_value='"10.0"', description=''),
         DeclareLaunchArgument('GridGlobal/MinSize', default_value="'100'", description=''),
         DeclareLaunchArgument('GridGlobal/UpdateError', default_value='"0.5"', description=''),
-        DeclareLaunchArgument('Grid/FlatObstacleDetectedAngle', default_value='"10"', description=''),
-        DeclareLaunchArgument('Grid/MaxGroundAngle', default_value='"15"', description=''),
+        DeclareLaunchArgument('Grid/FlatObstacleDetectedAngle', default_value='"5"', description=''),
+        DeclareLaunchArgument('Grid/MaxGroundAngle', default_value='"10"', description=''),
 
         #DeclareLaunchArgument('database_path', default_value="''", description=''),
 
@@ -384,8 +384,8 @@ def launch_setup(context, *args, **kwargs):
                 "GridGlobal/FullUpdate" : LaunchConfiguration('GridGlobal/FullUpdate'),
                 # "MapUpdateRate" : LaunchConfiguration('MapUpdateRate'),
                 #"GridGlobal/OccupancyThr" : LaunchConfiguration('GridGlobal/OccupancyThr'),
-                "Grid/FlatObstacleDetectedAngle" : LaunchConfiguration('Grid/FlatObstacleDetectedAngle'),
-                "Grid/MaxGroundAngle" : LaunchConfiguration('Grid/MaxGroundAngle'),
+                # "Grid/FlatObstacleDetectedAngle" : LaunchConfiguration('Grid/FlatObstacleDetectedAngle'),
+                # "Grid/MaxGroundAngle" : LaunchConfiguration('Grid/MaxGroundAngle'),
                 #"Mem/IncrementalMemory" : LaunchConfiguration('Mem/IncrementalMemory'),
 
 

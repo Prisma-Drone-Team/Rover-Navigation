@@ -169,7 +169,7 @@ controller_server:
           publish_feedback: true
 
           # Robot
-          max_vel_x: 0.3  # 0.1
+          max_vel_x: 0.05  # 0.1
           max_vel_x_backwards: 0.05
           max_vel_theta: 4.0  # 15deg more or less
           acc_lim_x: 1.0  # was 1.0
@@ -241,7 +241,7 @@ local_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 #was 3.0
-        inflation_radius: 1.4 #was 0.55
+        inflation_radius: 0.3 #was 0.55
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -278,22 +278,22 @@ local_costmap:
 global_costmap:
   global_costmap:
     ros__parameters:
-      update_frequency: 2.0
-      publish_frequency: 1.0
+      update_frequency: 1.0
+      publish_frequency: 2.0
       global_frame: robot1/map #rover/map
       robot_base_frame: robot1/base_link
       #map_topic: /robot1/map
       use_sim_time: True
       robot_radius: 0.25
       resolution: 0.05
-      track_unknown_space: false
+      track_unknown_space: true
       #-- WARNING THIS IS GOOD ONLY FOR LEAONARDO
       height: 500 #was 50
       width: 500 #was 50
       origin_x: -50.0
       origin_y: -50.0
       #--
-      plugins: ["static_layer","obstacle_layer",  "inflation_layer"] #
+      plugins: ["static_layer", "gradient_layer",  "inflation_layer"] #"obstacle_layer"
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -314,12 +314,18 @@ global_costmap:
           obstacle_min_range: 0.0
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
+        enabled: true
         subscribe_to_updates: True
         map_subscribe_transient_local: True
+      gradient_layer:
+        plugin: "costmap_plugin/GradientLayer"
+        enabled: true
+        slope_threshold_deg: 30.0
+        inflation_radius: 0.3 #must be equal to the inlfation layer one
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 #was 3.0
-        inflation_radius: 1.4 #was 0.55
+        inflation_radius: 0.3 #was 0.55
       always_send_full_costmap: True
       qos_overrides:
         cloud:
@@ -410,8 +416,8 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.3, 0.0, 4.0]
-    min_velocity: [-0.3, 0.0, -4.0]
+    max_velocity: [0.05, 0.0, 4.0]
+    min_velocity: [-0.05, 0.0, -4.0]
     max_accel: [0.1, 0.0, 4.0]
     max_decel: [-1.0, 0.0, -4.0]
     odom_topic: "robot1/odom"
