@@ -1,53 +1,32 @@
-# Copyright 2023 Intel Corporation. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Launch realsense2_camera node."""
 import os
 import yaml
 from launch import LaunchDescription
 import launch_ros.actions
-from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 
 
 configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
-                           {'name': 'camera_namespace',             'default': 'rover', 'description': 'namespace for camera'},
-                           {'name': 'depth_qos',                    'default': 'SENSOR_DATA', 'description': 'depth_qos'},
-                           {'name': 'color_qos',                    'default': 'SENSOR_DATA', 'description': 'color_qos'},
-                           {'name': 'gyro_qos',                     'default': 'SENSOR_DATA', 'description': 'depth_qos'},
-                           {'name': 'accel_qos',                    'default': 'SENSOR_DATA', 'description': 'color_qos'},
-                           {'name': 'pointcloud.pointcloud_qos',    'default': 'SENSOR_DATA', 'description': 'pointcloud_qos'},
+                           {'name': 'camera_namespace',             'default': '', 'description': 'namespace for camera'},
                            {'name': 'serial_no',                    'default': "''", 'description': 'choose device by serial number'},
                            {'name': 'usb_port_id',                  'default': "''", 'description': 'choose device by usb port id'},
                            {'name': 'device_type',                  'default': "''", 'description': 'choose device by type'},
                            {'name': 'config_file',                  'default': "''", 'description': 'yaml config file'},
                            {'name': 'json_file_path',               'default': "''", 'description': 'allows advanced configuration'},
-                           {'name': 'initial_reset',                'default': 'false', 'description': "''"},
+                           {'name': 'initial_reset',                'default': 'true', 'description': "''"},
                            {'name': 'accelerate_gpu_with_glsl',     'default': "false", 'description': 'enable GPU acceleration with GLSL'},
                            {'name': 'rosbag_filename',              'default': "''", 'description': 'A realsense bagfile to run from as a device'},
                            {'name': 'log_level',                    'default': 'info', 'description': 'debug log level [DEBUG|INFO|WARN|ERROR|FATAL]'},
                            {'name': 'output',                       'default': 'screen', 'description': 'pipe node output [screen|log]'},
                            {'name': 'enable_color',                 'default': 'true', 'description': 'enable color stream'},
-                           {'name': 'rgb_camera.color_profile',     'default': '0,0,0', 'description': 'color stream profile'},
+                           {'name': 'rgb_camera.color_profile',     'default': '640,480,30', 'description': 'color stream profile'},
                            {'name': 'rgb_camera.color_format',      'default': 'RGB8', 'description': 'color stream format'},
                            {'name': 'rgb_camera.enable_auto_exposure', 'default': 'true', 'description': 'enable/disable auto exposure for color image'},
                            {'name': 'enable_depth',                 'default': 'true', 'description': 'enable depth stream'},
                            {'name': 'enable_infra',                 'default': 'false', 'description': 'enable infra0 stream'},
                            {'name': 'enable_infra1',                'default': 'false', 'description': 'enable infra1 stream'},
                            {'name': 'enable_infra2',                'default': 'false', 'description': 'enable infra2 stream'},
-                           {'name': 'depth_module.depth_profile',   'default': '0,0,0', 'description': 'depth stream profile'},
+                           {'name': 'depth_module.depth_profile',   'default': '640,480,30', 'description': 'depth stream profile'},
                            {'name': 'depth_module.depth_format',    'default': 'Z16', 'description': 'depth stream format'},
                            {'name': 'depth_module.infra_profile',   'default': '0,0,0', 'description': 'infra streams (0/1/2) profile'},
                            {'name': 'depth_module.infra_format',    'default': 'RGB8', 'description': 'infra0 stream format'},
@@ -62,12 +41,12 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'depth_module.exposure.2',      'default': '1', 'description': 'Depth module second exposure value. Used for hdr_merge filter'},
                            {'name': 'depth_module.gain.2',          'default': '16', 'description': 'Depth module second gain value. Used for hdr_merge filter'},
                            {'name': 'enable_sync',                  'default': 'true', 'description': "'enable sync mode'"},
-                           {'name': 'enable_rgbd',                  'default': 'false', 'description': "'enable rgbd topic'"},
+                           {'name': 'enable_rgbd',                  'default': 'true', 'description': "'enable rgbd topic'"},
                            {'name': 'enable_gyro',                  'default': 'false', 'description': "'enable gyro stream'"},
                            {'name': 'enable_accel',                 'default': 'false', 'description': "'enable accel stream'"},
-                           {'name': 'gyro_fps',                     'default': '200', 'description': "''"},
-                           {'name': 'accel_fps',                    'default': '200', 'description': "''"},
-                           {'name': 'unite_imu_method',             'default': "1", 'description': '[0-None, 1-copy, 2-linear_interpolation]'},
+                           {'name': 'gyro_fps',                     'default': '0', 'description': "''"},
+                           {'name': 'accel_fps',                    'default': '0', 'description': "''"},
+                           {'name': 'unite_imu_method',             'default': "0", 'description': '[0-None, 1-copy, 2-linear_interpolation]'},
                            {'name': 'clip_distance',                'default': '-2.', 'description': "''"},
                            {'name': 'angular_velocity_cov',         'default': '0.01', 'description': "''"},
                            {'name': 'linear_accel_cov',             'default': '0.01', 'description': "''"},
@@ -82,8 +61,8 @@ configurable_parameters = [{'name': 'camera_name',                  'default': '
                            {'name': 'align_depth.enable',           'default': 'true', 'description': 'enable align depth filter'},
                            {'name': 'colorizer.enable',             'default': 'false', 'description': 'enable colorizer filter'},
                            {'name': 'decimation_filter.enable',     'default': 'false', 'description': 'enable_decimation_filter'},
-                           {'name': 'spatial_filter.enable',        'default': 'false', 'description': 'enable_spatial_filter'},
-                           {'name': 'temporal_filter.enable',       'default': 'false', 'description': 'enable_temporal_filter'},
+                           {'name': 'spatial_filter.enable',        'default': 'true', 'description': 'enable_spatial_filter'},
+                           {'name': 'temporal_filter.enable',       'default': 'true', 'description': 'enable_temporal_filter'},
                            {'name': 'disparity_filter.enable',      'default': 'false', 'description': 'enable_disparity_filter'},
                            {'name': 'hole_filling_filter.enable',   'default': 'false', 'description': 'enable_hole_filling_filter'},
                            {'name': 'hdr_merge.enable',             'default': 'false', 'description': 'hdr_merge filter enablement flag'},
@@ -125,18 +104,7 @@ def launch_setup(context, params, param_name_suffix=''):
             )
     ]
 
-tf_publisher_node = Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name="footprint_to_rover_camera",
-                arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "rover/camera_link", "camera_link"],
-            )
-nodes_to_start = [
-        tf_publisher_node,
-]
-
 def generate_launch_description():
     return LaunchDescription(declare_configurable_parameters(configurable_parameters) + [
         OpaqueFunction(function=launch_setup, kwargs = {'params' : set_configurable_parameters(configurable_parameters)})
-            ] + nodes_to_start
-        )
+    ])
