@@ -4,11 +4,14 @@
   <include file="$(find-pkg-share roboclaw_ros2)/launch/diffdrive.launch"/>
   <include file="$(find-pkg-share rover_bringup)/launch/rplidar_s1.launch.py"/>
 
-  <!-- <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/> -->
+  <include file="$(find-pkg-share rover_bringup)/launch/rs_camera.launch.py"/>
   
-  <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py">
+  <!-- <include file="$(find-pkg-share rover_bringup)/launch/online_async_launch.py">
       <arg name="namespace" value="rover"/>
-  </include>
+  </include> -->
+
+  <include file="$(find-pkg-share rover_bringup)/launch/rtabmap.launch.py"/>
+
   <include file="$(find-pkg-share rover_bringup)/launch/navigation_launch.py">
     <arg name="namespace" value="rover"/>
   </include>
