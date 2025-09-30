@@ -4,7 +4,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     this_package_name = 'yolov11_ros2'
     
-    # Run the yolov8 node with OpenVINO
+    # Run the yolov11 node with OpenVINO
     yolov11_node = Node(
         package=this_package_name,
         executable='yolov11_node',

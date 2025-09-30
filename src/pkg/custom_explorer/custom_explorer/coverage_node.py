@@ -197,7 +197,7 @@ class CoverageNode(Node):
             return
 
         goal_msg = PoseStamped()
-        goal_msg.header.frame_id = 'rover/map'
+        goal_msg.header.frame_id = 'map'
         goal_msg.header.stamp = self.get_clock().now().to_msg()
         goal_msg.pose.position.x = x
         goal_msg.pose.position.y = y

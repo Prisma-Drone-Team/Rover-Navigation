@@ -1,48 +1,7 @@
-amcl:
-  ros__parameters:
-    use_sim_time: False
-    alpha1: 0.2
-    alpha2: 0.2
-    alpha3: 0.2
-    alpha4: 0.2
-    alpha5: 0.2
-    base_frame_id: "base_footprint"
-    beam_skip_distance: 0.5
-    beam_skip_error_threshold: 0.9
-    beam_skip_threshold: 0.3
-    do_beamskip: false
-    global_frame_id: "rover/map"
-    lambda_short: 0.1
-    laser_likelihood_max_dist: 2.0
-    laser_max_range: 100.0
-    laser_min_range: -1.0
-    laser_model_type: "likelihood_field"
-    max_beams: 60
-    max_particles: 2000
-    min_particles: 500
-    odom_frame_id: "rover/odom" #"rover/odom"
-    pf_err: 0.05
-    pf_z: 0.99
-    recovery_alpha_fast: 0.0
-    recovery_alpha_slow: 0.0
-    resample_interval: 1
-    robot_model_type: "nav2_amcl::DifferentialMotionModel"
-    save_pose_rate: 0.5
-    sigma_hit: 0.2
-    tf_broadcast: true
-    transform_tolerance: 1.0
-    update_min_a: 0.2
-    update_min_d: 0.25
-    z_hit: 0.5
-    z_max: 0.05
-    z_rand: 0.5
-    z_short: 0.05
-    scan_topic: /rover/scan
-
 bt_navigator:
   ros__parameters:
     use_sim_time: False
-    global_frame: rover/map
+    global_frame: map
     robot_base_frame: rover/base_link
     odom_topic: /rover/odom
     bt_loop_duration: 100
@@ -112,9 +71,9 @@ controller_server:
   ros__parameters:
     use_sim_time: False
     odom_topic: /rover/odom
-    controller_frequency: 5.0 # was 20/50.0
+    controller_frequency: 20.0 # was 20/50.0
     min_x_velocity_threshold: 0.001
-    min_y_velocity_threshold: 0.5
+    min_y_velocity_threshold: 0.1
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
     progress_checker_plugin: "progress_checker"
@@ -124,7 +83,7 @@ controller_server:
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 0.2
+      required_movement_radius: 0.22
       movement_time_allowance: 10.0
     # Goal checker parameters
     #precise_goal_checker:
@@ -140,7 +99,7 @@ controller_server:
     FollowPath:
           plugin: "teb_local_planner::TebLocalPlannerROS"
           # odom_topic: /rover/odom
-          map_frame: rover/map
+          map_frame: map
 
           # Trajectory
           teb_autosize: 1.0  # deve rimanere un double
@@ -152,22 +111,22 @@ controller_server:
           publish_feedback: true
 
           # Robot
-          max_vel_x: 0.15  # 0.1
+          max_vel_x: 0.35  # 0.1
           max_vel_x_backwards: 0.05
-          max_vel_theta: 0.3  # 15deg more or less
+          max_vel_theta: 0.2  # 15deg more or less
           acc_lim_x: 0.1  # was 1.0
-          acc_lim_theta: 0.3  # was 0.3
+          acc_lim_theta: 0.1  # was 0.3
           min_turning_radius: 0.0
           footprint_model:
             type: "circular"
-            radius: 0.2
+            radius: 0.22
           # GoalTolerance
-          xy_goal_tolerance: 0.15  # was 0.1
-          yaw_goal_tolerance: 0.15  # was 0.1
+          xy_goal_tolerance: 0.25  # was 0.1
+          yaw_goal_tolerance: 0.25  # was 0.1
           free_goal_vel: False
 
           # Obstacles
-          min_obstacle_dist: 0.1  # was 0.15
+          min_obstacle_dist: 0.05  # was 0.15
           include_costmap_obstacles: True
           costmap_obstacles_behind_robot_dist: 1.0
           obstacle_poses_affected: 20  # was 30
@@ -217,7 +176,7 @@ local_costmap:
       width: 6
       height: 6
       resolution: 0.05
-      robot_radius: 0.2
+      robot_radius: 0.22
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
@@ -242,7 +201,7 @@ local_costmap:
           raytrace_max_range: 3.0
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
-          obstacle_min_range: 0.0 #0.3
+          obstacle_min_range: 0.4 #0.3
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -260,7 +219,7 @@ global_costmap:
       global_frame: rover/map
       robot_base_frame: rover/base_link
       use_sim_time: False
-      robot_radius: 0.2
+      robot_radius: 0.22
       resolution: 0.05
       track_unknown_space: true
       #-- WARNING THIS IS GOOD ONLY FOR LEAONARDO
@@ -283,7 +242,7 @@ global_costmap:
           raytrace_max_range: 3.0
           raytrace_min_range: 0.0
           obstacle_max_range: 2.5
-          obstacle_min_range: 0.0 #0.3
+          obstacle_min_range: 0.4 #0.3
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
@@ -356,7 +315,7 @@ behavior_server:
     simulate_ahead_time: 2.0
     max_rotational_vel: 0.5
     min_rotational_vel: 0.0
-    rotational_acc_lim: 0.5
+    rotational_acc_lim: 0.1
 
 robot_state_publisher:
   ros__parameters:
@@ -379,9 +338,9 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.3, 0.0, 0.5]
-    min_velocity: [-0.3, 0.0, -0.5]
-    max_accel: [0.3, 0.0, 0.5]
+    max_velocity: [0.3, 0.0, 0.2]
+    min_velocity: [-0.3, -0.0, -0.2]
+    max_accel: [0.1, 0.1, 0.1]
     max_decel: [-0.3, 0.0, -0.5]
     odom_topic: "rover/odom"
     odom_duration: 0.1

@@ -67,7 +67,8 @@ RUN apt-get install ros-humble-robot-localization -y
 
 RUN apt-get update && apt-get install -y
 RUN sudo apt install pip -y
-RUN pip3 install opencv-python opencv-contrib-python transforms3d
+RUN pip3 install opencv-python opencv-contrib-python
+RUN pip3 install --upgrade transforms3d
 RUN apt-get update && apt install ros-humble-tf-transformations -y
 RUN pip3 install --no-cache-dir Cython
 
@@ -129,7 +130,16 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash;" >>  ${HOME}/.bashrc
 RUN echo "source ${HOME}/ros2_ws/install/local_setup.bash;" >>  ${HOME}/.bashrc
 
 
+
+
 #Clean image
 USER root
+# Additional packages
+RUN apt update && apt install -y --no-install-recommends \    
+    aptitude \
+    tmux \
+    tmuxp 
+
+COPY tmux.conf .tmux.conf
 RUN rm -rf /var/lib/apt/lists/*
 USER user

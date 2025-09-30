@@ -28,7 +28,7 @@ def generate_launch_description():
     
     
     # Run the yolov8 node, with the set device
-    yolov8_node = Node(
+    yolov11_node = Node(
         package=this_package_name,
         executable='yolov11_node',
         #name='node2', # Default is name of executable

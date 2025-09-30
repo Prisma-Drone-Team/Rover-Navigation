@@ -290,33 +290,10 @@ class Yolov11Node(Node):
                 detection_class = detection.boxes.cls.cpu().numpy()
                 detection_conf = detection.boxes.conf.cpu().numpy()
                 
-                # MODIFICA: Calcola le posizioni come nel metodo process_yolo_detections
-                for i, (item, n) in enumerate(zip(detection_class, range(n_objects))):
-                    xmin, ymin, xmax, ymax = object_boxes[i]
-                    label = detection.names[item]
-                    
-                    # Calcola le coordinate come in process_yolo_detections
-                    u = int((xmin + xmax) / 2.0)
-                    v = int((ymin + ymax) / 2.0)
-                    
-                    # Verifica che le coordinate siano valide
-                    if (u < 0 or v < 0 or u >= np_depth_image.shape[1] or v >= np_depth_image.shape[0]):
-                        position = [0.0, 0.0, 0.0]  # Posizione di default se non valida
-                    else:
-                        depth = np_depth_image[v, u] / 1000.0  # mm -> m
-                        if depth == 0 or np.isnan(depth):
-                            position = [0.0, 0.0, 0.0]  # Posizione di default se depth non valida
-                        else:
-                            # Calcola X, Y, Z come in process_yolo_detections
-                            X = (u - self.cx) * depth / self.fx
-                            Y = (v - self.cy) * depth / self.fy
-                            Z = depth
-                            position = [float(X), float(Y), float(Z), 1.0]
-                    
-                    item_dict[f'item_{n}'] = {
-                        'class': detection.names[item],
-                        'position': position
-                    }
+                for item, n, median_tf in zip(detection_class, range(n_objects), objects_median_center_transform):
+
+                    item_dict[f'item_{n}'] = {'class': detection.names[item],
+                                             'position': median_tf.tolist()}
                 
                 self.item_dict = item_dict
                 self.item_dict_str = json.dumps(self.item_dict)
@@ -325,7 +302,6 @@ class Yolov11Node(Node):
                 item_dict_msg = String()
                 item_dict_msg.data = self.item_dict_str
                 self._item_dict_pub.publish(item_dict_msg)
-                
                 detections = []
                 for i, box in enumerate(object_boxes):
                     xmin, ymin, xmax, ymax = box
@@ -380,6 +356,19 @@ class Yolov11Node(Node):
             pose.position.y = float(Y)
             pose.position.z = float(Z)
             pose.orientation.w = 1.0
+
+            # Trasforma in base_link da fare se posestamped
+            # try:
+            #     transform = self.tf_buffer.lookup_transform(
+            #         'rover/map', 'rover/camera_rgb_optical_frame', rclpy.time.Time())
+            #     pose_stamped = PoseStamped()
+            #     pose_stamped.pose = pose
+            #     pose_stamped.header = pose_array.header
+            #     pose_transformed = tf2_geometry_msgs.do_transform_pose(pose_stamped, transform)
+            #     pose = pose_transformed.pose
+                
+            # except Exception as e:
+            #     self.get_logger().warn(f"TF transform failed: {e}")
 
             pose_array.poses.append(pose)
             self.get_logger().info(f"Added {label} at ({pose.position.x:.2f}, {pose.position.y:.2f}, {pose.position.z:.2f})")
