@@ -272,7 +272,7 @@ void RoverManager::execute_command(const std::string& cmd)
         nav2_running = false; 
         coverage_active = false; 
         command_running = false; 
-        // current_command = "";
+        current_command = "";
         navigation_in_progress = false;
     }
     else if(op == "stop" || op == "emergency_stop"){
@@ -283,14 +283,14 @@ void RoverManager::execute_command(const std::string& cmd)
         nav2_running = false; 
         coverage_active = false; 
         command_running = false; 
-        // current_command = "";
+        current_command = "";
         navigation_in_progress = false;
     }
     else if(op == "cancel" || op == "cancel_goal"){
         if(client_ptr_) client_ptr_->async_cancel_all_goals();
         nav2_running = false; 
         command_running = false; 
-        // current_command = "";
+        current_command = "";
         navigation_in_progress = false;
     }
     else if(op == "return" || op == "return_to_base"){
@@ -342,15 +342,19 @@ void RoverManager::nav2_result_callback(const rclcpp_action::ClientGoalHandle<na
     switch(result.code){
         case rclcpp_action::ResultCode::SUCCEEDED:
             RCLCPP_INFO(this->get_logger(), "Goal reached successfully");
+            new_command = "";
             break;
         case rclcpp_action::ResultCode::ABORTED:
             RCLCPP_ERROR(this->get_logger(), "Goal was aborted");
+            new_command = "";
             break;
         case rclcpp_action::ResultCode::CANCELED:
             RCLCPP_WARN(this->get_logger(), "Goal was canceled");
+            new_command = "";
             break;
         default:
             RCLCPP_WARN(this->get_logger(), "Unknown result code");
+            new_command = "";
             break;
     }
 
@@ -363,11 +367,11 @@ void RoverManager::nav2_result_callback(const rclcpp_action::ClientGoalHandle<na
             RCLCPP_INFO(this->get_logger(), "Coverage completed!");
             coverage_active = false;
             command_running = false;
-            // current_command = "";
+            current_command = "";
         }
     } else {
         // Per comandi normali (non coverage), resettiamo lo stato
-        // current_command = "";
+        current_command = "";
         command_running = false;
         nav2_running = false;
     }
@@ -461,7 +465,7 @@ void RoverManager::execute_coverage_step(){
         RCLCPP_INFO(this->get_logger(), "Coverage completed!");
         coverage_active = false;
         command_running = false;
-        // current_command = "";
+        current_command = "";
         return;
     }
 
