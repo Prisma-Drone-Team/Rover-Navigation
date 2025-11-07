@@ -26,7 +26,7 @@ def generate_launch_description():
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_2',
-              arguments = ['-24.0', '10.0', '15.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
+              arguments = ['-24.0', '10.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
         )
         
         static_tf_2 = Node(

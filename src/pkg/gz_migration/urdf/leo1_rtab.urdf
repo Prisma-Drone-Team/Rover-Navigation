@@ -902,8 +902,8 @@
       <child_frame_id>robot1/base_footprint</child_frame_id> <!--frame target di odom tf-->
       <odom_publish_frequency></odom_publish_frequency>
       <topic>/robot1/cmd_vel</topic> <!--topic da cui legge cmd_vel-->
-      <odom_topic></odom_topic> <!--topic su cui pubblica odom-->
-      <tf_topic></tf_topic> <!--topic su cui pubblica tf tra frame_id e child_frame_id-->
+      <odom_topic>/robot1/odom/wheels</odom_topic> <!--topic su cui pubblica odom-->
+      <tf_topic>/robot1/tf_gzebo</tf_topic> <!--topic su cui pubblica tf tra frame_id e child_frame_id-->
       <max_linear_acceleration>2.5</max_linear_acceleration>
       <max_angular_acceleration>3</max_angular_acceleration>
       <min_linear_acceleration>-2.5</min_linear_acceleration>

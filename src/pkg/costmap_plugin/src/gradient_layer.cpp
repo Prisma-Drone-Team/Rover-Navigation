@@ -67,7 +67,7 @@ GradientLayer::onInitialize()
     node->get_parameter(name_ + "." + "slope_threshold_deg", slope_threshold_deg_);
 
     octomap_sub_ = node->create_subscription<octomap_msgs::msg::Octomap>(
-      "/robot1/octomap_full", 2,
+      "/rtab1/octomap_full", 2,
       std::bind(&GradientLayer::pointCloudCallback, this, std::placeholders::_1));
   }
 
