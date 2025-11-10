@@ -27,6 +27,7 @@ GradientLayer::GradientLayer()
   cost_scaling_factor_(0),
   inflate_unknown_(false),
   inflate_around_unknown_(false),
+  first_update_(true),
   cell_inflation_radius_(0),
   cached_cell_inflation_radius_(0),
   resolution_(0),
@@ -56,6 +57,7 @@ GradientLayer::onInitialize()
   declareParameter("inflation_radius", rclcpp::ParameterValue(0.55));
   declareParameter("cost_scaling_factor", rclcpp::ParameterValue(10.0));
   declareParameter("slope_threshold_deg", rclcpp::ParameterValue(15.0));
+  declareParameter("octomap_topic", rclcpp::ParameterValue("/rtabmap/octomap_full"));
   {
     auto node = node_.lock();
     if (!node) {
@@ -65,9 +67,10 @@ GradientLayer::onInitialize()
     node->get_parameter(name_ + "." + "inflation_radius", inflation_radius_);
     node->get_parameter(name_ + "." + "cost_scaling_factor", cost_scaling_factor_);
     node->get_parameter(name_ + "." + "slope_threshold_deg", slope_threshold_deg_);
+    node->get_parameter(name_ + "." + "octomap_topic", octomap_topic_);
 
     octomap_sub_ = node->create_subscription<octomap_msgs::msg::Octomap>(
-      "/rtab1/octomap_full", 2,
+      octomap_topic_, 2,
       std::bind(&GradientLayer::pointCloudCallback, this, std::placeholders::_1));
   }
 
@@ -176,25 +179,33 @@ GradientLayer::onFootprintChanged()
  * @param max_i Maximum x index of the update bounds.
  * @param max_j Maximum y index of the update bounds.
  */
-void
-GradientLayer::updateCosts(
+void GradientLayer::updateCosts(
   nav2_costmap_2d::Costmap2D & master_grid, int min_i, int min_j,
-  int max_i,
-  int max_j)
+  int max_i, int max_j)
 {
   std::lock_guard<nav2_costmap_2d::Costmap2D::mutex_t> guard(*getMutex());
-  if (!enabled_ || !octree_) {
-    RCLCPP_ERROR(logger_, "Octree pointer is mullptr");
+  
+  // ==================== SAFETY CHECKS ====================
+  if (!enabled_) {
+    return;  // Layer disabilitato
+  }
+  
+  if (!octree_) {
+    RCLCPP_WARN_THROTTLE(logger_, *node_.lock()->get_clock(), 5000, 
+                         "GradientLayer: Octree not available yet");
     return;
   }
-  // RCLCPP_INFO(logger_, "Update COST");
 
   unsigned char * master_array = master_grid.getCharMap();
   if (!master_array) {
-  RCLCPP_ERROR(logger_, "master_array è nullptr");
-  return;
+    RCLCPP_ERROR(logger_, "master_array is nullptr");
+    return;
   }
-  unsigned int size_x = master_grid.getSizeInCellsX(), size_y = master_grid.getSizeInCellsY();
+
+  unsigned int size_x = master_grid.getSizeInCellsX();
+  unsigned int size_y = master_grid.getSizeInCellsY();
+  
+  // ==================== INIZIALIZZAZIONE ====================
   reference_z_map_.clear();
   seen_.clear();
   occupied_.clear();
@@ -203,92 +214,50 @@ GradientLayer::updateCosts(
   min_j = std::max(0, min_j);
   max_i = std::min(static_cast<int>(size_x), max_i);
   max_j = std::min(static_cast<int>(size_y), max_j);
-  constexpr float INVALID_ELEVATION = std::numeric_limits<float>::lowest();
 
-  reference_z_map_.resize(size_x * size_y, 0);
+  constexpr float INVALID_ELEVATION = -1000.0f;
+  reference_z_map_.resize(size_x * size_y, INVALID_ELEVATION);
   seen_.resize(size_x * size_y, false);
-  occupied_ = std::vector<bool>(size_x * size_y, false);
-  for (unsigned int i = 0; i < size_x * size_y; ++i) {
-    if(master_array[i] == nav2_costmap_2d::NO_INFORMATION) {
-       reference_z_map_[i] = -1000; 
-    }
-  }
-  RCLCPP_INFO(logger_, "Seen inizializzata");
+  occupied_.resize(size_x * size_y, false);
 
+  // ==================== POSIZIONE ROBOT ====================
   unsigned int robot_mx, robot_my;
-  if (!master_grid.worldToMap(last_pose_x_,last_pose_y_ , robot_mx, robot_my)) {
-    RCLCPP_WARN(logger_, "Robot is outside the costmap bounds");
+  if (!master_grid.worldToMap(last_pose_x_, last_pose_y_, robot_mx, robot_my)) {
+    RCLCPP_WARN(logger_, "Robot is outside costmap bounds");
     return;
   }
-  double last_pose_z_ = 0.0; 
+  
+  // ==================== FILTRAGGIO OCTOMAP ====================
+  double last_pose_z = 0.0;
+  auto filtered_tree = gradient_utils::filterOctomapWithinRadius(
+    octree_, master_grid, reference_z_map_, occupied_,
+    last_pose_x_, last_pose_y_, last_pose_z, 15.0, min_dist
+  );
 
-  // auto filtered_tree = filterLocalOctomap(master_grid, 1.0);
-  auto filtered_tree = gradient_utils::filterOctomapWithinRadius(octree_, master_grid,reference_z_map_, occupied_,
-  last_pose_x_, last_pose_y_, last_pose_z_, 5.0, min_dist);
-
-  // if (gradient_utils::collisionCheck(octree_, last_pose_x_, last_pose_y_, last_pose_z_, 1.0)){
-  //   RCLCPP_INFO(logger_, "Collision detected within 1 meter radius of the robot");
-  // }
-
-
-  // RCLCPP_INFO(logger_, "Filtered OctoMap has %lu leaf nodes", filtered_tree->getNumLeafNodes());
-  // octomap_msgs::msg::Octomap msg;
-  // octomap_msgs::fullMapToMsg(*filtered_tree, msg);
-  // msg.header.frame_id = "rover/map";
-  // msg.header.stamp = node_.lock()->now();
-  // filtered_octomap_pub_->publish(msg);
-
-
-  // RCLCPP_INFO(logger_, "Attitude map riempita");
-
-
-
-
-
-  // Pubblicazione della mappa di elevazione
-  // nav_msgs::msg::OccupancyGrid elevation_msg;
-  // elevation_msg.header.stamp = node_.lock()->now();
-  // elevation_msg.header.frame_id = layered_costmap_->getGlobalFrameID();
-  // elevation_msg.info.resolution = master_grid.getResolution();
-  // elevation_msg.info.width = master_grid.getSizeInCellsX();
-  // elevation_msg.info.height = master_grid.getSizeInCellsY();
-  // elevation_msg.info.origin.position.x = master_grid.getOriginX();
-  // elevation_msg.info.origin.position.y = master_grid.getOriginY();
-  // elevation_msg.info.origin.position.z = 0.0;
-  // elevation_msg.info.origin.orientation.w = 1.0;
-
-  // elevation_msg.data.resize(reference_z_map_.size());
-
-  // for (size_t i = 0; i < reference_z_map_.size(); ++i) {
-  //   float elevation = reference_z_map_[i];
-  //   if (elevation < -100 || elevation > 100) {
-  //     elevation_msg.data[i] = -1;  // no data
-  //   } else {
-  //     // Normalize for 0-100 display in RViz
-  //     elevation_msg.data[i] = std::min(100, std::max(0, static_cast<int>(elevation * 100)));
-  //   }
-  // }
-
-  // elevation_pub_->publish(elevation_msg);
-
-  // Ottenimento celle corrispondenti al footprint del robot
+  // ==================== FOOTPRINT CLEARING ====================
   std::unordered_set<unsigned int> footprint_cells;
   footprint = layered_costmap_->getFootprint();
+  
   for (const auto& pt : footprint) {
-    unsigned int fx, fy;
     double global_x = std::cos(last_pose_yaw_) * pt.x - std::sin(last_pose_yaw_) * pt.y + last_pose_x_;
     double global_y = std::sin(last_pose_yaw_) * pt.x + std::cos(last_pose_yaw_) * pt.y + last_pose_y_;
+    
+    unsigned int fx, fy;
     if (master_grid.worldToMap(global_x, global_y, fx, fy)) {
-      // Convert inflation_radius (in metri) in celle
-      unsigned int radius_cells = static_cast<unsigned int>(std::ceil(inflation_radius_/ master_grid.getResolution()));
+      unsigned int radius_cells = static_cast<unsigned int>(
+        std::ceil(inflation_radius_ / master_grid.getResolution())
+      );
 
-      // Espandi attorno al punto (fx, fy)
-      for (int dx = -static_cast<int>(radius_cells-2); dx <= static_cast<int>(radius_cells-2); ++dx) {
-        for (int dy = -static_cast<int>(radius_cells-2); dy <= static_cast<int>(radius_cells-2); ++dy) {
+      for (int dx = -static_cast<int>(radius_cells - 2); 
+           dx <= static_cast<int>(radius_cells - 2); ++dx) {
+        for (int dy = -static_cast<int>(radius_cells - 2); 
+             dy <= static_cast<int>(radius_cells - 2); ++dy) {
           int nx = static_cast<int>(fx) + dx;
           int ny = static_cast<int>(fy) + dy;
 
-          if (nx >= 0 && ny >= 0 && nx < static_cast<int>(master_grid.getSizeInCellsX()) && ny < static_cast<int>(master_grid.getSizeInCellsY())) {
+          if (nx >= 0 && ny >= 0 && 
+              nx < static_cast<int>(size_x) && 
+              ny < static_cast<int>(size_y)) {
             unsigned int nidx = master_grid.getIndex(nx, ny);
             footprint_cells.insert(nidx);
           }
@@ -297,126 +266,139 @@ GradientLayer::updateCosts(
     }
   }
 
-    //Visulizzazione footprint esteso ottenuto
-    // visualization_msgs::msg::Marker marker;
-    // marker.header.frame_id = layered_costmap_->getGlobalFrameID();
-    // marker.header.stamp = node_.lock()->now();
-    // marker.ns = "footprint_debug";
-    // marker.id = 0;
-    // marker.type = visualization_msgs::msg::Marker::CUBE_LIST;
-    // marker.action = visualization_msgs::msg::Marker::ADD;
-    // marker.scale.x = master_grid.getResolution();
-    // marker.scale.y = master_grid.getResolution();
-    // marker.scale.z = 0.05;  // Altezza visiva
-
-    // marker.color.r = 0.0f;
-    // marker.color.g = 0.0f;
-    // marker.color.b = 1.0f;  // Blu
-    // marker.color.a = 0.6f;
-
-    // for (const auto& idx : footprint_cells) {
-    //   unsigned int mx = idx % master_grid.getSizeInCellsX();
-    //   unsigned int my = idx / master_grid.getSizeInCellsX();
-    //   double wx, wy;
-    //   master_grid.mapToWorld(mx, my, wx, wy);
-
-    //   geometry_msgs::msg::Point p;
-    //   p.x = wx + master_grid.getResolution() / 2.0;
-    //   p.y = wy + master_grid.getResolution() / 2.0;
-    //   p.z = 0.05;  // Leggermente sollevato da terra
-    //   marker.points.push_back(p);
-    // }
-
-    // marker_pub_->publish(marker);
-
+  // ==================== BFS CON LIMITI ====================
   size_t cells_visited = 0;
+  constexpr size_t MAX_CELLS = 200000;  // Limite hard per evitare hang
+  constexpr double MAX_DISTANCE = 15.0;  // Distanza max dal robot (metri)
+  
   std::queue<std::pair<unsigned int, unsigned int>> q;
   q.emplace(robot_mx, robot_my);
 
-  while (!q.empty()) {
+  const int dx[8] = {1, -1, 0, 0, 1, -1, 1, -1};
+  const int dy[8] = {0, 0, 1, -1, 1, 1, -1, -1};
+
+  while (!q.empty() && cells_visited < MAX_CELLS) { //
     auto [mx, my] = q.front();
     q.pop();
-
-    // if (++cells_visited > 500000) {
-    //   break;
-    // }    
     
+    //CHECK: Indice valido
     unsigned int index = master_grid.getIndex(mx, my);
     if (index >= size_x * size_y) {
-      continue; // Skip out of bounds cells
-    }
- 
-    if (seen_[index] || (master_array[index] == nav2_costmap_2d::NO_INFORMATION)) { //
       continue;
     }
-    seen_[index] = true;
-
     
-    const int dx[8] = {1, -1, 0, 0, 1, -1, 1, -1};
-    const int dy[8] = {0, 0, 1, -1, 1, 1, -1, -1};
-    float min_z = reference_z_map_[index], max_z = reference_z_map_[index];
+    //CHECK: Già visitato o NO_INFORMATION
+    if (seen_[index] || master_array[index] == nav2_costmap_2d::NO_INFORMATION) {
+      continue;
+    }
+    
+    // CHECK: Distanza dal robot
     double wx, wy;
     master_grid.mapToWorld(mx, my, wx, wy);
-    double min_x = wx, min_y = wy;
-    double max_x = wx, max_y = wy;
-
-    for (int dir = 0; dir < 8; ++dir) {
-      int nx = static_cast<int>(mx) + dx[dir];
-      int ny = static_cast<int>(my) + dy[dir];
-      if (nx < static_cast<int>(size_x) && ny < static_cast<int>(size_y)) {
-        unsigned int nidx = master_grid.getIndex(nx, ny);
-        if (nidx >= reference_z_map_.size() || std::abs(reference_z_map_[nidx]) <= 0.1 || !occupied_[nidx]) {
-          continue; // Skip out of bounds cells
-        }
-        else if (reference_z_map_[nidx] < min_z) {
-            min_z = reference_z_map_[nidx];
-            master_grid.mapToWorld(nx, ny, min_x, min_y);
-        }
-        else if (reference_z_map_[nidx] > max_z) {
-            max_z = reference_z_map_[nidx];
-            master_grid.mapToWorld(nx, ny, max_x, max_y);
-        }
-      }
-    }
-    double dz = static_cast<double>(max_z) - static_cast<double>(min_z);
-    double delta_x = (max_x - min_x);
-    double delta_y = (max_y - min_y);
-    double dist = std::sqrt(delta_x * delta_x + delta_y * delta_y + 0.1*0.1);
-    if (dist < 1e-6f) {
-        dist = 1e-6f;
-      }
-    double slope_deg = 0.0f;
-    if(abs(dz) < 1){
-    slope_deg = std::atan2(dz,dist) * 180.0f / M_PI;
+    double dist_from_robot = std::hypot(wx - last_pose_x_, wy - last_pose_y_);
+    
+    if (dist_from_robot > MAX_DISTANCE) {
+      continue;
     }
     
-    if (slope_deg > slope_threshold_deg_)
-      {
-      // RCLCPP_INFO(logger_, "Max Z: %f  Min Z: %f  Dz: %f  Slope deg: %f", max_z, min_z, dz, slope_deg);
-      if (footprint_cells.count(index)) {
-      master_array[index] = nav2_costmap_2d::FREE_SPACE;
-        }
-      else{ master_array[index] = nav2_costmap_2d::LETHAL_OBSTACLE;
-        }
-      }
+    seen_[index] = true;
+    cells_visited++;
 
+    // ==================== CALCOLO SLOPE CON VALIDAZIONE ====================
+    float min_z = INVALID_ELEVATION;
+    float max_z = INVALID_ELEVATION;
+    int valid_neighbors = 0;
+    bool current_cell_valid = (occupied_[index] && reference_z_map_[index] > INVALID_ELEVATION);
 
-    // Enqueue celle adiacenti
-    // const int dx[4] = {1, -1, 0, 0};
-    // const int dy[4] = {0, 0, 1, -1};
+    // ✅ Se la cella corrente è valida, inizializza min/max con il suo valore
+    if (current_cell_valid) {
+      min_z = reference_z_map_[index];
+      max_z = reference_z_map_[index];
+      valid_neighbors = 1;
+    }
+
+    // Cerca min/max tra i vicini VALIDI
     for (int dir = 0; dir < 8; ++dir) {
       int nx = static_cast<int>(mx) + dx[dir];
       int ny = static_cast<int>(my) + dy[dir];
-      if (nx < static_cast<int>(size_x) && ny < static_cast<int>(size_y)) {
+      
+      if (nx >= 0 && nx < static_cast<int>(size_x) && 
+          ny >= 0 && ny < static_cast<int>(size_y)) {
         unsigned int nidx = master_grid.getIndex(nx, ny);
-        if (nidx < seen_.size() && !seen_[nidx] ) { //&& (master_array[nidx] == nav2_costmap_2d::FREE_SPACE)
+        
+        // ✅ CRITICO: Verifica che il vicino sia VALIDO
+        if (occupied_[nidx] && reference_z_map_[nidx] > INVALID_ELEVATION) {
+          float neighbor_z = reference_z_map_[nidx];
+          
+          if (valid_neighbors == 0) {
+            // Primo vicino valido trovato
+            min_z = neighbor_z;
+            max_z = neighbor_z;
+          } else {
+            min_z = std::min(min_z, neighbor_z);
+            max_z = std::max(max_z, neighbor_z);
+          }
+          valid_neighbors++;
+        }
+      }
+    }
+
+    // ==================== CALCOLO PENDENZA ====================
+    double slope_deg = 0.0;
+
+    if (valid_neighbors >= 3) {  // ✅ Serve almeno 3 celle valide (current + 2 vicini)
+      float dz = std::abs(max_z - min_z);
+      
+      // ✅ Ignora variazioni troppo piccole (rumore)
+      if (dz < 2.02f) {  // 2 cm
+        // Stima conservativa distanza (diagonale max tra celle)
+        float max_dist = 2*resolution_ * 1.414f;  // sqrt(2)
+        slope_deg = std::atan2(dz, max_dist) * 180.0 / M_PI;
+      }
+    } else {
+      // ✅ Dati insufficienti: considera terreno piatto
+      slope_deg = 0.0;
+    }
+
+    // ==================== ASSEGNAZIONE COSTI ====================
+    unsigned char current_cost = master_array[index];
+
+    if (slope_deg >= slope_threshold_deg_) {
+      // Pendenza eccessiva
+      if (footprint_cells.count(index) > 0) {
+        if (current_cost != nav2_costmap_2d::LETHAL_OBSTACLE) {
+          master_array[index] = nav2_costmap_2d::FREE_SPACE;
+        }
+      } else {
+        master_array[index] = nav2_costmap_2d::LETHAL_OBSTACLE;
+      }
+    } else if (slope_deg > 5.0) {  // Soglia minima per ignorare rumore
+      unsigned char cost = static_cast<unsigned char>(
+        std::min(253.0, cost_scaling_factor_ * slope_deg)
+      );
+      master_array[index] = std::max(current_cost, cost);
+    }
+
+    // ==================== ENQUEUE VICINI ====================
+    for (int dir = 0; dir < 8; ++dir) {
+      int nx = static_cast<int>(mx) + dx[dir];
+      int ny = static_cast<int>(my) + dy[dir];
+      
+      if (nx >= 0 && nx < static_cast<int>(size_x) && 
+          ny >= 0 && ny < static_cast<int>(size_y)) {
+        unsigned int nidx = master_grid.getIndex(nx, ny);
+        
+        // ✅ Safety check su bounds
+        if (nidx < seen_.size() && !seen_[nidx]) {
           q.emplace(nx, ny);
         }
       }
     }
   }
+
   current_ = true;
 }
+
 
 /**
  * @brief  Given an index of a cell in the costmap, place it into a list pending for obstacle gradient

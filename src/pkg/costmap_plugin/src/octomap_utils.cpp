@@ -26,8 +26,8 @@ std::unique_ptr<octomap::OcTree> filterOctomapWithinRadius(
     return filtered_tree;
   }
 
-  // for (auto it = octree->begin_leafs_bbx(min_key, max_key); it != octree->end_leafs_bbx(); ++it) {
-  for (auto it = octree->begin_leafs(); it != octree->end_leafs(); ++it) {  //Controllo dell'interca octomap
+  for (auto it = octree->begin_leafs_bbx(min_key, max_key); it != octree->end_leafs_bbx(); ++it) { //Controllo octomap filtrata
+  // for (auto it = octree->begin_leafs(); it != octree->end_leafs(); ++it) {  //Controllo dell'interca octomap
     if (octree->isNodeOccupied(*it)) {
       double wx = it.getX(), wy = it.getY(), wz = it.getZ();
       double dist = std::sqrt((wx - robot_x)*(wx - robot_x) + (wy - robot_y)*(wy - robot_y) + (wz - robot_z)*(wz - robot_z));
@@ -37,11 +37,11 @@ std::unique_ptr<octomap::OcTree> filterOctomapWithinRadius(
         unsigned int idx = costmap.getIndex(mx, my);
         occupied[idx] = true;
         if (idx <= reference_z_map.size() && std::abs(wz) >= reference_z_map[idx])  {
-          if ((wz >= -resolution && wz <= resolution)) {
-            reference_z_map[idx] = 0;
-          } else {
+          // if ((wz >= -resolution && wz <= resolution)) {
+          //   reference_z_map[idx] = 0;
+          // } else {
             reference_z_map[idx] = wz;
-          }
+          // }
         }
       }
 

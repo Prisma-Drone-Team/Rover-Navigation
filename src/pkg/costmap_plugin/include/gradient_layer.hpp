@@ -154,6 +154,9 @@ protected:
   unsigned int cell_inflation_radius_;
   unsigned int cached_cell_inflation_radius_;
   std::vector<std::vector<CellData>> gradient_cells_;
+  std::vector<unsigned char> persistent_costs_;  // Costmap persistente
+  bool first_update_;  // Flag per primo update
+  std::string octomap_topic_;
 
   std::vector<float> reference_z_map_;
   std::vector<bool> seen_;

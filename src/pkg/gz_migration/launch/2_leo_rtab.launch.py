@@ -38,7 +38,8 @@ def generate_launch_description():
 
         robot_state_publisher_node = Node(
             package='robot_state_publisher',
-            name='robot_state_publisher_2',
+            name='robot_state_publisher',
+            namespace='robot2',
             executable='robot_state_publisher',
             parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot2/'}],
             #parameters=[{'robot_description' : robot_description}],
@@ -48,7 +49,8 @@ def generate_launch_description():
         joint_state_publisher_node = Node(
             package='joint_state_publisher',
             executable='joint_state_publisher',
-            name='joint_state_publisher_2',
+            name='joint_state_publisher',
+            namespace='robot2',
             #remappings=[('joint_states', 'robot2/joint_states')],
         )
 
@@ -59,7 +61,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '-name', 'leo2', 
-                '-topic', 'robot_description', 
+                '-topic', 'robot2/robot_description', 
                 '-x', '1.5',
                 '-y', '8.0',
                 '-z', '12',

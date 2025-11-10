@@ -60,7 +60,7 @@
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>      
         </camera>
-      <plugin filename="GzScene3D" name="3D View">
+      <!-- <plugin filename="GzScene3D" name="3D View">
         <ignition-gui>
           <title>3D View</title>
           <property type="bool" key="showTitleBar">false</property>
@@ -71,7 +71,7 @@
           <scene>scene</scene>
           <background_color>0.0 0.0 0.0 1.0</background_color>
           <camera_pose>-6 0 6 0 0.5 0</camera_pose>
-      </plugin>
+      </plugin> -->
     </gui>
 
     <!-- <scene>
