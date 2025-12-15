@@ -8,10 +8,10 @@
   <!--xacro:Livox_Mid40 name="livox"/>
   <xacro:include filename="$(find gz_migration)/urdf/macros.xacro"/>
   <xacro:leo/-->
-    <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
+    <!-- <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher2">
       <use_pose_vector_msg>true</use_pose_vector_msg>
       <publish_nested_model_pose>true</publish_nested_model_pose>
-    </plugin>
+    </plugin> -->
   <link name="base_footprint"/>
   <link name="base_link">
     <inertial>
@@ -68,7 +68,7 @@
   </link>
   <link name="wheel_FL_link">
     <inertial>
-      <mass value="0.283642"/>
+      <mass value="1.283642"/>
       <origin xyz="0 0.030026 0"/>
       <inertia ixx="0.000491" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0005716" iyz="-0.000002082042" izz="0.000491"/>
       <!-- <inertia ixx="0.000391" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0004716" iyz="-0.000002082042" izz="0.000391"/> -->
@@ -99,7 +99,7 @@
   </link>
   <link name="wheel_RL_link">
     <inertial>
-      <mass value="0.283642"/>
+      <mass value="1.283642"/>
       <origin xyz="0 0.030026 0"/>
       <inertia ixx="0.000491" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0005716" iyz="-0.000002082042" izz="0.000491"/>
       <!-- <inertia ixx="0.000391" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0004716" iyz="-0.000002082042" izz="0.000391"/> -->
@@ -130,7 +130,7 @@
   </link>
   <link name="wheel_FR_link">
     <inertial>
-      <mass value="0.283642"/>
+      <mass value="1.283642"/>
       <origin xyz="0 0.030026 0"/>
       <inertia ixx="0.000491" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0005716" iyz="-0.000002082042" izz="0.000491"/>
       <!-- <inertia ixx="0.000391" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0004716" iyz="-0.000002082042" izz="0.000391"/> -->
@@ -161,7 +161,7 @@
   </link>
   <link name="wheel_RR_link">
     <inertial>
-      <mass value="0.283642"/>
+      <mass value="1.283642"/>
       <origin xyz="0 0.030026 0"/>
       <inertia ixx="0.000491" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0005716" iyz="-0.000002082042" izz="0.000491"/>
       <!-- <inertia ixx="0.000391" ixy="0.00000123962" ixz="5.52582e-7" iyy="0.0004716" iyz="-0.000002082042" izz="0.000391"/> -->
@@ -208,7 +208,7 @@
       </geometry>
     </collision>
   </link>
-  <material name="camera_aluminum">
+  <material name="camera_aluminum_2">
     <color rgba="0.5 0.5 0.5 1"/>
   </material>
   <!-- camera body, with origin at bottom screw mount -->
@@ -219,7 +219,7 @@
   </joint>
   <link name="camera_bottom_screw_frame"/>
   <joint name="camera_link_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0.0175 0.0125"/>
+    <origin rpy="0 0 0" xyz="0 0.0175 0.0"/>
     <parent link="camera_bottom_screw_frame"/>
     <child link="camera_link"/>
   </joint>
@@ -231,7 +231,7 @@
         <mesh filename="package://gz_migration/models/d435.dae"/>
         <!--<mesh filename="package://realsense2_description/meshes/d435/d435.dae" />-->
       </geometry>
-      <material name="camera_aluminum"/>
+      <material name="camera_aluminum_2"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 -0.0175 0"/>
@@ -312,8 +312,8 @@
     <kd>1</kd>
     <!--<max_vel>0.01</max_vel>
       <min_depth>0</min_depth>-->
-    <sensor name="cameracolor" type="camera">
-      <prefix>camera</prefix>
+    <sensor name="cameracolor2" type="camera">
+      <prefix>camera2</prefix>
       <topic>/robot2/color/image_raw</topic>
       <ignition_frame_id>robot2/camera_link</ignition_frame_id>
       <update_rate>15.0</update_rate>
@@ -339,12 +339,12 @@
         </noise> -->
       </camera>
     </sensor>
-    <sensor name="cameraired1" type="camera">
+    <sensor name="cameraired1_2" type="camera">
       <camera name="camera">
-      <prefix>camera</prefix>
+      <prefix>camera2</prefix>
       <infraredUpdateRate>30.0</infraredUpdateRate>
-      <infrared1TopicName>infra1/image_raw</infrared1TopicName>
-      <infrared1CameraInfoTopicName>infra1/camera_info</infrared1CameraInfoTopicName>
+      <infrared1TopicName>infra2/image_raw</infrared1TopicName>
+      <infrared1CameraInfoTopicName>infra2/camera_info</infrared1CameraInfoTopicName>
       <infrared1OpticalframeName>camera_left_ir_optical_frame</infrared1OpticalframeName>
         <horizontal_fov>1.4870205226991688</horizontal_fov>
         <image>
@@ -366,9 +366,9 @@
       <update_rate>90</update_rate>
       <visualize>0</visualize>
     </sensor>
-    <sensor name="cameraired2" type="camera">
+    <sensor name="cameraired2_2" type="camera">
       <camera name="camera">
-        <prefix>camera</prefix>
+        <prefix>camera2</prefix>
         <infraredUpdateRate>30.0</infraredUpdateRate>
         <infrared2TopicName>infra2/image_raw</infrared2TopicName>
         <infrared2CameraInfoTopicName>infra2/camera_info</infrared2CameraInfoTopicName>
@@ -393,8 +393,8 @@
       <update_rate>90</update_rate>
       <visualize>0</visualize>
     </sensor>
-    <sensor name="cameradepth" type="depth_camera">
-      <prefix>camera</prefix>
+    <sensor name="cameradepth2" type="depth_camera">
+      <prefix>camera2</prefix>
       <topic>/robot2/depth/image_raw</topic>
       <ignition_frame_id>robot2/camera_depth_frame</ignition_frame_id>
       <update_rate>30.0</update_rate>
@@ -405,8 +405,8 @@
         <!--depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName-->
         <horizontal_fov>1.4870205226991688</horizontal_fov>
         <image>
-          <width>1280</width>
-          <height>720</height>
+          <width>640</width>
+          <height>480</height>
         </image>
         <clip>
           <near>0.1</near>
@@ -457,8 +457,8 @@
         <mesh filename="package://gz_migration/meshes/livox_mid40.dae">
           </mesh>
       </geometry>
-      <material name="grey">
-        <color rgba="0.2350821 0.2106182 0.2557221 1.0"/>
+      <material name="blu">
+        <color rgba="0.0 0.0 0.6 1.0"/>
       </material>
     </visual>
     <collision>
@@ -487,7 +487,7 @@
     <origin rpy="0 0 0" xyz="-0.02 0 0.01"/>
   </joint>
   <gazebo reference="livox">
-    <sensor name="laser_livox" type="gpu_lidar">
+    <sensor name="laser_livox2" type="gpu_lidar">
       <ignition_frame_id>robot2/base_link</ignition_frame_id>
       <pose>0 0 0 0 0 0</pose>
       <visualize>True</visualize>
@@ -583,7 +583,7 @@
     <parent link="base_link"/>
     <child link="rocker_L_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100.0" lower="-0.24" upper="0.24" velocity="100.0"/>
+    <limit effort="100.0" lower="-0.5" upper="0.5" velocity="10.0"/>
     <dynamics damping="0.1" friction="1.0"/>
   </joint>
   <joint name="rocker_R_joint" type="revolute">
@@ -591,7 +591,7 @@
     <parent link="base_link"/>
     <child link="rocker_R_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="100.0" lower="-0.24" upper="0.24" velocity="100.0"/>
+    <limit effort="100.0" lower="-0.5" upper="0.5" velocity="10.0"/>
     <dynamics damping="0.1" friction="1.0"/>
     <!-- <mimic joint="rocker_L_joint"/> -->
   </joint>
@@ -600,7 +600,7 @@
     <parent link="rocker_L_link"/>
     <child link="wheel_FL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RL_joint" type="continuous">
@@ -608,7 +608,7 @@
     <parent link="rocker_L_link"/>
     <child link="wheel_RL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_FR_joint" type="continuous">
@@ -616,7 +616,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_FR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RR_joint" type="continuous">
@@ -624,7 +624,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_RR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="6.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="antenna_joint" type="fixed">
@@ -646,7 +646,7 @@
     </joint-->
   <!-- base ODE properties -->
   <gazebo reference="base_footprint">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -660,10 +660,15 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
-  </gazebo>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>  
+    </gazebo>
   <gazebo reference="base_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -677,11 +682,16 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <!-- rocker ODE properties -->
   <gazebo reference="rocker_L_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -695,10 +705,15 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <gazebo reference="rocker_R_link">
-    <collision>
+    <!-- <collision>
       <surface>
         <friction>
           <ode>
@@ -712,100 +727,158 @@
           </bullet>
         </friction>
       </surface>
-    </collision>
+    </collision> -->
+      <kp>1e6</kp>
+      <kd>1.0</kd>
+      <mu1>0.3</mu1>
+      <mu2>0.3</mu2>
+      <minDepth>0.003</minDepth>
   </gazebo>
   <!-- wheel ODE properties -->
+<xacro:macro name="gazebo_wheel_contact">
+
   <gazebo reference="wheel_FL_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
     <collision>
       <surface>
         <friction>
           <ode>
-            <mu>0.4</mu>
-            <mu2>0.4</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
           </ode>
           <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
   </gazebo>
+
   <gazebo reference="wheel_FR_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
     <collision>
       <surface>
         <friction>
           <ode>
-            <mu>0.4</mu>
-            <mu2>0.4</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
           </ode>
           <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
   </gazebo>
+
   <gazebo reference="wheel_RL_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
     <collision>
       <surface>
         <friction>
           <ode>
-            <mu>0.4</mu>
-            <mu2>0.4</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
           </ode>
           <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
   </gazebo>
+
   <gazebo reference="wheel_RR_link">
+        <!-- <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="1e15"/>
+        <kd value="1e13"/>
+        <fdir1>1 0 0</fdir1>
+        <minDepth>0.003</minDepth> -->
     <collision>
       <surface>
         <friction>
           <ode>
-            <mu>0.4</mu>
-            <mu2>0.4</mu2>
-            <slip1>0.035</slip1>
-            <slip2>0</slip2>
-            <fdir1>0 0 1</fdir1>
+            <mu>3.0</mu>
+            <mu2>1.0</mu2>
           </ode>
           <bullet>
-            <friction>1</friction>
-            <friction2>1</friction2>
-            <rolling_friction>0.1</rolling_friction>
+            <friction>3.0</friction>
+            <friction2>1.0</friction2>
+            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
   </gazebo>
+
+  <gazebo reference="collision_f_l">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_f_r">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_b_l">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+
+  <gazebo reference="collision_b_r">
+      <mu1 value="0.1"/>
+      <mu2 value="0.1"/>
+      <kp value="10000000.0"/>
+      <kd value="100.0"/>
+      <minDepth>0.001</minDepth>
+  </gazebo>
+</xacro:macro>
   <!-- rocker differential -->
-  <!-- <gazebo>
-    <plugin filename="libleo_gz_differential_plugin.so" name="leo_gz::DifferentialSystem">
+  <!-- <plugin filename="libleo_gz_differential_plugin.so" name="leo_gz::DifferentialSystem"> -->
+  <gazebo>
+        <plugin name="leo_gz::DifferentialSystem" filename="libleo_gz_differential_plugin.so">
       <jointA>rocker_L_joint</jointA>
       <jointB>rocker_R_joint</jointB>
       <forceConstant>100.0</forceConstant>
     </plugin>
-  </gazebo> -->
+  </gazebo>
   <gazebo>
-    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
-      <topic>joint_states</topic>
+      <plugin
+        filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
+    <!-- <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"> -->
+      <topic>robot2/joint_states</topic>
     </plugin>
   </gazebo>
   <!-- <gazebo reference="imu_frame">
@@ -827,7 +900,6 @@
       <wheel_radius>0.0625</wheel_radius>
       <frame_id></frame_id>  <!--frame custom preso come origine di odom tf-->
       <child_frame_id>robot2/base_footprint</child_frame_id> <!--frame target di odom tf-->
-      <odom_publish_frequency></odom_publish_frequency>
       <topic>/robot2/cmd_vel</topic> <!--topic da cui legge cmd_vel-->
       <odom_topic>/robot2/odom/wheels</odom_topic> <!--topic su cui pubblica odom-->
       <tf_topic>/robot2/tf_gzebo</tf_topic> <!--topic su cui pubblica tf tra frame_id e child_frame_id-->

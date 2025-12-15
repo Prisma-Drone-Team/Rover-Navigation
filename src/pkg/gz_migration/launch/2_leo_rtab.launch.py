@@ -26,19 +26,19 @@ def generate_launch_description():
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_2',
-              arguments = ['-24.0', '10.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
+              arguments = ['-5.0', '15.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
         )
         
         static_tf_2 = Node(
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'robot_map_to_base_footprint',
-              arguments = ['0', '0', '0', '0', '0', '0', 'robot1/map', 'robot1/base_footprint'],
+              arguments = ['0.0', '0', '0', '0', '0', '0', 'robot1/map', 'robot1/base_footprint'],
         )
 
         robot_state_publisher_node = Node(
             package='robot_state_publisher',
-            name='robot_state_publisher',
+            name='robot_state_publisher_2',
             namespace='robot2',
             executable='robot_state_publisher',
             parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot2/'}],
@@ -49,9 +49,9 @@ def generate_launch_description():
         joint_state_publisher_node = Node(
             package='joint_state_publisher',
             executable='joint_state_publisher',
-            name='joint_state_publisher',
+            name='joint_state_publisher_2',
             namespace='robot2',
-            #remappings=[('joint_states', 'robot2/joint_states')],
+            # remappings=[('joint_states', 'robot2/joint_states')],
         )
 
         spawn_node = Node(
@@ -62,10 +62,10 @@ def generate_launch_description():
             arguments=[
                 '-name', 'leo2', 
                 '-topic', 'robot2/robot_description', 
-                '-x', '1.5',
-                '-y', '8.0',
-                '-z', '12',
-                '-Y', '1.2',
+                '-x', '-5.0',
+                '-y', '15.0',
+                '-z', '11',
+                '-Y', '0.0',
                 ],
             respawn=False,
         )

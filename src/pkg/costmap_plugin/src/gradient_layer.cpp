@@ -216,9 +216,10 @@ void GradientLayer::updateCosts(
   max_j = std::min(static_cast<int>(size_y), max_j);
 
   constexpr float INVALID_ELEVATION = -1000.0f;
-  reference_z_map_.resize(size_x * size_y, INVALID_ELEVATION);
-  seen_.resize(size_x * size_y, false);
-  occupied_.resize(size_x * size_y, false);
+  seen_.assign(size_x * size_y, false);  // ← CAMBIATO: assign invece di resize
+  occupied_.assign(size_x * size_y, false);
+  reference_z_map_.assign(size_x * size_y, INVALID_ELEVATION);
+
 
   // ==================== POSIZIONE ROBOT ====================
   unsigned int robot_mx, robot_my;
@@ -231,7 +232,7 @@ void GradientLayer::updateCosts(
   double last_pose_z = 0.0;
   auto filtered_tree = gradient_utils::filterOctomapWithinRadius(
     octree_, master_grid, reference_z_map_, occupied_,
-    last_pose_x_, last_pose_y_, last_pose_z, 15.0, min_dist
+    last_pose_x_, last_pose_y_, last_pose_z, 10.0, min_dist
   );
 
   // ==================== FOOTPRINT CLEARING ====================
@@ -269,7 +270,7 @@ void GradientLayer::updateCosts(
   // ==================== BFS CON LIMITI ====================
   size_t cells_visited = 0;
   constexpr size_t MAX_CELLS = 200000;  // Limite hard per evitare hang
-  constexpr double MAX_DISTANCE = 15.0;  // Distanza max dal robot (metri)
+  constexpr double MAX_DISTANCE = 10.0;  // Distanza max dal robot (metri)
   
   std::queue<std::pair<unsigned int, unsigned int>> q;
   q.emplace(robot_mx, robot_my);
@@ -344,21 +345,64 @@ void GradientLayer::updateCosts(
     }
 
     // ==================== CALCOLO PENDENZA ====================
+    // ==================== CALCOLO SLOPE CON GRADIENTE ====================
     double slope_deg = 0.0;
 
-    if (valid_neighbors >= 3) {  // ✅ Serve almeno 3 celle valide (current + 2 vicini)
-      float dz = std::abs(max_z - min_z);
-      
-      // ✅ Ignora variazioni troppo piccole (rumore)
-      if (dz < 2.02f) {  // 2 cm
-        // Stima conservativa distanza (diagonale max tra celle)
-        float max_dist = 2*resolution_ * 1.414f;  // sqrt(2)
-        slope_deg = std::atan2(dz, max_dist) * 180.0 / M_PI;
-      }
-    } else {
-      // ✅ Dati insufficienti: considera terreno piatto
+    // Se la cella corrente non ha quota valida, considerala piatta e salta
+    if (!(occupied_[index] && reference_z_map_[index] > INVALID_ELEVATION)) {
       slope_deg = 0.0;
+    } else {
+      // Coordinate in mappa
+      int cx = static_cast<int>(mx);
+      int cy = static_cast<int>(my);
+
+      // Servono i 4 vicini: (i+1,j), (i-1,j), (i,j+1), (i,j-1)
+      // Se manca anche solo uno, consideriamo slope=0 per non introdurre rumore
+      bool valid_grad = true;
+      float h_c  = reference_z_map_[index];
+      float h_px = 0.0f, h_mx = 0.0f, h_py = 0.0f, h_my = 0.0f;
+
+      auto get_h = [&](int ix, int iy, float &h_out) -> bool {
+        if (ix < 0 || iy < 0 ||
+            ix >= static_cast<int>(size_x) ||
+            iy >= static_cast<int>(size_y)) {
+          return false;
+        }
+        unsigned int idx_n = master_grid.getIndex(ix, iy);
+        if (!occupied_[idx_n] || reference_z_map_[idx_n] <= INVALID_ELEVATION) {
+          return false;
+        }
+        h_out = reference_z_map_[idx_n];
+        return true;
+      };
+
+      // Prendi i 4 vicini
+      if (!get_h(cx + 1, cy, h_px)) valid_grad = false;
+      if (!get_h(cx - 1, cy, h_mx)) valid_grad = false;
+      if (!get_h(cx, cy + 1, h_py)) valid_grad = false;
+      if (!get_h(cx, cy - 1, h_my)) valid_grad = false;
+
+      if (valid_grad) {
+        const double dr = resolution_;  // Δr = resolution della costmap
+        // derivate finite centrate
+        double dh_dx = (h_px - h_mx) / (2.0 * dr);
+        double dh_dy = (h_py - h_my) / (2.0 * dr);
+
+        double grad_norm = std::sqrt(dh_dx * dh_dx + dh_dy * dh_dy);
+
+        // Ignora gradienti minuscoli (rumore)
+        if (grad_norm < 1e-3) {
+          slope_deg = 0.0;
+        } else {
+          double theta_rad = std::atan(grad_norm);
+          slope_deg = theta_rad * 180.0 / M_PI;
+        }
+      } else {
+        // Dati insufficienti: considera terreno piatto
+        slope_deg = 0.0;
+      }
     }
+
 
     // ==================== ASSEGNAZIONE COSTI ====================
     unsigned char current_cost = master_array[index];
@@ -366,13 +410,13 @@ void GradientLayer::updateCosts(
     if (slope_deg >= slope_threshold_deg_) {
       // Pendenza eccessiva
       if (footprint_cells.count(index) > 0) {
-        if (current_cost != nav2_costmap_2d::LETHAL_OBSTACLE) {
+        // if (current_cost != nav2_costmap_2d::LETHAL_OBSTACLE) {
           master_array[index] = nav2_costmap_2d::FREE_SPACE;
-        }
+        // }
       } else {
         master_array[index] = nav2_costmap_2d::LETHAL_OBSTACLE;
       }
-    } else if (slope_deg > 5.0) {  // Soglia minima per ignorare rumore
+    } else if (slope_deg > 1.0) {  // Soglia minima per ignorare rumore
       unsigned char cost = static_cast<unsigned char>(
         std::min(253.0, cost_scaling_factor_ * slope_deg)
       );

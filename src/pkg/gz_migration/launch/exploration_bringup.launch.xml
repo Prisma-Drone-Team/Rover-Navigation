@@ -1,0 +1,6 @@
+<launch>
+ 
+  <include file="$(find-pkg-share gz_migration)/launch/leo1_exploration.launch.py"/>  
+  <include file="$(find-pkg-share gz_migration)/launch/leo2_exploration.launch.py"/>
+
+</launch>

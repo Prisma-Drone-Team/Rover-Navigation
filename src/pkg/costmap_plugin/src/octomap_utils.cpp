@@ -35,13 +35,16 @@ std::unique_ptr<octomap::OcTree> filterOctomapWithinRadius(
       unsigned int mx, my;
       if (costmap.worldToMap(wx, wy, mx, my)) {
         unsigned int idx = costmap.getIndex(mx, my);
-        occupied[idx] = true;
-        if (idx <= reference_z_map.size() && std::abs(wz) >= reference_z_map[idx])  {
-          // if ((wz >= -resolution && wz <= resolution)) {
-          //   reference_z_map[idx] = 0;
-          // } else {
-            reference_z_map[idx] = wz;
-          // }
+        
+        if (idx < reference_z_map.size()) {
+          if (std::abs(wz) >= reference_z_map[idx]) {
+            if (occupied[idx]) {
+              reference_z_map[idx] = std::max(static_cast<float>(wz), reference_z_map[idx]);
+            } else {
+              reference_z_map[idx] = wz;
+            }
+            occupied[idx] = true;
+          }
         }
       }
 

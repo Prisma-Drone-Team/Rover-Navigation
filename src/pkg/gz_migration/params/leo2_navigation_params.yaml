@@ -1,53 +1,12 @@
-# amcl:
-#   ros__parameters:
-#     use_sim_time: True
-#     alpha1: 0.2
-#     alpha2: 0.2
-#     alpha3: 0.2
-#     alpha4: 0.2
-#     alpha5: 0.2
-#     base_frame_id: "rover/base_link"
-#     beam_skip_distance: 0.5
-#     beam_skip_error_threshold: 0.9
-#     beam_skip_threshold: 0.3
-#     do_beamskip: false
-#     global_frame_id: "rover/map"
-#     lambda_short: 0.1
-#     laser_likelihood_max_dist: 2.0
-#     laser_max_range: 100.0
-#     laser_min_range: -1.0
-#     laser_model_type: "likelihood_field"
-#     max_beams: 60
-#     max_particles: 2000
-#     min_particles: 500
-#     odom_frame_id: "rover/odom" #"rover/odom"
-#     pf_err: 0.05
-#     pf_z: 0.99
-#     recovery_alpha_fast: 0.0
-#     recovery_alpha_slow: 0.0
-#     resample_interval: 1
-#     robot_model_type: "nav2_amcl::DifferentialMotionModel"
-#     save_pose_rate: 0.5
-#     sigma_hit: 0.2
-#     tf_broadcast: true
-#     transform_tolerance: 1.0
-#     update_min_a: 0.2
-#     update_min_d: 0.25
-#     z_hit: 0.5
-#     z_max: 0.05
-#     z_rand: 0.5
-#     z_short: 0.05
-#     scan_topic: /scan
-
 bt_navigator:
   ros__parameters:
     use_sim_time: True
-    global_frame: robot2/map #rover/map
-    robot_base_frame: robot2/base_link
+    global_frame: map #rover/map
+    robot_base_frame: robot2/base_footprint
     odom_topic: /robot2/odom
     #cmd_vel_topic: /robot1/cmd_vel
     #goal_blackboard_variable: /robot1/goal_pose ##
-    bt_loop_duration: 10
+    bt_loop_duration: 100
     default_server_timeout: 20
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
     # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
@@ -113,13 +72,13 @@ bt_navigator_navigate_to_pose_rclcpp_node:
 controller_server:
   ros__parameters:
     use_sim_time: True
-    #odom_topic: /robot1/odom
+    odom_topic: /robot2/odom
     #cmd_vel_topic: /robot1/cmd_vel
     controller_frequency: 5.0 # was 20/50.0
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
-    failure_tolerance: 0.3
+    failure_tolerance: 0.5
     progress_checker_plugin: "progress_checker"
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
@@ -138,14 +97,14 @@ controller_server:
     general_goal_checker:
       stateful: True
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.15
-      yaw_goal_tolerance: 0.15
+      xy_goal_tolerance: 0.25
+      yaw_goal_tolerance: 0.25
     FollowPath:
           plugin: "teb_local_planner::TebLocalPlannerROS"
           #plugin: "dwb_core::DWBLocalPlanner"
           #plugin: "nav2_mppi_controller::MPPIController"
-          map_frame: robot2/map #rover/map
-          odom_frame: robot2/odom
+          map_frame: map #rover/map
+          # odom_frame: robot2/odom
           # critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
           # BaseObstacle.scale: 0.02
           # PathAlign.scale: 32.0
@@ -159,39 +118,39 @@ controller_server:
           # RotateToGoal.lookahead_time: -1.0
           # Trajectory
           teb_autosize: 1.0  # deve rimanere un double
-          dt_ref: 0.05  # was 0.3
-          model_dt: 0.05
-          controller_period: 0.05
+          dt_ref: 0.5  # was 0.3
+          # model_dt: 0.05
+          # controller_period: 0.05
           dt_hysteresis: 0.2  # was 0.1
           global_plan_overwrite_orientation: True
           max_global_plan_lookahead_dist: 2.0  # was 3.0
-          feasibility_check_no_poses: 5
-          publish_feedback: true
+          feasibility_check_no_poses: 3
+          publish_feedback: false
 
           # Robot
-          max_vel_x: 0.3  # 0.1
-          max_vel_x_backwards: 0.05
-          max_vel_theta: 4.0  # 15deg more or less
+          max_vel_x: 0.2  # 0.1
+          max_vel_x_backwards: 0.2
+          max_vel_theta: 2.0  # 15deg more or less
           acc_lim_x: 1.0  # was 1.0
-          acc_lim_theta: 4.0  # was 0.3
+          acc_lim_theta: 1.0  # was 0.3
           min_turning_radius: 0.0 #molto importante, determina se durante la rotazione le ruote possono andare in versi opposti
           footprint_model:
             type: "circular"
-            radius: 0.25
+            radius: 0.3
           # GoalTolerance
           xy_goal_tolerance: 0.15  # was 0.1
           yaw_goal_tolerance: 0.15  # was 0.1
           free_goal_vel: False
 
           # Obstacles
-          min_obstacle_dist: 0.1  # was 0.15
+          min_obstacle_dist: 0.35  # was 0.15
           include_costmap_obstacles: True
           costmap_obstacles_behind_robot_dist: 1.0
-          obstacle_poses_affected: 20  # was 30
+          obstacle_poses_affected: 10  # was 30
           costmap_converter_plugin: ""
           costmap_converter_spin_thread: True
-          costmap_converter_rate: 5.0
-          inflation_dist: 0.1
+          costmap_converter_rate: 2.0
+          inflation_dist: 0.5
           include_dynamic_obstacles: True
 
           # Optimization
@@ -214,7 +173,7 @@ controller_server:
 
           # Homotopy Class Planner
           enable_homotopy_class_planning: False  # was True, requires high computational effort
-          enable_multithreading: True
+          enable_multithreading: False
           simple_exploration: False
           max_number_classes: 4  # reduce this value to reduce the computational effort
           roadmap_graph_no_samples: 15
@@ -225,26 +184,27 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
-      update_frequency: 10.0
-      publish_frequency: 5.0
+      update_frequency: 5.0
+      publish_frequency: 2.0
       global_frame: robot2/odom #odom
-      robot_base_frame: robot2/base_link
+      robot_base_frame: robot2/base_footprint
       use_sim_time: True
       rolling_window: true
-      width: 10 #was 6
-      height: 10 #was 6
-      origin_x: -50.0
-      origin_y: -50.0
+      # width: 10 #was 6
+      # height: 10 #was 6
+      # origin_x: -50.0
+      # origin_y: -50.0
       resolution: 0.05
-      robot_radius: 0.25
-      plugins: ["voxel_layer", "inflation_layer"]
+      robot_radius: 0.3
+      plugins: ["static_layer", "inflation_layer"] #"gradient_layer"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 #was 3.0
-        inflation_radius: 0.3 #was 0.55
+        inflation_radius: 0.4 #was 0.55
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
+        footprint_clearing_enabled: True
         publish_voxel_map: True
         origin_z: 0.0
         z_resolution: 0.05
@@ -254,10 +214,12 @@ local_costmap:
         mark_threshold: 0
         observation_sources: cloud #scan
         cloud:
-          topic: /robot2/scan/points #scan
+          topic: /robot2/depth/image_raw/points #scan
           max_obstacle_height: 2.0
           clearing: True
           marking: True
+          raytrace_range: 3.0 
+          observation_persistence: 0.5
           data_type: "PointCloud2" #"LaserScan"
           raytrace_max_range: 3.0
           raytrace_min_range: 0.0
@@ -278,29 +240,32 @@ global_costmap:
       update_frequency: 2.0
       publish_frequency: 1.0
       global_frame: robot2/map #rover/map
-      robot_base_frame: robot2/base_link
+      robot_base_frame: robot2/base_footprint
       #map_topic: /robot1/map
       use_sim_time: True
-      robot_radius: 0.25
+      robot_radius: 0.3
       resolution: 0.05
       track_unknown_space: true
       #-- WARNING THIS IS GOOD ONLY FOR LEAONARDO
-      height: 100 #was 50
-      width: 100 #was 50
-      origin_x: -50.0
-      origin_y: -50.0
+      # height: 100 #was 50
+      # width: 100 #was 50
+      # origin_x: -50.0
+      # origin_y: -50.0
       #--
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
+        footprint_clearing_enabled: True
         observation_sources: cloud #scan
         cloud:
-          topic: /robot2/scan/points #/scan
+          topic: /robot2/depth/image_raw/points #/scan
           max_obstacle_height: 2.0
           min_obstacle_height: 0.02
           clearing: True
           marking: True
+          raytrace_range: 3.0 
+          observation_persistence: 0.5
           data_type: "PointCloud2" #"LaserScan"
           raytrace_max_range: 3.0
           raytrace_min_range: 0.0
@@ -341,9 +306,9 @@ planner_server:
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
-      tolerance: 0.2
+      tolerance: 0.5
       use_astar: false
-      allow_unknown: true
+      allow_unknown: True
 
 smoother_server:
   ros__parameters:
@@ -359,9 +324,9 @@ smoother_server:
 behavior_server:
   ros__parameters:
     #cmd_vel_topic: /robot1/cmd_vel
-    costmap_topic: /local_costmap/costmap_raw
-    footprint_topic: /local_costmap/published_footprint
-    cycle_frequency: 10.0
+    costmap_topic: /robot2/local_costmap/costmap_raw
+    footprint_topic: /robot2/local_costmap/published_footprint
+    cycle_frequency: 2.0
     behavior_plugins: ["spin", "backup", "drive_on_heading", "assisted_teleop", "wait"]
     spin:
       plugin: "nav2_behaviors/Spin"
@@ -374,13 +339,13 @@ behavior_server:
     assisted_teleop:
       plugin: "nav2_behaviors/AssistedTeleop"
     global_frame: robot2/odom #rover/odom
-    robot_base_frame: robot2/base_link
+    robot_base_frame: robot2/base_footprint
     transform_tolerance: 0.1
     use_sim_time: True
     simulate_ahead_time: 2.0
-    max_rotational_vel: 4.0
+    max_rotational_vel: 2.0
     min_rotational_vel: 0.0
-    rotational_acc_lim: 4.0
+    rotational_acc_lim: 1.0
 
 robot_state_publisher:
   ros__parameters:
@@ -403,10 +368,10 @@ velocity_smoother:
     smoothing_frequency: 10.0
     scale_velocities: False
     feedback: "OPEN_LOOP"
-    max_velocity: [0.3, 0.0, 4.0]
-    min_velocity: [-0.3, 0.0, -4.0]
-    max_accel: [0.1, 0.0, 4.0]
-    max_decel: [-1.0, 0.0, -4.0]
+    max_velocity: [0.2, 0.0, 2.0]
+    min_velocity: [-0.2, 0.0, -2.0]
+    max_accel: [0.1, 0.0, 1.0]
+    max_decel: [-1.0, 0.0, -1.0]
     odom_topic: "robot2/odom"
     odom_duration: 0.1
     deadband_velocity: [0.0, 0.0, 0.0]

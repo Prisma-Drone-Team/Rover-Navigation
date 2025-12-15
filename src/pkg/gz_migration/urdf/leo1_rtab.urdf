@@ -8,15 +8,15 @@
   <!--xacro:Livox_Mid40 name="livox"/>
   <xacro:include filename="$(find gz_migration)/urdf/macros.xacro"/>
   <xacro:leo/-->
-    <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
+    <!-- <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
       <use_pose_vector_msg>true</use_pose_vector_msg>
       <publish_nested_model_pose>true</publish_nested_model_pose>
-    </plugin>
+    </plugin> -->
   <link name="base_footprint"/>
   <link name="base_link">
     <inertial>
       <mass value="1.584994"/>
-      <origin xyz="0.0 0.0 -0.031802"/>
+      <origin xyz="-0.019662 0.011643 -0.031802"/>
       <!-- <inertia ixx="0.01042" ixy="0.001177" ixz="-0.0008871" iyy="0.01045" iyz="0.0002226" izz="0.01817"/> -->
       <inertia ixx="0.0292" ixy="0.001177" ixz="-0.0008871" iyy="0.0183" iyz="0.0002226" izz="0.0256"/>
     </inertial>
@@ -457,8 +457,8 @@
         <mesh filename="package://gz_migration/meshes/livox_mid40.dae">
           </mesh>
       </geometry>
-      <material name="grey">
-        <color rgba="0.2350821 0.2106182 0.2557221 1.0"/>
+      <material name="rosso">
+        <color rgba="0.6 0.0 0.0 1.0"/>
       </material>
     </visual>
     <collision>
@@ -600,7 +600,7 @@
     <parent link="rocker_L_link"/>
     <child link="wheel_FL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="2.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RL_joint" type="continuous">
@@ -608,7 +608,7 @@
     <parent link="rocker_L_link"/>
     <child link="wheel_RL_link"/>
     <axis xyz="0 -1 0"/>
-    <limit effort="2.0" velocity="2.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_FR_joint" type="continuous">
@@ -616,7 +616,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_FR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="2.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="wheel_RR_joint" type="continuous">
@@ -624,7 +624,7 @@
     <parent link="rocker_R_link"/>
     <child link="wheel_RR_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="2.0" velocity="2.0"/>
+    <limit effort="1000.0" velocity="2.0"/>
     <dynamics damping="0.1" friction="0.3125"/>
   </joint>
   <joint name="antenna_joint" type="fixed">
@@ -644,7 +644,6 @@
         <origin rpy="0 0 1.5707"
                 xyz="0.0 0.4 0.3057"/>
     </joint-->
-
   <!-- base ODE properties -->
   <gazebo reference="base_footprint">
     <!-- <collision>
@@ -749,17 +748,20 @@
       <surface>
         <friction>
           <ode>
-            <mu>3.0</mu>
-            <mu2>1.0</mu2>
+            <mu>100.0</mu>
+            <mu2>100.0</mu2>
           </ode>
           <bullet>
-            <friction>3.0</friction>
-            <friction2>1.0</friction2>
-            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+            <friction>100.0</friction>
+            <friction2>100.0</friction2>
+            <rolling_friction>0.0</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
+    <kp>1e8</kp>
+    <kd>1.0</kd>
+    <minDepth>0.0001</minDepth>
   </gazebo>
 
   <gazebo reference="wheel_FR_link">
@@ -773,17 +775,20 @@
       <surface>
         <friction>
           <ode>
-            <mu>3.0</mu>
-            <mu2>1.0</mu2>
+            <mu>100.0</mu>
+            <mu2>100.0</mu2>
           </ode>
           <bullet>
-            <friction>3.0</friction>
-            <friction2>1.0</friction2>
-            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+            <friction>100.0</friction>
+            <friction2>100.0</friction2>
+            <rolling_friction>0.0</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
+    <kp>1e8</kp>
+    <kd>1.0</kd>
+    <minDepth>0.0001</minDepth>
   </gazebo>
 
   <gazebo reference="wheel_RL_link">
@@ -797,41 +802,41 @@
       <surface>
         <friction>
           <ode>
-            <mu>3.0</mu>
-            <mu2>1.0</mu2>
+            <mu>100.0</mu>
+            <mu2>100.0</mu2>
           </ode>
           <bullet>
-            <friction>3.0</friction>
-            <friction2>1.0</friction2>
-            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+            <friction>100.0</friction>
+            <friction2>100.0</friction2>
+            <rolling_friction>0.0</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
+    <kp>1e8</kp>
+    <kd>1.0</kd>
+    <minDepth>0.0001</minDepth>
   </gazebo>
 
   <gazebo reference="wheel_RR_link">
-        <!-- <mu1 value="1.0"/>
-        <mu2 value="1.0"/>
-        <kp value="1e15"/>
-        <kd value="1e13"/>
-        <fdir1>1 0 0</fdir1>
-        <minDepth>0.003</minDepth> -->
     <collision>
       <surface>
         <friction>
           <ode>
-            <mu>3.0</mu>
-            <mu2>1.0</mu2>
+            <mu>100.0</mu>
+            <mu2>100.0</mu2>
           </ode>
           <bullet>
-            <friction>3.0</friction>
-            <friction2>1.0</friction2>
-            <rolling_friction>0.05</rolling_friction> <!-- utile per stabilità -->
+            <friction>100.0</friction>
+            <friction2>100.0</friction2>
+            <rolling_friction>0.0</rolling_friction> <!-- utile per stabilità -->
           </bullet>
         </friction>
       </surface>
     </collision>
+    <kp>1e8</kp>
+    <kd>1.0</kd>
+    <minDepth>0.0001</minDepth>
   </gazebo>
 
   <gazebo reference="collision_f_l">
@@ -878,7 +883,7 @@
   <gazebo>
       <plugin
         filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
-      <topic>joint_states</topic>
+      <topic>robot1/joint_states</topic>
     </plugin>
   </gazebo>
   <!-- <gazebo reference="imu_frame">

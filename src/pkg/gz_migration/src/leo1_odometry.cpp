@@ -41,9 +41,9 @@ class Odometry : public rclcpp::Node{
         void topic_callback(const tf2_msgs::msg::TFMessage::SharedPtr msg){
             auto now_ = this->get_clock()->now();
             //RCLCPP_INFO(this->get_logger(), "now: %f", now_.seconds());
-            double start_x=-20.0; //-40
-            double start_y=10.0; //40
-            double start_z=15; //-1.5
+            double start_x=-3.0; //-40
+            double start_y=4.0; //40
+            double start_z=11; //-1.5
             //geometry_msgs::msg::PoseStamped new_odom_;
             nav_msgs::msg::Odometry new_odom_;
             //tf2_msgs::msg::TFMessage odom_tf_;
@@ -54,7 +54,7 @@ class Odometry : public rclcpp::Node{
             //new_odom_.header = transform_.transforms[7].header;     //elemento 7 di transforms è la tf tra world frame e base_link
             new_odom_.header.stamp = now_;
             new_odom_.header.frame_id = odom_frame_;
-            new_odom_.child_frame_id = transform_.transforms[7].child_frame_id;
+            new_odom_.child_frame_id = child_frame_;
             new_odom_.pose.pose.position.x = transform_.transforms[7].transform.translation.x - start_x;
             new_odom_.pose.pose.position.y = transform_.transforms[7].transform.translation.y - start_y;
             new_odom_.pose.pose.position.z = transform_.transforms[7].transform.translation.z - start_z;

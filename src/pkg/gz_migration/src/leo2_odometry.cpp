@@ -40,9 +40,9 @@ class Odometry : public rclcpp::Node{
         void topic_callback(const tf2_msgs::msg::TFMessage::SharedPtr msg){
             auto now_ = this->get_clock()->now();
             //RCLCPP_INFO(this->get_logger(), "now: %f", now_.seconds());
-            double start_x=-24.0; //-35
-            double start_y=10.0; //35
-            double start_z=15.0; //-2
+            double start_x=-5.0; //-35
+            double start_y=15.0; //35
+            double start_z=11.0; //-2
             //geometry_msgs::msg::PoseStamped new_odom_;
             nav_msgs::msg::Odometry new_odom_;
             //tf2_msgs::msg::TFMessage odom_tf_;

@@ -1,0 +1,10 @@
+<launch>
+ 
+  <include file="$(find-pkg-share gz_migration)/launch/leo2_rtabmap.launch.py"/>
+  <include file="$(find-pkg-share gz_migration)/launch/namespace_2.launch.py"/>
+  <!-- <include file="$(find-pkg-share gz_migration)/launch/leo2_exploration.launch.py"/> -->
+
+  
+ 
+
+</launch>

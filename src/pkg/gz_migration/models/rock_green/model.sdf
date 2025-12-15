@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <model name="rock">
+    <static>true</static>
+
+    <link name="rock_link">
+      <visual name="rock_visual">
+        <geometry>
+          <mesh>
+            <uri>model://home/user/ros2_ws/src/pkg/gz_migration/models/rock/meshes/Rock.stl</uri>
+            <scale>0.2 0.2 0.2</scale>
+          </mesh>
+        </geometry>
+          <material>
+            <ambient>0.5 0.5 0.5 1</ambient>
+            <diffuse>0.5 0.8 0.5 1</diffuse>
+            <specular>0.1 0.1 0.1 1</specular>
+        </material>
+      </visual>
+
+      <collision name="rock_collision">
+        <geometry>
+          <mesh>
+            <uri>model://home/user/ros2_ws/src/pkg/gz_migration/models/rock/meshes/Rock.stl</uri>
+            <scale>0.2 0.2 0.2</scale>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
