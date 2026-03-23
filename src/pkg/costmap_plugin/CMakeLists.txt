@@ -23,14 +23,20 @@ set(dep_pkgs
     pluginlib
     octomap_msgs
     octomap
+    sensor_msgs
     )
 
 # === Build ===
 
 add_library(${lib_name} SHARED
             src/gradient_layer.cpp
-            src/octomap_utils.cpp)
+            src/octomap_utils.cpp
+            src/slope_cost_map.cpp
+            src/roughness_cost_map.cpp
+            src/shadow_cost_map.cpp)
+
 include_directories(include)
+include_directories(include/costmap_plugin)
 include_directories(octomap)
 
 # === Installation ===
@@ -39,15 +45,16 @@ install(TARGETS ${lib_name}
         DESTINATION lib)
 
 target_link_libraries(${lib_name}
-        octomap  # questa variabile contiene liboctomap.so
+        octomap
       )
-      
 
 # === Ament work ===
 
-# pluginlib_export_plugin_description_file() installs gradient_layer.xml
-# file into "share" directory and sets ament indexes for it.
-# This allows the plugin to be discovered as a plugin of required type.
+# Export GradientLayer as a nav2_costmap_2d::Layer plugin
 pluginlib_export_plugin_description_file(nav2_costmap_2d gradient_layer.xml)
+
+# Export CostMapBase sub-plugins (SlopeCostMap, RoughnessCostMap, ShadowCostMap, etc.)
+pluginlib_export_plugin_description_file(costmap_plugin cost_map_plugins.xml)
+
 ament_target_dependencies(${lib_name} ${dep_pkgs})
 ament_package()

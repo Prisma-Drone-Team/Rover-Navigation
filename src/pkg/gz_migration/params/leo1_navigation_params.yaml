@@ -203,13 +203,41 @@ local_costmap:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 #was 3.0
         inflation_radius: 0.4 #was 0.55
+      #gradient_layer:
+        #plugin: "costmap_plugin/GradientLayer"
+        #enabled: true
+        #slope_threshold_deg: 35.0
+        #cost_scaling_factor: 4.0
+        #inflation_radius: 0.5 #must be equal to the inlfation layer one  
+        #octomap_topic: "/robot1/octomap_full"
       gradient_layer:
-        plugin: "costmap_plugin/GradientLayer"
+        plugin: "costmap_plugin::GradientLayer"
         enabled: true
-        slope_threshold_deg: 35.0
-        cost_scaling_factor: 4.0
-        inflation_radius: 0.5 #must be equal to the inlfation layer one  
         octomap_topic: "/robot1/octomap_full"
+        cloud_topic: "/robot1/cloud_map"
+        search_radius: 25.0
+        cost_map_plugins: ["slope", "roughness", "shadow"]
+        slope:
+          plugin: "costmap_plugin::SlopeCostMap"
+          weight: 1.0
+          slope_threshold_deg: 35.0
+          cost_scaling_factor: 4.0
+          search_radius: 25.0
+        roughness:
+          plugin: "costmap_plugin::RoughnessCostMap"
+          weight: 0.5
+          roughness_threshold: 0.1
+          cost_scaling_factor: 800.0
+          kernel_size: 3
+        shadow:
+          plugin: "costmap_plugin::ShadowCostMap"
+          weight: 0.4
+          sun_direction_x: -0.5
+          sun_direction_y: 0.5
+          sun_direction_z: -1.0
+          shadow_cost: 200
+          max_ray_cells: 50
+          min_sun_angle_deg: 5.0
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -261,6 +289,10 @@ global_costmap:
       # origin_x: -50.0
       # origin_y: -50.0
       #--
+      rolling_window: true
+      width: 20
+      height: 20
+
       plugins: ["static_layer", "gradient_layer", "inflation_layer"] #"obstacle_layer" 
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -285,13 +317,41 @@ global_costmap:
         enabled: true
         subscribe_to_updates: True
         map_subscribe_transient_local: True
+      #gradient_layer:
+        #plugin: "costmap_plugin/GradientLayer"
+        #enabled: true
+        #slope_threshold_deg: 45.0
+        #cost_scaling_factor: 2.0
+        #inflation_radius: 0.5 #must be equal to the inlfation layer one
+        #octomap_topic: "/robot1/octomap_full"
       gradient_layer:
-        plugin: "costmap_plugin/GradientLayer"
+        plugin: "costmap_plugin::GradientLayer"
         enabled: true
-        slope_threshold_deg: 45.0
-        cost_scaling_factor: 2.0
-        inflation_radius: 0.5 #must be equal to the inlfation layer one
         octomap_topic: "/robot1/octomap_full"
+        cloud_topic: "/robot1/cloud_map"
+        search_radius: 25.0
+        cost_map_plugins: ["slope", "roughness", "shadow"]
+        slope:
+          plugin: "costmap_plugin::SlopeCostMap"
+          weight: 1.0
+          slope_threshold_deg: 45.0
+          cost_scaling_factor: 2.0
+          search_radius: 25.0
+        roughness:
+          plugin: "costmap_plugin::RoughnessCostMap"
+          weight: 0.5
+          roughness_threshold: 0.1
+          cost_scaling_factor: 800.0
+          kernel_size: 3
+        shadow:
+          plugin: "costmap_plugin::ShadowCostMap"
+          weight: 0.4
+          sun_direction_x: -0.5
+          sun_direction_y: 0.5
+          sun_direction_z: -1.0
+          shadow_cost: 200
+          max_ray_cells: 50
+          min_sun_angle_deg: 5.0
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0 #was 3.0

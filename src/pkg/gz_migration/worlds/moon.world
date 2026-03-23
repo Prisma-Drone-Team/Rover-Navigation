@@ -3,7 +3,7 @@
   <world name="moon">
     <render_engine>ogre2</render_engine>
     <include>
-      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/Apollo_14.sdf</uri>
+      <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/Apollo_14.sdf</uri>
     </include>
 
     <light name="sun" type="directional">
@@ -31,11 +31,20 @@
       <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Sun</uri>
       <cast_shadows>false</cast_shadows>
     </include> -->
-
-    <plugin
+   
+   <!--FIRST MODIFY-->
+    <!--plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">
-    </plugin>
+    </plugin> -->
+
+    <plugin
+  filename="gz-sim-physics-system"
+  name="gz::sim::systems::Physics">
+  <engine>
+    <filename>ignition-physics-bullet-featherstone-plugin</filename>
+  </engine>
+  </plugin>
     <plugin
       filename="gz-sim-user-commands-system"
       name="gz::sim::systems::UserCommands">
@@ -110,26 +119,26 @@
     </physics> -->
     <!-- ROCCIA 1 -->
     <include>
-      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/rock/model.sdf</uri>
+      <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock/model.sdf</uri>
       <name>rock1</name>
       <pose>-7 7 11 0 0 0</pose>
     </include>
 
     <!-- ROCCIA 2 -->
     <include>
-      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/rock/model.sdf</uri>
+      <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock/model.sdf</uri>
       <name>rock2</name>
       <pose>0 2 11 0 0 0</pose>
     </include>
     <!-- ROCCIA B -->
     <include>
-      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/rock_blu/model.sdf</uri>
+      <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock_blu/model.sdf</uri>
       <name>rockb</name>
       <pose>-5 10 11.5 0 0 0</pose>
     </include>
       <!-- ROCCIA G -->
     <include>
-      <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/rock_green/model.sdf</uri>
+      <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock_green/model.sdf</uri>
       <name>rockg</name>
       <pose>-6 3 10.4 0 0 0</pose>
     </include>

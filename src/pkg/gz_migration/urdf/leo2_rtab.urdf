@@ -316,7 +316,8 @@
       <prefix>camera2</prefix>
       <topic>/robot2/color/image_raw</topic>
       <ignition_frame_id>robot2/camera_link</ignition_frame_id>
-      <update_rate>15.0</update_rate>
+      <!-- <update_rate>15.0</update_rate> -->
+      <update_rate>5</update_rate>
       <always_on>1</always_on>
       <visualize>1</visualize>
       <camera name="camera">
@@ -324,8 +325,10 @@
         <!--colorOpticalframeName>camera_color_optical_frame</colorOpticalframeName-->
         <horizontal_fov>1.2112585008840648</horizontal_fov>
         <image>
-          <width>640</width>
-          <height>480</height>
+          <!-- <width>640</width>
+          <height>480</height> -->
+          <width>320</width>
+          <height>240</height>
           <format>RGB_INT8</format>
         </image>
         <clip>
@@ -363,7 +366,8 @@
         </noise>
       </camera>
       <always_on>1</always_on>
-      <update_rate>90</update_rate>
+      <!-- <update_rate>90</update_rate> -->
+      <update_rate>0</update_rate>
       <visualize>0</visualize>
     </sensor>
     <sensor name="cameraired2_2" type="camera">
@@ -390,14 +394,16 @@
         </noise>
       </camera>
       <always_on>1</always_on>
-      <update_rate>90</update_rate>
+      <!-- <update_rate>90</update_rate> -->
+      <update_rate>0</update_rate>
       <visualize>0</visualize>
     </sensor>
     <sensor name="cameradepth2" type="depth_camera">
       <prefix>camera2</prefix>
       <topic>/robot2/depth/image_raw</topic>
       <ignition_frame_id>robot2/camera_depth_frame</ignition_frame_id>
-      <update_rate>30.0</update_rate>
+      <!-- <update_rate>30.0</update_rate> -->
+      <update_rate>5</update_rate>
       <always_on>1</always_on>
       <visualize>1</visualize>
       <camera name="camera">
@@ -405,8 +411,10 @@
         <!--depthOpticalframeName>camera_depth_optical_frame</depthOpticalframeName-->
         <horizontal_fov>1.4870205226991688</horizontal_fov>
         <image>
-          <width>640</width>
-          <height>480</height>
+          <!-- <width>640</width>
+          <height>480</height> -->
+          <width>320</width>
+          <height>240</height>
         </image>
         <clip>
           <near>0.1</near>
@@ -491,7 +499,7 @@
       <ignition_frame_id>robot2/base_link</ignition_frame_id>
       <pose>0 0 0 0 0 0</pose>
       <visualize>True</visualize>
-      <update_rate>10</update_rate>
+      <update_rate>10</update_rate> 
       <!-- This ray plgin is only for visualization. -->
       <!--plugin filename="libros2_livox.so" name="livox_plugin"-->
         <lidar>

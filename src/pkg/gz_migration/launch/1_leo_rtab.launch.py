@@ -22,11 +22,19 @@ def generate_launch_description():
             robot_description = urdf_file.read() #apri il file in modalità lettura e salvalo in robot_description (variabile) come stringa
 
 
+        # static_tf_1 = Node(
+        #       package = 'tf2_ros',
+        #       executable = 'static_transform_publisher',
+        #       name = 'map_to_robot_map_1',
+        #       arguments = ['-3.0', '4.0', '0', '0', '0', '0', 'map', 'robot1/map'], #-40 40 -1.5 #-20 10 15
+        # )
+
         static_tf_1 = Node(
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_1',
-              arguments = ['-3.0', '4.0', '0', '0', '0', '0', 'map', 'robot1/map'], #-40 40 -1.5 #-20 10 15
+              arguments = ['-3.0', '4.0', '0', '0', '0', '0', 'map', 'robot1/map'],
+              parameters=[{'use_sim_time' : True}],
         )
         
         static_tf_2 = Node(
@@ -41,17 +49,26 @@ def generate_launch_description():
             name='robot_state_publisher_1',
             namespace='robot1',            
             executable='robot_state_publisher',
-            parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot1/'}],
+            #parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot1/'}],
             #parameters=[{'robot_description' : robot_description}],
+            parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot1/', 'use_sim_time' : True}],
             output='screen',
         )
+
+        # joint_state_publisher_node = Node(
+        #     package='joint_state_publisher',
+        #     executable='joint_state_publisher',
+        #     name='joint_state_publisher_1',
+        #     namespace='robot1',
+        #     # remappings=[('joint_states', 'robot1/joint_states')],
+        # )
 
         joint_state_publisher_node = Node(
             package='joint_state_publisher',
             executable='joint_state_publisher',
             name='joint_state_publisher_1',
             namespace='robot1',
-            # remappings=[('joint_states', 'robot1/joint_states')],
+            parameters=[{'use_sim_time' : True}],
         )
 
         spawn_node = Node(

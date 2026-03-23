@@ -1,0 +1,30 @@
+<library path="costmap_plugin_core">
+  <class name="costmap_plugin::SlopeCostMap"
+         type="costmap_plugin::SlopeCostMap"
+         base_class_type="costmap_plugin::CostMapBase">
+    <description>
+      Terrain slope cost map. Computes traversability costs from elevation
+      data using centered finite differences.
+    </description>
+  </class>
+
+  <class name="costmap_plugin::RoughnessCostMap"
+         type="costmap_plugin::RoughnessCostMap"
+         base_class_type="costmap_plugin::CostMapBase">
+    <description>
+      Terrain roughness cost map. Penalizes uneven terrain based on
+      local elevation variance in a configurable neighborhood.
+    </description>
+  </class>
+
+  <class name="costmap_plugin::ShadowCostMap"
+         type="costmap_plugin::ShadowCostMap"
+         base_class_type="costmap_plugin::CostMapBase">
+    <description>
+      Light/shadow cost map. Uses ray marching on the elevation map
+      to detect cells in shadow from a configurable sun direction.
+      Relevant for lunar navigation where shadow affects temperature,
+      solar power, and sensor visibility.
+    </description>
+  </class>
+</library>

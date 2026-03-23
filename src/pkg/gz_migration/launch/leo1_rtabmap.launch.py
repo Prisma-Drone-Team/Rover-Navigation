@@ -363,7 +363,7 @@ def launch_setup(context, *args, **kwargs):
                 "landmark_linear_variance": LaunchConfiguration('tag_linear_variance'),
                 "landmark_angular_variance": LaunchConfiguration('tag_angular_variance'),
                 
-                # "map_always_update" : LaunchConfiguration('map_always_update'),
+                "map_always_update" : LaunchConfiguration('map_always_update'),
                 # "Grid/Sensor" : LaunchConfiguration('Grid/Sensor'),
                 "Grid/RangeMax": LaunchConfiguration('Grid/RangeMax'),
                 "Grid/RangeMin" : LaunchConfiguration('Grid/RangeMin'),
@@ -529,8 +529,8 @@ def generate_launch_description():
         DeclareLaunchArgument('namespace',      default_value='robot1',            description=''),
         #DeclareLaunchArgument('database_path',  default_value='~/.ros/rtabmap.db',  description='Where is the map saved/loaded.'),
         DeclareLaunchArgument('database_path',  default_value='',  description='Where is the map saved/loaded.'),
-        DeclareLaunchArgument('topic_queue_size', default_value='10',                description='Queue size of individual topic subscribers.'),
-        DeclareLaunchArgument('queue_size',     default_value='12',                 description='Backward compatibility, use "sync_queue_size" instead.'),
+        DeclareLaunchArgument('topic_queue_size', default_value='100',                description='Queue size of individual topic subscribers.'),
+        DeclareLaunchArgument('queue_size',     default_value='50',                 description='Backward compatibility, use "sync_queue_size" instead.'),
         DeclareLaunchArgument('qos',            default_value='2',                  description='General QoS used for sensor input data: 0=system default, 1=Reliable, 2=Best Effort.'),
         DeclareLaunchArgument('wait_for_transform', default_value='0.2',            description=''),
         DeclareLaunchArgument('rtabmap_args',   default_value='',                   description='Backward compatibility, use "args" instead.'),
@@ -545,7 +545,7 @@ def generate_launch_description():
         DeclareLaunchArgument('ground_truth_base_frame_id', default_value='', description='e.g., "tracker", a fake frame matching the frame "frame_id" (but on different TF tree)'),
         
         DeclareLaunchArgument('approx_sync',  default_value='true',            description='If timestamps of the input topics should be synchronized using approximate or exact time policy.'),
-        DeclareLaunchArgument('approx_sync_max_interval',  default_value='0.1', description='(sec) 0 means infinite interval duration (used with approx_sync=true)'),
+        DeclareLaunchArgument('approx_sync_max_interval',  default_value='0', description='(sec) 0 means infinite interval duration (used with approx_sync=true)'),
 
         # RGB-D related topics
         DeclareLaunchArgument('rgb_topic',           default_value='/robot1/color/image_raw',       description=''),

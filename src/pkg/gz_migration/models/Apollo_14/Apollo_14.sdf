@@ -7,8 +7,8 @@
         <collision name="collision">
           <geometry>
             <mesh>
-                <!-- <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_14_crater.obj</uri> -->
-                <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_11_normals.obj</uri>
+                <!-- <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_14_crater.obj</uri> -->
+                <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_11_normals.obj</uri>
              <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -30,8 +30,8 @@
         <visual name="visual">
           <geometry>
             <mesh>
-                <!-- <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_14_crater.obj</uri> -->
-                <uri>file://home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_11_normals.obj</uri>
+                <!-- <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_14_crater.obj</uri> -->
+                <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/Apollo_14/meshes/apollo_11_normals.obj</uri>
              <scale>1 1 1</scale>
             </mesh>
           </geometry>
