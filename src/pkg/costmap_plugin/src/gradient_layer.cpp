@@ -32,7 +32,6 @@ GradientLayer::~GradientLayer()
   dyn_params_handler_.reset();
 
   // IMPORTANT: destroy cost_maps_ BEFORE the ClassLoader
-  // (pluginlib requires instances to be released before the loader)
   cost_maps_.clear();
   cost_map_loader_.reset();
 
@@ -101,16 +100,10 @@ void GradientLayer::onInitialize()
   node->get_parameter(name_ + ".cost_map_plugins", cost_map_plugin_names);
 
   for (const auto & plugin_name : cost_map_plugin_names) {
-    // Each plugin entry needs a "plugin" parameter with the class type
     std::string plugin_type;
-    // declareParameter(plugin_name + ".plugin", rclcpp::ParameterValue(""));
-    // node->get_parameter(name_ + "." + plugin_name + ".plugin", plugin_type);
-
     try {
       declareParameter(plugin_name + ".plugin", rclcpp::ParameterValue(""));
-    } catch (const rclcpp::exceptions::ParameterAlreadyDeclaredException &) {
-      // Parameter already declared from YAML, that's fine
-    }
+    } catch (const rclcpp::exceptions::ParameterAlreadyDeclaredException &) {}
     node->get_parameter(name_ + "." + plugin_name + ".plugin", plugin_type);
 
     if (plugin_type.empty()) {
@@ -124,9 +117,16 @@ void GradientLayer::onInitialize()
       auto cost_map = cost_map_loader_->createSharedInstance(plugin_type);
       cost_map->initialize(node, name_ + "." + plugin_name);
       cost_maps_.push_back(cost_map);
+      cost_map_names_.push_back(plugin_name);
 
-      RCLCPP_WARN(logger_, "GradientLayer: loaded cost map plugin '%s' (type: %s)",
-                  plugin_name.c_str(), plugin_type.c_str());
+      // Create a publisher for this cost map's individual costs
+      std::string topic_name = "gradient_layer/" + plugin_name + "_costs";
+      auto pub = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
+        topic_name, rclcpp::QoS(1).transient_local());
+      cost_map_pubs_.push_back(pub);
+
+      RCLCPP_WARN(logger_, "GradientLayer: loaded cost map plugin '%s' (type: %s), publishing on '%s'",
+                  plugin_name.c_str(), plugin_type.c_str(), topic_name.c_str());
     } catch (const pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(logger_,
         "GradientLayer: failed to load cost map plugin '%s' (type: %s): %s",
@@ -211,13 +211,11 @@ void GradientLayer::buildElevationFromCloud(
 {
   unsigned int size_x = master_grid.getSizeInCellsX();
   unsigned int size_y = master_grid.getSizeInCellsY();
-  double res = master_grid.getResolution();
 
   elevation_map_.assign(size_x * size_y, INVALID_ELEVATION);
 
   if (cloud_points_.empty()) return;
 
-  // Estimate robot Z from nearby points (median Z within 1m)
   double robot_wz = 0.0;
   {
     std::vector<float> nearby_z;
@@ -355,6 +353,60 @@ unsigned char GradientLayer::combineCosts(
 }
 
 // ============================================================
+// publishIndividualCostMaps
+// ============================================================
+
+void GradientLayer::publishIndividualCostMaps(
+  const nav2_costmap_2d::Costmap2D & master_grid,
+  int min_i, int min_j, int max_i, int max_j)
+{
+  unsigned int size_x = master_grid.getSizeInCellsX();
+  unsigned int size_y = master_grid.getSizeInCellsY();
+
+  for (size_t k = 0; k < cost_maps_.size(); ++k) {
+    if (!cost_maps_[k]->isReady()) continue;
+    if (k >= cost_map_pubs_.size()) continue;
+
+    // Check if anyone is subscribed
+    if (cost_map_pubs_[k]->get_subscription_count() == 0) continue;
+
+    nav_msgs::msg::OccupancyGrid grid;
+    //grid.header.frame_id = master_grid.getGlobalFrameID();
+    grid.header.frame_id = layered_costmap_->getGlobalFrameID();
+    grid.header.stamp = node_.lock()->now();
+    grid.info.resolution = master_grid.getResolution();
+    grid.info.width = size_x;
+    grid.info.height = size_y;
+    grid.info.origin.position.x = master_grid.getOriginX();
+    grid.info.origin.position.y = master_grid.getOriginY();
+    grid.info.origin.position.z = 0.0;
+
+    grid.data.assign(size_x * size_y, -1);  // -1 = unknown
+
+    for (int j = min_j; j < max_j; ++j) {
+      for (int i = min_i; i < max_i; ++i) {
+        unsigned char cost = cost_maps_[k]->computeCost(i, j, master_grid, octree_);
+
+        unsigned int idx = master_grid.getIndex(i, j);
+        if (idx >= grid.data.size()) continue;
+
+        // Map costmap values (0-255) to OccupancyGrid values (0-100)
+        if (cost == LETHAL_OBSTACLE) {
+          grid.data[idx] = 100;
+        } else if (cost == FREE_SPACE) {
+          grid.data[idx] = 0;
+        } else {
+          grid.data[idx] = static_cast<int8_t>(
+            std::min(99.0, static_cast<double>(cost) * 100.0 / 253.0));
+        }
+      }
+    }
+
+    cost_map_pubs_[k]->publish(grid);
+  }
+}
+
+// ============================================================
 // updateCosts
 // ============================================================
 
@@ -392,19 +444,18 @@ void GradientLayer::updateCosts(
 
   // --- Pass shared data to all cost maps via the generic interface ---
   if (have_cloud) {
-    // Primary: build elevation map from point cloud
     buildElevationFromCloud(master_grid, last_pose_x_, last_pose_y_);
-
-    // Distribute to ALL cost maps (each decides if it cares)
     for (auto & cost_map : cost_maps_) {
       cost_map->setElevationData(elevation_map_, size_x, size_y, res);
     }
   } else if (have_octree) {
-    // Fallback: let each cost map rebuild from OctoMap if it can
     for (auto & cost_map : cost_maps_) {
       cost_map->rebuildFromOctree(master_grid, last_pose_x_, last_pose_y_, octree_);
     }
   }
+
+  // --- Publish individual cost maps for visualization ---
+  publishIndividualCostMaps(master_grid, min_i, min_j, max_i, max_j);
 
   // Compute footprint cells
   std::unordered_set<unsigned int> footprint_cells;

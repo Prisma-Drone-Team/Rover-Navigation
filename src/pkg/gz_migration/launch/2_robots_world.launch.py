@@ -11,8 +11,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
          #FIST MODIFY
-        #world_file_name = "moon.world" #"empty_world.sdf"
-        world_file_name = "empty_world.sdf"
+        world_file_name = "moon.world" #"empty_world.sdf"
+        #world_file_name = "empty_world.sdf"
         world_file = os.path.join(get_package_share_directory('gz_migration'), "worlds", world_file_name)
 
         gazebo_ign = IncludeLaunchDescription(

@@ -32,19 +32,19 @@
       <cast_shadows>false</cast_shadows>
     </include> -->
    
-   <!--FIRST MODIFY-->
-    <!--plugin
+   
+  <plugin
       filename="gz-sim-physics-system"
       name="gz::sim::systems::Physics">
-    </plugin> -->
+  </plugin> 
 
-    <plugin
+  <!-- <plugin
   filename="gz-sim-physics-system"
   name="gz::sim::systems::Physics">
   <engine>
     <filename>ignition-physics-bullet-featherstone-plugin</filename>
   </engine>
-  </plugin>
+  </plugin>  -->
     <plugin
       filename="gz-sim-user-commands-system"
       name="gz::sim::systems::UserCommands">

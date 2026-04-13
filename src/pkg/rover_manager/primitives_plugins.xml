@@ -1,0 +1,29 @@
+<library path="rover_manager_primitives">
+  <class name="rover_manager::GotoPrimitive"
+         type="rover_manager::GotoPrimitive"
+         base_class_type="rover_manager::PrimitiveBase">
+    <description>
+      Point-to-point navigation primitive via Nav2 NavigateToPose.
+      Accepts coordinates (x,y,yaw) or TF frame names.
+    </description>
+  </class>
+
+  <class name="rover_manager::ReturnToBasePrimitive"
+         type="rover_manager::ReturnToBasePrimitive"
+         base_class_type="rover_manager::PrimitiveBase">
+    <description>
+      Return to home/base position. Home is configurable as
+      coordinates or TF frame via YAML parameters.
+    </description>
+  </class>
+
+  <class name="rover_manager::CoverAreaPrimitive"
+         type="rover_manager::CoverAreaPrimitive"
+         base_class_type="rover_manager::PrimitiveBase">
+    <description>
+      Area coverage using boustrophedon decomposition.
+      Generates a lawn-mower path over a polygon and executes
+      it waypoint by waypoint. Parametric swath width and angle.
+    </description>
+  </class>
+</library>

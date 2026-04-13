@@ -1,0 +1,26 @@
+# ============================================================
+# Rover Manager configuration for robot2
+# ============================================================
+
+rover_manager:
+  ros__parameters:
+    robot_namespace: "robot2"
+    command_topic: "seed_pdt_rover2/command"
+    feedback_topic: "seed_pdt_rover2/state"
+
+    # Primitives loaded dynamically via pluginlib
+    primitives: ["goto", "return_to_base", "cover_area"]
+
+    goto:
+      plugin: "rover_manager::GotoPrimitive"
+      goal_tolerance_xy: 0.35
+      goal_tolerance_yaw: 0.35
+
+    return_to_base:
+      plugin: "rover_manager::ReturnToBasePrimitive"
+      home_pose: "0.0,0.0,0.0"
+
+    cover_area:
+      plugin: "rover_manager::CoverAreaPrimitive"
+      swath_width: 1.5
+      sweep_angle: 0.0

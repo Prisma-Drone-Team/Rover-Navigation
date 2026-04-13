@@ -7,6 +7,7 @@
 #include <memory>
 #include <mutex>
 #include <string>
+#include <unordered_set>
 
 #include "nav2_costmap_2d/layer.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
@@ -86,6 +87,11 @@ private:
     unsigned int my,
     const nav2_costmap_2d::Costmap2D & master_grid);
 
+  // Publish individual cost maps as OccupancyGrid
+  void publishIndividualCostMaps(
+    const nav2_costmap_2d::Costmap2D & master_grid,
+    int min_i, int min_j, int max_i, int max_j);
+  
   // --- pluginlib loader for CostMapBase plugins ---
   std::shared_ptr<pluginlib::ClassLoader<CostMapBase>> cost_map_loader_;
 
@@ -97,6 +103,11 @@ private:
   rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr elevation_pub_;
   rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;
 
+  // Per-plugin cost map publishers (name -> publisher)
+  std::vector<rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr> cost_map_pubs_;
+  // Plugin names (parallel to cost_maps_ and cost_map_pubs_)
+  std::vector<std::string> cost_map_names_;
+  
   // Shared OctoMap (fallback)
   std::shared_ptr<octomap::ColorOcTree> octree_;
 
