@@ -105,44 +105,114 @@ private:
   // Tick loop — called every 200ms
   // ============================================================
 
+  // void tick_callback()
+  // {
+  //   // If there's an active primitive, tick it
+  //   if (active_primitive_) {
+  //     active_primitive_->tick();
+
+  //     auto status = active_primitive_->getStatus();
+
+  //     // Publish feedback
+  //     auto fb_msg = std_msgs::msg::String();
+  //     fb_msg.data = active_primitive_name_ + ": " +
+  //                   statusToString(status) + " - " +
+  //                   active_primitive_->getFeedback();
+  //     feedback_pub_->publish(fb_msg);
+
+  //     // If primitive finished, clean up
+  //     if (status == PrimitiveStatus::SUCCEEDED ||
+  //         status == PrimitiveStatus::FAILED ||
+  //         status == PrimitiveStatus::CANCELLED)
+  //     {
+  //       RCLCPP_WARN(this->get_logger(), "Primitive '%s' finished with status: %s",
+  //                   active_primitive_name_.c_str(), statusToString(status).c_str());
+  //       active_primitive_->reset();
+  //       active_primitive_ = nullptr;
+  //       active_primitive_name_ = "";
+  //       current_command_ = "";
+  //     }
+  //   }
+
+  //   // Process new command
+  //   if (!new_command_.empty() && new_command_ != current_command_) {
+  //     process_command(new_command_);
+  //     current_command_ = new_command_;
+  //     new_command_ = "";
+  //   } else if (!new_command_.empty()) {
+  //     new_command_ = "";
+  //   }
+  // }
+
   void tick_callback()
-  {
-    // If there's an active primitive, tick it
-    if (active_primitive_) {
-      active_primitive_->tick();
+{
+  if (active_primitive_) {
+    active_primitive_->tick();
 
-      auto status = active_primitive_->getStatus();
+    auto status = active_primitive_->getStatus();
+    auto predicate = active_primitive_->getInstancePredicate();
 
-      // Publish feedback
-      auto fb_msg = std_msgs::msg::String();
-      fb_msg.data = active_primitive_name_ + ": " +
-                    statusToString(status) + " - " +
-                    active_primitive_->getFeedback();
-      feedback_pub_->publish(fb_msg);
-
-      // If primitive finished, clean up
-      if (status == PrimitiveStatus::SUCCEEDED ||
-          status == PrimitiveStatus::FAILED ||
-          status == PrimitiveStatus::CANCELLED)
-      {
-        RCLCPP_WARN(this->get_logger(), "Primitive '%s' finished with status: %s",
-                    active_primitive_name_.c_str(), statusToString(status).c_str());
-        active_primitive_->reset();
-        active_primitive_ = nullptr;
-        active_primitive_name_ = "";
-        current_command_ = "";
-      }
+    // If the state has changed, publish transitions as predicates
+    if (status != last_published_status_) {
+      publishStateTransition(last_published_predicate_, last_published_status_,
+                             predicate, status);
+      last_published_status_ = status;
+      last_published_predicate_ = predicate;
     }
 
-    // Process new command
-    if (!new_command_.empty() && new_command_ != current_command_) {
-      process_command(new_command_);
-      current_command_ = new_command_;
-      new_command_ = "";
-    } else if (!new_command_.empty()) {
-      new_command_ = "";
+    if (status == PrimitiveStatus::SUCCEEDED ||
+        status == PrimitiveStatus::FAILED ||
+        status == PrimitiveStatus::CANCELLED)
+    {
+      active_primitive_->reset();
+      active_primitive_ = nullptr;
+      active_primitive_name_ = "";
+      current_command_ = "";
+      last_published_status_ = PrimitiveStatus::IDLE;
+      last_published_predicate_ = "";
     }
   }
+
+  if (!new_command_.empty() && new_command_ != current_command_) {
+    process_command(new_command_);
+    current_command_ = new_command_;
+    new_command_ = "";
+  }
+}
+
+void publishStateTransition(
+  const std::string & old_predicate, PrimitiveStatus old_status,
+  const std::string & new_predicate, PrimitiveStatus new_status)
+{
+  // Deny the old state if it existed
+  if (!old_predicate.empty() && old_status != PrimitiveStatus::IDLE) {
+    publishFact("not " + old_predicate + "." + statusToString(old_status));
+  }
+
+  // Affirms the new state
+  if (new_status != PrimitiveStatus::IDLE) {
+    publishFact(new_predicate + "." + statusToString(new_status));
+  }
+}
+
+void publishFact(const std::string & fact)
+{
+  auto msg = std_msgs::msg::String();
+  msg.data = fact;
+  feedback_pub_->publish(msg);
+  RCLCPP_INFO(this->get_logger(), "Published fact: %s", fact.c_str());
+}
+
+std::string statusToString(PrimitiveStatus s)
+{
+  switch (s) {
+    case PrimitiveStatus::RUNNING:   return "running";
+    case PrimitiveStatus::SUCCEEDED: return "succeeded";
+    case PrimitiveStatus::FAILED:    return "failed";
+    case PrimitiveStatus::CANCELLED: return "cancelled";
+    default:                         return "idle";
+  }
+}
 
   // ============================================================
   // Command processing
@@ -342,6 +412,9 @@ private:
   // Command state
   std::string current_command_;
   std::string new_command_;
+  
+  PrimitiveStatus last_published_status_ = PrimitiveStatus::IDLE;
+  std::string last_published_predicate_;
 
   // ROS2 interfaces
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr cmd_sub_;

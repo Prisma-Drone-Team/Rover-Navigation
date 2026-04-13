@@ -61,6 +61,7 @@ class PrimitiveBase
 {
 public:
   virtual ~PrimitiveBase() = default;
+  const std::string & getInstancePredicate() const { return instance_predicate_; }
 
   /**
    * @brief Initialize the primitive with the parent ROS2 node.
@@ -136,6 +137,8 @@ protected:
   PrimitiveStatus status_ = PrimitiveStatus::IDLE;
   std::string feedback_msg_;
   rclcpp::Logger logger_ = rclcpp::get_logger("primitive_base");
+  std::string instance_predicate_;  // es. "goto(5,3,0)"
+  
 };
 
 }  // namespace rover_manager

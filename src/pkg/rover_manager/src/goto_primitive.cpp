@@ -48,13 +48,16 @@ bool GotoPrimitive::execute(const std::vector<std::string> & args)
   }
 
   double x = 0, y = 0, yaw = 0;
-
+  
   // Rejoin args in case the parser split "1.0,2.0,0.0" into separate tokens
   std::string joined;
   for (size_t i = 0; i < args.size(); ++i) {
     if (i > 0) joined += ",";
     joined += args[i];
   }
+  instance_predicate_ = name_ + "(" + joined + ")";
+  
+
 
   if (parse_xyyaw(joined, x, y, yaw)) {
     // Parsed as coordinates

@@ -34,6 +34,8 @@ bool ReturnToBasePrimitive::execute(const std::vector<std::string> & /*args*/)
   // Ignores arguments — always goes to home_pose_
   double x = 0, y = 0, yaw = 0;
 
+ instance_predicate_ = "return_to_base";
+
   if (parse_xyyaw(home_pose_, x, y, yaw)) {
     return send_goal(x, y, yaw);
   }

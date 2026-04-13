@@ -41,6 +41,14 @@ void CoverAreaPrimitive::initialize(
 
 bool CoverAreaPrimitive::execute(const std::vector<std::string> & args)
 {
+  
+  std::string joined;
+for (size_t i = 0; i < args.size(); ++i) {
+  if (i > 0) joined += ",";
+  joined += args[i];
+}
+instance_predicate_ = name_ + "(" + joined + ")";
+
   // Parse polygon vertices from arguments
   coverage_area_ = parse_polygon(args);
 
