@@ -180,18 +180,33 @@ private:
   }
 }
 
+// void publishStateTransition(
+//   const std::string & old_predicate, PrimitiveStatus old_status,
+//   const std::string & new_predicate, PrimitiveStatus new_status)
+// {
+//   // Deny the old state if it existed
+//   if (!old_predicate.empty() && old_status != PrimitiveStatus::IDLE) {
+//     publishFact("-" + old_predicate + "." + statusToString(old_status));
+//   }
+
+//   // Affirms the new state
+//   if (new_status != PrimitiveStatus::IDLE) {
+//     publishFact(new_predicate + "." + statusToString(new_status));
+//   }
+// }
+
 void publishStateTransition(
   const std::string & old_predicate, PrimitiveStatus old_status,
   const std::string & new_predicate, PrimitiveStatus new_status)
 {
   // Deny the old state if it existed
   if (!old_predicate.empty() && old_status != PrimitiveStatus::IDLE) {
-    publishFact("not " + old_predicate + "." + statusToString(old_status));
+    publishFact("-" + statusToString(old_status) + "(" + old_predicate + ")");
   }
 
   // Affirms the new state
   if (new_status != PrimitiveStatus::IDLE) {
-    publishFact(new_predicate + "." + statusToString(new_status));
+    publishFact("+" + statusToString(new_status) + "(" + new_predicate + ")");
   }
 }
 
@@ -268,6 +283,21 @@ std::string statusToString(PrimitiveStatus s)
       active_primitive_->reset();
       active_primitive_ = nullptr;
       active_primitive_name_ = "";
+    }
+    
+    // std::string instance_pred = active_primitive_->getInstancePredicate();
+    // //Ensure there are no residues of past successes or failures for this exact point
+    // if (!instance_pred.empty()) {
+    // publishFact("-" + instance_pred + ".succeeded");
+    // publishFact("-" + instance_pred + ".failed");
+    // publishFact("-" + instance_pred + ".cancelled");
+    // }
+    
+    std::string instance_pred = active_primitive_->getInstancePredicate();
+    if (!instance_pred.empty()) {
+      publishFact("-succeeded(" + instance_pred + ")");
+      publishFact("-failed(" + instance_pred + ")");
+      publishFact("-cancelled(" + instance_pred + ")");
     }
   }
 
@@ -412,7 +442,7 @@ std::string statusToString(PrimitiveStatus s)
   // Command state
   std::string current_command_;
   std::string new_command_;
-  
+
   PrimitiveStatus last_published_status_ = PrimitiveStatus::IDLE;
   std::string last_published_predicate_;
 
