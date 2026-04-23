@@ -26,14 +26,15 @@ def generate_launch_description():
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_2',
-              arguments = ['-5.0', '15.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
+              #arguments = ['-5.0', '15.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
+              arguments = ['-20.0', '30.0', '0.0', '0', '0', '0', 'map', 'robot2/map'],
         )
         
         static_tf_2 = Node(
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'robot_map_to_base_footprint',
-              arguments = ['0.0', '0', '0', '0', '0', '0', 'robot1/map', 'robot1/base_footprint'],
+              arguments = ['0.0', '0', '0', '0', '0', '0', 'robot2/map', 'robot2/base_footprint'],
         )
 
         robot_state_publisher_node = Node(
@@ -62,12 +63,12 @@ def generate_launch_description():
             arguments=[
                 '-name', 'leo2', 
                 '-topic', 'robot2/robot_description', 
-                # '-x', '-5.0',
-                # '-y', '15.0',
-                # '-z', '11',
-                '-x', '-35.0',
-                '-y', '30.0',
-                '-z', '13',
+                #  '-x', '-5.0',
+                #  '-y', '15.0',
+                #  '-z', '11',
+                 '-x', '40.0',
+                 '-y', '20.0',
+                 '-z', '13',
                 '-Y', '0.0',
                 ],
             respawn=False,

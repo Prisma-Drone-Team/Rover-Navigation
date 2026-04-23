@@ -95,11 +95,24 @@ private:
   // Command handling
   // ============================================================
 
+  // void command_callback(const std_msgs::msg::String::SharedPtr msg)
+  // {
+  //   new_command_ = msg->data;
+  //   RCLCPP_WARN(this->get_logger(), "Received command: %s", new_command_.c_str());
+  // }
+
   void command_callback(const std_msgs::msg::String::SharedPtr msg)
-  {
-    new_command_ = msg->data;
+{
+    std::string cmd = msg->data;
+    
+    // Ignore commands that are equal to the current one or the actual completed one 
+    if (cmd == current_command_) {
+      return;
+    }
+    
+    new_command_ = cmd;
     RCLCPP_WARN(this->get_logger(), "Received command: %s", new_command_.c_str());
-  }
+}
 
   // ============================================================
   // Tick loop — called every 200ms
@@ -167,7 +180,7 @@ private:
       active_primitive_->reset();
       active_primitive_ = nullptr;
       active_primitive_name_ = "";
-      current_command_ = "";
+      //current_command_ = "";
       last_published_status_ = PrimitiveStatus::IDLE;
       last_published_predicate_ = "";
     }
@@ -195,18 +208,33 @@ private:
 //   }
 // }
 
+// void publishStateTransition(
+//   const std::string & old_predicate, PrimitiveStatus old_status,
+//   const std::string & new_predicate, PrimitiveStatus new_status)
+// {
+//   // Deny the old state if it existed
+//   if (!old_predicate.empty() && old_status != PrimitiveStatus::IDLE) {
+//     publishFact("-" + statusToString(old_status) + "(" + old_predicate + ")");
+//   }
+
+//   // Affirms the new state
+//   if (new_status != PrimitiveStatus::IDLE) {
+//     publishFact("+" + statusToString(new_status) + "(" + new_predicate + ")");
+//   }
+// }
+
 void publishStateTransition(
   const std::string & old_predicate, PrimitiveStatus old_status,
   const std::string & new_predicate, PrimitiveStatus new_status)
 {
-  // Deny the old state if it existed
+  // Negazione del vecchio stato
   if (!old_predicate.empty() && old_status != PrimitiveStatus::IDLE) {
     publishFact("-" + statusToString(old_status) + "(" + old_predicate + ")");
   }
 
-  // Affirms the new state
+  // Affermazione del nuovo stato (SENZA il +)
   if (new_status != PrimitiveStatus::IDLE) {
-    publishFact("+" + statusToString(new_status) + "(" + new_predicate + ")");
+    publishFact(statusToString(new_status) + "(" + new_predicate + ")");
   }
 }
 
@@ -239,6 +267,11 @@ std::string statusToString(PrimitiveStatus s)
     auto tokens = instance2vector(cmd);
     if (tokens.empty()) {
       RCLCPP_ERROR(this->get_logger(), "Empty command");
+      return;
+    }
+
+    // Ignore duplicate commands
+    if (cmd == current_command_) {
       return;
     }
 
