@@ -171,8 +171,8 @@ void GradientLayer::cloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr
 {
   std::lock_guard<mutex_t> guard(*getMutex());
 
-  RCLCPP_WARN(logger_, "GradientLayer: cloudCallback ENTERED, msg size=%u x %u, point_step=%u",
-              msg->width, msg->height, msg->point_step);
+  // RCLCPP_WARN(logger_, "GradientLayer: cloudCallback ENTERED, msg size=%u x %u, point_step=%u",
+  //             msg->width, msg->height, msg->point_step);
 
   cloud_points_.clear();
 
@@ -198,7 +198,7 @@ void GradientLayer::cloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr
   cloud_received_ = true;
   need_regradient_ = true;
 
-  RCLCPP_WARN(logger_, "GradientLayer: received cloud with %zu valid points", cloud_points_.size());
+  // RCLCPP_WARN(logger_, "GradientLayer: received cloud with %zu valid points", cloud_points_.size());
 }
 
 // ============================================================

@@ -140,7 +140,8 @@
     <include>
       <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock_green/model.sdf</uri>
       <name>rockg</name>
-      <pose>-6 3 10.4 0 0 0</pose>
+      <!-- <pose>-22 20 10.45 0 0 0</pose> -->
+      <pose>-25 24 10.45 0 0 0</pose>
     </include>
 
   </world>

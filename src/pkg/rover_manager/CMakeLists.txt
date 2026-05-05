@@ -37,7 +37,8 @@ include_directories(include)
 add_library(rover_manager_primitives SHARED
             src/goto_primitive.cpp
             src/return_to_base_primitive.cpp
-            src/cover_area_primitive.cpp)
+            src/cover_area_primitive.cpp
+            src/read_pose_primitive.cpp)
 
 ament_target_dependencies(rover_manager_primitives ${dep_pkgs})
 

@@ -188,11 +188,11 @@ unsigned char ShadowCostMap::computeCost(
     size_t shadow_count = 0;
     for (bool s : shadow_map_) { if (s) ++shadow_count; }
 
-    RCLCPP_WARN(
-      logger_,
-      "[ShadowCostMap] shadow map rebuilt: %zu/%zu cells in shadow (%.1f%%)",
-      shadow_count, shadow_map_.size(),
-      100.0 * shadow_count / std::max(shadow_map_.size(), size_t(1)));
+    // RCLCPP_WARN(
+    //   logger_,
+    //   "[ShadowCostMap] shadow map rebuilt: %zu/%zu cells in shadow (%.1f%%)",
+    //   shadow_count, shadow_map_.size(),
+    //   100.0 * shadow_count / std::max(shadow_map_.size(), size_t(1)));
   }
 
   unsigned int idx = my * size_x_ + mx;

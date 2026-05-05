@@ -33,7 +33,8 @@ add_library(${lib_name} SHARED
             src/octomap_utils.cpp
             src/slope_cost_map.cpp
             src/roughness_cost_map.cpp
-            src/shadow_cost_map.cpp)
+            src/shadow_cost_map.cpp
+            )
 
 include_directories(include)
 include_directories(include/costmap_plugin)

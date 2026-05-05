@@ -1,3 +1,96 @@
+# import os
+# from launch.actions import DeclareLaunchArgument
+# from launch_ros.actions import Node
+# from launch import LaunchDescription
+# from launch.substitutions import LaunchConfiguration
+
+# from ament_index_python.packages import get_package_share_directory
+
+# def generate_launch_description():
+    
+#         DeclareLaunchArgument('is_sim', default_value='true'),
+#         # declare_x=DeclareLaunchArgument('spawn_x', default_value='5')
+#         # declare_y=DeclareLaunchArgument('spawn_y', default_value='0')
+#         # declare_z=DeclareLaunchArgument('spawn_z', default_value='0')
+#         # x = LaunchConfiguration('spawn_x')
+#         # y = LaunchConfiguration('spawn_y')
+#         # z = LaunchConfiguration('spawn_z')
+
+#         xacro_file_name = "leo2_rtab.urdf"
+#         xacro = os.path.join(get_package_share_directory('gz_migration'), "urdf", xacro_file_name)
+#         with open(xacro, 'r') as urdf_file:
+#             robot_description = urdf_file.read() #apri il file in modalità lettura e salvalo in robot_description (variabile) come stringa
+
+
+#         static_tf_1 = Node(
+#               package = 'tf2_ros',
+#               executable = 'static_transform_publisher',
+#               name = 'map_to_robot_map_2',
+#               arguments = ['-15.0', '7.0', '13', '0', '0', '0', 'map', 'robot2/map'],
+#               parameters=[{'use_sim_time' : True}],
+#         )
+        
+#         static_tf_2 = Node(
+#               package = 'tf2_ros',
+#               executable = 'static_transform_publisher',
+#               name = 'robot_map_to_base_footprint',
+#               arguments = ['0.0', '0', '0', '0', '0', '0', 'robot2/map', 'robot2/base_footprint'],
+#         )
+
+#         robot_state_publisher_node = Node(
+#             package='robot_state_publisher',
+#             name='robot_state_publisher_2',
+#             namespace='robot2',
+#             executable='robot_state_publisher',
+#             parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot2/', 'use_sim_time' : True}],
+#             output='screen',
+#         )
+
+#         joint_state_publisher_node = Node(
+#             package='joint_state_publisher',
+#             executable='joint_state_publisher',
+#             name='joint_state_publisher_2',
+#             namespace='robot2',
+#             parameters=[{'use_sim_time' : True}],
+#         )
+
+#         spawn_node = Node(
+#             package='ros_gz_sim',
+#             executable='create',
+#             name='urdf_spawner_2',
+#             output='screen',
+#             arguments=[
+#                 '-name', 'leo2', 
+#                 '-topic', 'robot2/robot_description', 
+#                 #  '-x', '-5.0',
+#                 #  '-y', '15.0',
+#                 #  '-z', '11',
+#                  '-x', '-15.0',
+#                  '-y', '7.0',
+#                  '-z', '13',
+#                 '-Y', '0.0',
+#                 ],
+#             respawn=False,
+#         )
+
+#         odom_sim = Node(
+#             package='gz_migration',
+#             executable='robot2_odom_sim',
+#             name='odometry_simulation_2',
+#             parameters=[{'use_sim_time' : True}],
+#         )
+
+#         return LaunchDescription([
+#             robot_state_publisher_node,
+#             joint_state_publisher_node,
+#             spawn_node,
+#             # declare_x,
+#             # declare_y,
+#             # declare_z,
+#             odom_sim,
+#             static_tf_1,
+#             #static_tf_2,
+#             ])
 import os
 from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
@@ -26,8 +119,8 @@ def generate_launch_description():
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_2',
-              #arguments = ['-5.0', '15.0', '0.0', '0', '0', '0', 'map', 'robot2/map'], #-35 35 -2
-              arguments = ['-20.0', '30.0', '0.0', '0', '0', '0', 'map', 'robot2/map'],
+              arguments = ['-17.0', '15.0', '13.0', '0', '0', '0', 'map', 'robot2/map'],
+              parameters=[{'use_sim_time' : True}],
         )
         
         static_tf_2 = Node(
@@ -42,9 +135,9 @@ def generate_launch_description():
             name='robot_state_publisher_2',
             namespace='robot2',
             executable='robot_state_publisher',
-            parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot2/'}],
+            #parameters=[{'robot_description' : robot_description, 'frame_prefix' : 'robot2/'}],
             #parameters=[{'robot_description' : robot_description}],
-            output='screen',
+            parameters=[{'robot_description': robot_description, 'frame_prefix': 'robot2/', 'use_sim_time': True}],            output='screen',
         )
 
         joint_state_publisher_node = Node(
@@ -53,6 +146,7 @@ def generate_launch_description():
             name='joint_state_publisher_2',
             namespace='robot2',
             # remappings=[('joint_states', 'robot2/joint_states')],
+            parameters=[{'use_sim_time' : True}],
         )
 
         spawn_node = Node(
@@ -63,12 +157,9 @@ def generate_launch_description():
             arguments=[
                 '-name', 'leo2', 
                 '-topic', 'robot2/robot_description', 
-                #  '-x', '-5.0',
-                #  '-y', '15.0',
-                #  '-z', '11',
-                 '-x', '40.0',
-                 '-y', '20.0',
-                 '-z', '13',
+                '-x', '-17.0',
+                '-y', '15.0',
+                '-z', '13',
                 '-Y', '0.0',
                 ],
             respawn=False,

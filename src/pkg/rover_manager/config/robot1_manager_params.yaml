@@ -1,21 +1,20 @@
-# ============================================================
-# Rover Manager configuration for robot1
-# ============================================================
-
-rover_manager:
+/**:
   ros__parameters:
     robot_namespace: "robot1"
-    command_topic: "seed_pdt_rover1/command"
-    feedback_topic: "seed_pdt_rover1/state"
-    primitives: ["goto", "return_to_base", "cover_area"]
+    command_topic: "/seed_pdt_rover1/command"
+    feedback_topic: "/seed_pdt_rover1/state"
+    primitives: ["goto", "return_to_base", "cover_area", "read_pose"]
     goto:
       plugin: "rover_manager::GotoPrimitive"
-      goal_tolerance_xy: 0.25
-      goal_tolerance_yaw: 0.3
+      goal_tolerance_xy: 0.25 #0.25
+      goal_tolerance_yaw: 0.3 #0.3
     return_to_base:
       plugin: "rover_manager::ReturnToBasePrimitive"
-      home_pose: "-40.0,30.0,0.0"
+      home_pose: "-40.0,30.0,13.0"
     cover_area:
       plugin: "rover_manager::CoverAreaPrimitive"
       swath_width: 1.0
       sweep_angle: 0.0
+    read_pose:                                       
+      plugin: "rover_manager::ReadPosePrimitive"
+      lookup_timeout_sec: 3.0

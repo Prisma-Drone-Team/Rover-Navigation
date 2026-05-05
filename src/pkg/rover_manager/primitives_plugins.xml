@@ -26,4 +26,8 @@
       it waypoint by waypoint. Parametric swath width and angle.
     </description>
   </class>
+  <class type="rover_manager::ReadPosePrimitive"
+       base_class_type="rover_manager::PrimitiveBase">
+  <description>Reads a TF frame's pose in 'map' and publishes it on rock_pose.</description>
+</class>
 </library>

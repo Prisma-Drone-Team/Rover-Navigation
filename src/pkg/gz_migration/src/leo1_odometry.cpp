@@ -43,7 +43,7 @@ class Odometry : public rclcpp::Node{
             //RCLCPP_INFO(this->get_logger(), "now: %f", now_.seconds());
             double start_x=-3.0; //-40
             double start_y=4.0; //40
-            double start_z=11; //-1.5
+            double start_z=13; //-1.5
             //geometry_msgs::msg::PoseStamped new_odom_;
             nav_msgs::msg::Odometry new_odom_;
             //tf2_msgs::msg::TFMessage odom_tf_;
@@ -131,6 +131,8 @@ class Odometry : public rclcpp::Node{
 
             publisher_->publish(new_odom_);
             tf_broadcaster_->sendTransform(odom_tf_);
+            last_transform_ = transform_.transforms[7];
+            last_time_ = now_;
 
         }
 

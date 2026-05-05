@@ -365,9 +365,9 @@
           <stddev>0.05</stddev>
         </noise>
       </camera>
-      <always_on>1</always_on>
-      <update_rate>90</update_rate>
-      <!-- <update_rate>0</update_rate> -->
+      <always_on>0</always_on>
+      <update_rate>0</update_rate>
+      <!-- <update_rate>90</update_rate> -->
       <visualize>0</visualize>
     </sensor>
     <sensor name="cameraired2" type="camera">
@@ -393,17 +393,17 @@
           <stddev>0.05</stddev>
         </noise>
       </camera>
-      <always_on>1</always_on>
-      <update_rate>90</update_rate>
-      <!-- <update_rate>0</update_rate> -->
+      <always_on>0</always_on>
+      <update_rate>0</update_rate>
+      <!-- <update_rate>90</update_rate> -->
       <visualize>0</visualize>
     </sensor>
     <sensor name="cameradepth" type="depth_camera">
       <prefix>camera</prefix>
       <topic>/robot1/depth/image_raw</topic>
       <ignition_frame_id>robot1/camera_depth_frame</ignition_frame_id>
-      <update_rate>30.0</update_rate>
-      <!-- <update_rate>5.0</update_rate> -->
+      <update_rate>15.0</update_rate>
+      <!-- <update_rate>30.0</update_rate> -->
       <always_on>1</always_on>
       <visualize>1</visualize>
       <camera name="camera">

@@ -122,17 +122,33 @@ void GotoPrimitive::tick()
 // cancel
 // ============================================================
 
+// void GotoPrimitive::cancel()
+// {
+//   if (status_ != PrimitiveStatus::RUNNING) return;
+
+//   if (nav2_client_ && goal_handle_) {
+//     nav2_client_->async_cancel_goal(goal_handle_);
+//   }
+//   status_ = PrimitiveStatus::CANCELLED;
+//   feedback_msg_ = "Cancelled by manager";
+//   goal_finished_ = true;
+
+//   RCLCPP_WARN(logger_, "[GotoPrimitive] Cancelling goal");
+// }
+
 void GotoPrimitive::cancel()
 {
   if (status_ != PrimitiveStatus::RUNNING) return;
 
   if (nav2_client_ && goal_handle_) {
     nav2_client_->async_cancel_goal(goal_handle_);
+  } else if (nav2_client_) {
+    // goal_handle non ancora arrivato: cancella tutti i goal pendenti
+    nav2_client_->async_cancel_all_goals();
   }
   status_ = PrimitiveStatus::CANCELLED;
   feedback_msg_ = "Cancelled by manager";
   goal_finished_ = true;
-
   RCLCPP_WARN(logger_, "[GotoPrimitive] Cancelling goal");
 }
 

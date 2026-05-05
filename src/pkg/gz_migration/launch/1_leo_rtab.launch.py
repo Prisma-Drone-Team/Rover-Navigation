@@ -33,7 +33,7 @@ def generate_launch_description():
               package = 'tf2_ros',
               executable = 'static_transform_publisher',
               name = 'map_to_robot_map_1',
-              arguments = ['-3.0', '4.0', '0', '0', '0', '0', 'map', 'robot1/map'],
+              arguments = ['-3.0', '4.0', '13', '0', '0', '0', 'map', 'robot1/map'],
               parameters=[{'use_sim_time' : True}],
         )
         
