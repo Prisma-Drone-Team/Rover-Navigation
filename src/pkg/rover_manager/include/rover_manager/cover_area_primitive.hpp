@@ -7,24 +7,26 @@
 #include "geometry_msgs/msg/polygon.hpp"
 
 #include <tf2/LinearMath/Quaternion.h>
+#include <vector>
+#include <utility>
+#include <string>
 
 namespace rover_manager
 {
 
 /**
- * @brief Primitive for area coverage using boustrophedon decomposition.
+ * @brief Primitive for systematic area coverage using a boustrophedon path.
  *
- * Receives a polygon (list of vertices), generates a boustrophedon
- * (lawn-mower) path, and executes it waypoint by waypoint via Nav2.
+ * Accepts a polygon as a list of vertices and generates a sweep path that
+ * covers the area. Sends each waypoint as a Nav2 NavigateToPose goal.
  *
- * This primitive is "anytime": it tracks the current waypoint index,
- * can be cancelled at any point, and reports progress via feedback.
- *
- * Command format: cover_area((x1,y1)(x2,y2)(x3,y3)...)
+ * Supports RESUME: when cancelled and re-invoked with the SAME polygon,
+ * coverage resumes from the waypoint where it was interrupted instead of
+ * restarting from the first waypoint.
  *
  * Parameters (yaml):
- *   - swath_width     : distance between parallel passes (meters)
- *   - sweep_angle     : angle of the sweep pattern (degrees, 0 = aligned with X)
+ *   - swath_width  : distance between adjacent sweep lines (meters)
+ *   - sweep_angle  : sweep direction in degrees (0 = aligned with x-axis)
  */
 class CoverAreaPrimitive : public PrimitiveBase
 {
@@ -44,46 +46,38 @@ public:
   void tick() override;
   void cancel() override;
 
-  void reset() override
-  {
-    PrimitiveBase::reset();
-    coverage_path_.clear();
-    coverage_area_.clear();
-    current_waypoint_ = 0;
-    waypoint_sent_ = false;
-    waypoint_finished_ = false;
-  }
-
 private:
-  // Polygon parsing
-  std::vector<std::pair<double, double>> parse_polygon(const std::vector<std::string> & args);
-
-  // Boustrophedon path generation
+  std::vector<std::pair<double, double>> parse_polygon(
+    const std::vector<std::string> & args);
   void generate_boustrophedon_path();
-  std::pair<double, double> rotate_point(const std::pair<double, double> & p, double angle);
+  std::pair<double, double> rotate_point(
+    const std::pair<double, double> & p, double angle);
   std::vector<std::pair<double, double>> rotate_points(
     const std::vector<std::pair<double, double>> & pts, double angle);
   std::vector<double> find_polygon_intersections(
     const std::vector<std::pair<double, double>> & pts, double y);
-
-  // Send a single waypoint to Nav2
   bool send_waypoint(double x, double y, double yaw);
 
-  // Nav2 callbacks
+  // -- Resume support --
+  /// Build a stable signature for the current coverage_area_ to detect
+  /// whether the new execute() is on the same polygon as the previous one.
+  std::string compute_area_signature() const;
+
+  // Nav2 action callbacks
   void goal_response_callback(std::shared_ptr<GoalHandleNav> goal_handle);
   void feedback_callback(
     std::shared_ptr<GoalHandleNav>,
     const std::shared_ptr<const NavigateToPose::Feedback> feedback);
   void result_callback(const GoalHandleNav::WrappedResult & result);
 
+  // ROS2 node
   rclcpp::Node::SharedPtr node_;
+
+  // Nav2 client
   rclcpp_action::Client<NavigateToPose>::SharedPtr nav2_client_;
   std::shared_ptr<GoalHandleNav> goal_handle_;
 
-  // Coverage polygon publisher (for visualization)
-  rclcpp::Publisher<geometry_msgs::msg::Polygon>::SharedPtr coverage_pub_;
-
-  // Coverage state
+  // Coverage state (current invocation)
   std::vector<std::pair<double, double>> coverage_area_;
   std::vector<std::pair<double, double>> coverage_path_;
   size_t current_waypoint_ = 0;
@@ -91,9 +85,16 @@ private:
   bool waypoint_finished_ = false;
   rclcpp_action::ResultCode waypoint_result_;
 
+  // -- Resume state (persists across cancel/execute cycles) --
+  size_t saved_waypoint_index_ = 0;
+  std::string saved_area_signature_;
+
+  // Polygon publisher for RViz visualization
+  rclcpp::Publisher<geometry_msgs::msg::Polygon>::SharedPtr coverage_pub_;
+
   // Parameters
-  double swath_width_ = 1.0;
-  double sweep_angle_ = 0.0;  // degrees
+  double swath_width_ = 1.5;
+  double sweep_angle_ = 0.0;
 };
 
 }  // namespace rover_manager

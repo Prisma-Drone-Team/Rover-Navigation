@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(rover_manager)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -18,6 +18,9 @@ find_package(nav2_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(OpenCV REQUIRED)
 
 set(dep_pkgs
     rclcpp
@@ -28,6 +31,8 @@ set(dep_pkgs
     tf2
     tf2_ros
     pluginlib
+    sensor_msgs
+    cv_bridge
 )
 
 include_directories(include)
@@ -38,9 +43,11 @@ add_library(rover_manager_primitives SHARED
             src/goto_primitive.cpp
             src/return_to_base_primitive.cpp
             src/cover_area_primitive.cpp
-            src/read_pose_primitive.cpp)
+            src/read_pose_primitive.cpp
+            src/take_photo_primitive.cpp)
 
 ament_target_dependencies(rover_manager_primitives ${dep_pkgs})
+target_link_libraries(rover_manager_primitives ${OpenCV_LIBS})
 
 install(TARGETS rover_manager_primitives
         DESTINATION lib)

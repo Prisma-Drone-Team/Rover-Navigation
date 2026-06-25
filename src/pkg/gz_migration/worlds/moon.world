@@ -128,13 +128,13 @@
     <include>
       <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock/model.sdf</uri>
       <name>rock2</name>
-      <pose>0 2 11 0 0 0</pose>
+      <pose>0 -15 11 0 0 0</pose>
     </include>
     <!-- ROCCIA B -->
     <include>
       <uri>file:///home/user/ros2_ws/src/pkg/gz_migration/models/rock_blu/model.sdf</uri>
       <name>rockb</name>
-      <pose>-5 10 11.5 0 0 0</pose>
+      <pose>-21 29 11.50 0 0 0</pose>
     </include>
       <!-- ROCCIA G -->
     <include>

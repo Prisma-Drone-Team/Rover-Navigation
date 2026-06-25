@@ -30,4 +30,12 @@
        base_class_type="rover_manager::PrimitiveBase">
   <description>Reads a TF frame's pose in 'map' and publishes it on rock_pose.</description>
 </class>
+<class name="rover_manager::TakePhotoPrimitive"
+         type="rover_manager::TakePhotoPrimitive"
+         base_class_type="rover_manager::PrimitiveBase">
+    <description>
+      Captures a single camera frame and saves it as a PNG.
+      Instance predicate take_photo(label).
+    </description>
+  </class>
 </library>

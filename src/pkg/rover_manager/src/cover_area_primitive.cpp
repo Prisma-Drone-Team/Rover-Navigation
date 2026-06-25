@@ -2,6 +2,7 @@
 #include <regex>
 #include <cmath>
 #include <algorithm>
+#include <sstream>
 
 namespace rover_manager
 {
@@ -36,18 +37,17 @@ void CoverAreaPrimitive::initialize(
 }
 
 // ============================================================
-// execute
+// execute -- supports resume from previous interruption
 // ============================================================
 
 bool CoverAreaPrimitive::execute(const std::vector<std::string> & args)
 {
-  
   std::string joined;
-for (size_t i = 0; i < args.size(); ++i) {
-  if (i > 0) joined += ",";
-  joined += args[i];
-}
-instance_predicate_ = name_ + "(" + joined + ")";
+  for (size_t i = 0; i < args.size(); ++i) {
+    if (i > 0) joined += ",";
+    joined += args[i];
+  }
+  instance_predicate_ = name_ + "(" + joined + ")";
 
   // Parse polygon vertices from arguments
   coverage_area_ = parse_polygon(args);
@@ -59,7 +59,7 @@ instance_predicate_ = name_ + "(" + joined + ")";
     return false;
   }
 
-  // Publish polygon for visualization
+  // Publish polygon for RViz
   auto poly_msg = geometry_msgs::msg::Polygon();
   for (const auto & pt : coverage_area_) {
     geometry_msgs::msg::Point32 p;
@@ -70,7 +70,7 @@ instance_predicate_ = name_ + "(" + joined + ")";
   }
   coverage_pub_->publish(poly_msg);
 
-  // Generate boustrophedon path
+  // Generate the full boustrophedon path
   generate_boustrophedon_path();
 
   if (coverage_path_.empty()) {
@@ -79,31 +79,53 @@ instance_predicate_ = name_ + "(" + joined + ")";
     return false;
   }
 
-  current_waypoint_ = 0;
+  // -- Resume logic --
+  // If the polygon is the same as the one we were interrupted on, resume
+  // from the saved waypoint index. Otherwise, start from the beginning.
+  std::string current_sig = compute_area_signature();
+  if (current_sig == saved_area_signature_ &&
+      saved_waypoint_index_ > 0 &&
+      saved_waypoint_index_ < coverage_path_.size())
+  {
+    current_waypoint_ = saved_waypoint_index_;
+    RCLCPP_WARN(logger_,
+      "[CoverAreaPrimitive] RESUMING coverage of same area from waypoint %zu/%zu",
+      current_waypoint_, coverage_path_.size());
+  } else {
+    current_waypoint_ = 0;
+    if (saved_waypoint_index_ > 0) {
+      RCLCPP_WARN(logger_,
+        "[CoverAreaPrimitive] Area changed since cancel - starting fresh from waypoint 0");
+    }
+  }
+  // Reset saved state - it has been consumed (or discarded if area differs)
+  saved_waypoint_index_ = 0;
+  saved_area_signature_.clear();
+
   waypoint_sent_ = false;
   waypoint_finished_ = false;
   status_ = PrimitiveStatus::RUNNING;
-  feedback_msg_ = "Starting coverage with " + std::to_string(coverage_path_.size()) + " waypoints";
+  feedback_msg_ = "Coverage running on " + std::to_string(coverage_path_.size()) +
+                  " waypoints, starting at " + std::to_string(current_waypoint_);
 
   RCLCPP_WARN(logger_,
-    "[CoverAreaPrimitive] Starting coverage: %zu vertices, %zu waypoints, swath=%.2f m",
-    coverage_area_.size(), coverage_path_.size(), swath_width_);
+    "[CoverAreaPrimitive] Coverage: %zu vertices, %zu waypoints, swath=%.2f m, start_idx=%zu",
+    coverage_area_.size(), coverage_path_.size(), swath_width_, current_waypoint_);
 
   return true;
 }
 
 // ============================================================
-// tick — anytime execution: one waypoint at a time
+// tick -- one waypoint at a time
 // ============================================================
 
 void CoverAreaPrimitive::tick()
 {
   if (status_ != PrimitiveStatus::RUNNING) return;
 
-  // Check if current waypoint finished
+  // Has the current waypoint finished?
   if (waypoint_sent_ && waypoint_finished_) {
     if (waypoint_result_ == rclcpp_action::ResultCode::SUCCEEDED) {
-      // Move to next waypoint
       current_waypoint_++;
       waypoint_sent_ = false;
       waypoint_finished_ = false;
@@ -111,19 +133,16 @@ void CoverAreaPrimitive::tick()
       RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Waypoint %zu/%zu reached",
                   current_waypoint_, coverage_path_.size());
 
-      // Check if coverage is complete
       if (current_waypoint_ >= coverage_path_.size()) {
         status_ = PrimitiveStatus::SUCCEEDED;
         feedback_msg_ = "Coverage completed";
-        RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Coverage completed!");
-
-        // Publish empty polygon to clear visualization
+        RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Coverage COMPLETED");
         coverage_pub_->publish(geometry_msgs::msg::Polygon());
         return;
       }
     } else {
-      // Waypoint failed — skip to next 
-      RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Waypoint %zu failed, skipping to next",
+      // Waypoint failed - skip to next
+      RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Waypoint %zu failed, skipping",
                   current_waypoint_);
       current_waypoint_++;
       waypoint_sent_ = false;
@@ -132,14 +151,13 @@ void CoverAreaPrimitive::tick()
       if (current_waypoint_ >= coverage_path_.size()) {
         status_ = PrimitiveStatus::SUCCEEDED;
         feedback_msg_ = "Coverage completed (some waypoints skipped)";
-        RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Coverage completed with skipped waypoints");
         coverage_pub_->publish(geometry_msgs::msg::Polygon());
         return;
       }
     }
   }
 
-  // Send next waypoint if not already sent
+  // Send the next waypoint if not already sent
   if (!waypoint_sent_ && current_waypoint_ < coverage_path_.size()) {
     auto wp = coverage_path_[current_waypoint_];
     feedback_msg_ = "Waypoint " + std::to_string(current_waypoint_ + 1) + "/" +
@@ -156,7 +174,7 @@ void CoverAreaPrimitive::tick()
 }
 
 // ============================================================
-// cancel
+// cancel -- saves state for possible resume on next execute()
 // ============================================================
 
 void CoverAreaPrimitive::cancel()
@@ -165,18 +183,45 @@ void CoverAreaPrimitive::cancel()
 
   if (nav2_client_ && goal_handle_) {
     nav2_client_->async_cancel_goal(goal_handle_);
+  } else if (nav2_client_) {
+    nav2_client_->async_cancel_all_goals();
   }
+
+  // -- Save state for resume --
+  // Remember which waypoint we were on (the one not yet completed) and
+  // a signature of the area, so that the next execute() can resume here
+  // IF and ONLY IF it is on the same area.
+  saved_waypoint_index_ = current_waypoint_;
+  saved_area_signature_ = compute_area_signature();
+
   status_ = PrimitiveStatus::CANCELLED;
   feedback_msg_ = "Coverage cancelled at waypoint " + std::to_string(current_waypoint_);
-  RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Cancelled at waypoint %zu/%zu",
-              current_waypoint_, coverage_path_.size());
+  RCLCPP_WARN(logger_,
+    "[CoverAreaPrimitive] Cancelled at waypoint %zu/%zu - state saved for resume",
+    current_waypoint_, coverage_path_.size());
 
-  // Clear visualization
   coverage_pub_->publish(geometry_msgs::msg::Polygon());
 }
 
 // ============================================================
-// parse_polygon — extract vertices from arguments
+// Build a signature of the current coverage_area_
+// Stable across executes if the same polygon is provided.
+// ============================================================
+
+std::string CoverAreaPrimitive::compute_area_signature() const
+{
+  std::ostringstream oss;
+  for (const auto & v : coverage_area_) {
+    // Multiply by 100 and truncate to int -> tolerates floating-point noise
+    // while still distinguishing genuinely different polygons.
+    oss << static_cast<int>(v.first * 100) << ","
+        << static_cast<int>(v.second * 100) << ";";
+  }
+  return oss.str();
+}
+
+// ============================================================
+// parse_polygon
 // ============================================================
 
 std::vector<std::pair<double, double>> CoverAreaPrimitive::parse_polygon(
@@ -184,9 +229,6 @@ std::vector<std::pair<double, double>> CoverAreaPrimitive::parse_polygon(
 {
   std::vector<std::pair<double, double>> points;
 
-  // Rejoin all args to handle both formats:
-  //   cover_area((1,2)(3,4)(5,6))  -> args might be split
-  //   cover_area(1,2,3,4,5,6)      -> flat list of coordinates
   std::string joined;
   for (size_t i = 0; i < args.size(); ++i) {
     if (i > 0) joined += ",";
@@ -207,7 +249,7 @@ std::vector<std::pair<double, double>> CoverAreaPrimitive::parse_polygon(
     ++iter;
   }
 
-  // If no parenthesized points found, try flat list: x1,y1,x2,y2,...
+  // Fallback: flat list "x1,y1,x2,y2,..."
   if (points.empty()) {
     std::vector<double> coords;
     std::stringstream ss(joined);
@@ -222,9 +264,9 @@ std::vector<std::pair<double, double>> CoverAreaPrimitive::parse_polygon(
   }
 
   for (const auto & pt : points) {
-    RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Parsed vertex: (%.2f, %.2f)", pt.first, pt.second);
+    RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Parsed vertex: (%.2f, %.2f)",
+                pt.first, pt.second);
   }
-
   return points;
 }
 
@@ -239,10 +281,8 @@ void CoverAreaPrimitive::generate_boustrophedon_path()
   double angle_rad = sweep_angle_ * M_PI / 180.0;
   auto rotated_pts = rotate_points(coverage_area_, -angle_rad);
 
-  // Bounding box
   double min_x = rotated_pts[0].first, max_x = rotated_pts[0].first;
   double min_y = rotated_pts[0].second, max_y = rotated_pts[0].second;
-
   for (const auto & p : rotated_pts) {
     min_x = std::min(min_x, p.first);
     max_x = std::max(max_x, p.first);
@@ -252,14 +292,12 @@ void CoverAreaPrimitive::generate_boustrophedon_path()
 
   coverage_path_.clear();
   int line_count = 0;
-
   for (double y = min_y + swath_width_ / 2; y <= max_y; y += swath_width_) {
     auto intersections = find_polygon_intersections(rotated_pts, y);
     if (intersections.size() >= 2) {
       std::sort(intersections.begin(), intersections.end());
       double x_start = intersections.front();
       double x_end = intersections.back();
-
       if (line_count % 2 == 0) {
         coverage_path_.push_back({x_start, y});
         coverage_path_.push_back({x_end, y});
@@ -271,12 +309,12 @@ void CoverAreaPrimitive::generate_boustrophedon_path()
     }
   }
 
-  // Rotate waypoints back to original orientation
   for (auto & p : coverage_path_) {
     p = rotate_point(p, angle_rad);
   }
 
-  RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Generated %zu waypoints", coverage_path_.size());
+  RCLCPP_WARN(logger_, "[CoverAreaPrimitive] Generated %zu waypoints",
+              coverage_path_.size());
 }
 
 std::pair<double, double> CoverAreaPrimitive::rotate_point(
@@ -345,7 +383,8 @@ bool CoverAreaPrimitive::send_waypoint(double x, double y, double yaw)
   opts.goal_response_callback =
     std::bind(&CoverAreaPrimitive::goal_response_callback, this, std::placeholders::_1);
   opts.feedback_callback =
-    std::bind(&CoverAreaPrimitive::feedback_callback, this, std::placeholders::_1, std::placeholders::_2);
+    std::bind(&CoverAreaPrimitive::feedback_callback, this,
+              std::placeholders::_1, std::placeholders::_2);
   opts.result_callback =
     std::bind(&CoverAreaPrimitive::result_callback, this, std::placeholders::_1);
 
@@ -360,7 +399,8 @@ bool CoverAreaPrimitive::send_waypoint(double x, double y, double yaw)
 // Nav2 callbacks
 // ============================================================
 
-void CoverAreaPrimitive::goal_response_callback(std::shared_ptr<GoalHandleNav> goal_handle)
+void CoverAreaPrimitive::goal_response_callback(
+  std::shared_ptr<GoalHandleNav> goal_handle)
 {
   goal_handle_ = goal_handle;
   if (!goal_handle_) {
