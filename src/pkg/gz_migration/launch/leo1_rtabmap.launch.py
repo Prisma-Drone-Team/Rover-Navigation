@@ -512,7 +512,7 @@ def generate_launch_description():
         DeclareLaunchArgument('rtabmap_viz',  default_value='false',  description='Launch RTAB-Map UI (optional).'),
         DeclareLaunchArgument('rviz',         default_value='false', description='Launch RVIZ (optional).'),
 
-        DeclareLaunchArgument('use_sim_time', default_value='true', description='Use simulation (Gazebo) clock if true'),
+        DeclareLaunchArgument('use_sim_time', default_value='false', description='Use simulation (Gazebo) clock if true'),
 
         DeclareLaunchArgument('log_level',    default_value='info', description="ROS logging level (debug, info, warn, error). For RTAB-Map\'s logger level, use \"args\" argument."),
 
@@ -522,7 +522,7 @@ def generate_launch_description():
         DeclareLaunchArgument('rviz_cfg', default_value=config_rviz,               description='Configuration path of rviz2.'),
 
         DeclareLaunchArgument('frame_id',       default_value='robot1/base_footprint',          description='Fixed frame id of the robot (base frame), you may set "base_link" or "base_footprint" if they are published. For camera-only config, this could be "camera_link".'),
-        DeclareLaunchArgument('odom_frame_id',  default_value='',                   description='If set, TF is used to get odometry instead of the topic.'),
+        DeclareLaunchArgument('odom_frame_id',  default_value='robot1/odom',                   description='If set, TF is used to get odometry instead of the topic.'),
         DeclareLaunchArgument('map_frame_id',   default_value='robot1/map',                description='Output map frame id (TF).'),
         DeclareLaunchArgument('map_topic',      default_value='/robot1/map',                description='Map topic name.'),
         DeclareLaunchArgument('publish_tf_map', default_value='true',               description='Publish TF between map and odomerty.'),
@@ -548,9 +548,9 @@ def generate_launch_description():
         DeclareLaunchArgument('approx_sync_max_interval',  default_value='0', description='(sec) 0 means infinite interval duration (used with approx_sync=true)'),
 
         # RGB-D related topics
-        DeclareLaunchArgument('rgb_topic',           default_value='/robot1/color/image_raw',       description=''),
-        DeclareLaunchArgument('depth_topic',         default_value='/robot1/depth/image_raw', description=''),
-        DeclareLaunchArgument('camera_info_topic',   default_value='/robot1/color/camera_info',            description=''),
+        DeclareLaunchArgument('rgb_topic',           default_value='/robot1/camera/color/image_raw',       description=''),
+        DeclareLaunchArgument('depth_topic',         default_value='/robot1/camera/aligned_depth_to_color/image_raw', description=''),
+        DeclareLaunchArgument('camera_info_topic',   default_value='/robot1/camera/color/camera_info',            description=''),
         
         # Stereo related topics
         DeclareLaunchArgument('stereo_namespace',        default_value='/stereo_camera', description=''),
@@ -575,7 +575,7 @@ def generate_launch_description():
         DeclareLaunchArgument('subscribe_scan',       default_value='false',       description=''),
         DeclareLaunchArgument('scan_topic',           default_value='/robot1/scan',       description=''),
         DeclareLaunchArgument('subscribe_scan_cloud', default_value='true',       description=''),
-        DeclareLaunchArgument('scan_cloud_topic',     default_value='/robot1/depth/image_raw/points', description=''),
+        DeclareLaunchArgument('scan_cloud_topic',     default_value='/robot1/camera/depth/color/points', description=''),
         DeclareLaunchArgument('scan_normal_k',        default_value='0',           description=''),
         
         # Odometry

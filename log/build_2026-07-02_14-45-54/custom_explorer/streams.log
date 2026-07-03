@@ -1,0 +1,55 @@
+[0.375s] Invoking command in '/home/usainbot/org_repo/src/pkg/custom_explorer': PYTHONPATH=/home/usainbot/org_repo/build/custom_explorer/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/custom_explorer build --build-base /home/usainbot/org_repo/build/custom_explorer/build install --record /home/usainbot/org_repo/build/custom_explorer/install.log --single-version-externally-managed install_data
+[0.496s] running egg_info
+[0.496s] creating ../../../build/custom_explorer/custom_explorer.egg-info
+[0.496s] writing ../../../build/custom_explorer/custom_explorer.egg-info/PKG-INFO
+[0.497s] writing dependency_links to ../../../build/custom_explorer/custom_explorer.egg-info/dependency_links.txt
+[0.497s] writing entry points to ../../../build/custom_explorer/custom_explorer.egg-info/entry_points.txt
+[0.497s] writing requirements to ../../../build/custom_explorer/custom_explorer.egg-info/requires.txt
+[0.497s] writing top-level names to ../../../build/custom_explorer/custom_explorer.egg-info/top_level.txt
+[0.497s] writing manifest file '../../../build/custom_explorer/custom_explorer.egg-info/SOURCES.txt'
+[0.497s] reading manifest file '../../../build/custom_explorer/custom_explorer.egg-info/SOURCES.txt'
+[0.497s] writing manifest file '../../../build/custom_explorer/custom_explorer.egg-info/SOURCES.txt'
+[0.497s] running build
+[0.497s] running build_py
+[0.497s] creating /home/usainbot/org_repo/build/custom_explorer/build
+[0.497s] creating /home/usainbot/org_repo/build/custom_explorer/build/lib
+[0.497s] creating /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/simple_goal_pub.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/old_explorer.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/poi.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/__init__.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/explorer.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/coverage_node.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] copying custom_explorer/follower.py -> /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer
+[0.498s] running install
+[0.498s] running install_lib
+[0.498s] creating /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/simple_goal_pub.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/old_explorer.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/poi.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/__init__.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/explorer.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.498s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/coverage_node.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.499s] copying /home/usainbot/org_repo/build/custom_explorer/build/lib/custom_explorer/follower.py -> /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer
+[0.499s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/simple_goal_pub.py to simple_goal_pub.cpython-310.pyc
+[0.499s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/old_explorer.py to old_explorer.cpython-310.pyc
+[0.499s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/poi.py to poi.cpython-310.pyc
+[0.500s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/__init__.py to __init__.cpython-310.pyc
+[0.500s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/explorer.py to explorer.cpython-310.pyc
+[0.501s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/coverage_node.py to coverage_node.cpython-310.pyc
+[0.502s] byte-compiling /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer/follower.py to follower.cpython-310.pyc
+[0.503s] running install_data
+[0.504s] creating /home/usainbot/org_repo/install/custom_explorer/share/ament_index
+[0.504s] creating /home/usainbot/org_repo/install/custom_explorer/share/ament_index/resource_index
+[0.504s] creating /home/usainbot/org_repo/install/custom_explorer/share/ament_index/resource_index/packages
+[0.504s] copying resource/custom_explorer -> /home/usainbot/org_repo/install/custom_explorer/share/ament_index/resource_index/packages
+[0.504s] copying package.xml -> /home/usainbot/org_repo/install/custom_explorer/share/custom_explorer
+[0.504s] running install_egg_info
+[0.504s] Copying ../../../build/custom_explorer/custom_explorer.egg-info to /home/usainbot/org_repo/install/custom_explorer/lib/python3.10/site-packages/custom_explorer-0.0.0-py3.10.egg-info
+[0.505s] running install_scripts
+[0.513s] Installing coverage_node script to /home/usainbot/org_repo/install/custom_explorer/lib/custom_explorer
+[0.513s] Installing follower script to /home/usainbot/org_repo/install/custom_explorer/lib/custom_explorer
+[0.513s] Installing lunar_explorer script to /home/usainbot/org_repo/install/custom_explorer/lib/custom_explorer
+[0.513s] Installing point_of_interest script to /home/usainbot/org_repo/install/custom_explorer/lib/custom_explorer
+[0.513s] Installing simple_goal_pub script to /home/usainbot/org_repo/install/custom_explorer/lib/custom_explorer
+[0.514s] writing list of installed files to '/home/usainbot/org_repo/build/custom_explorer/install.log'

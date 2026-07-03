@@ -16,6 +16,8 @@ def generate_launch_description():
         # Leo1's home (spawn)
           Node(package="tf2_ros", executable="static_transform_publisher",
              arguments=["-40", "30", "0", "0", "0", "0", "map", "home"]),
+          Node(package="tf2_ros", executable="static_transform_publisher",
+             arguments=["0", "0", "0", "0", "0", "0", "map", "robot1/map"]),
         # Shared landmarks (defined once here, used by both rovers)
           Node(package="tf2_ros", executable="static_transform_publisher",
              arguments=["-26", "24", "0", "0", "0", "0", "map", "rockg"]),

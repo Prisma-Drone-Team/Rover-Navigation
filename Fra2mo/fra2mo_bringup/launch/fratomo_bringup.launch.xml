@@ -1,0 +1,67 @@
+<launch>
+
+    <arg name="use_slam" default="true"/>
+
+    <!-- roboclaw driver -->
+    <include file="$(find-pkg-share roboclaw_ros2)/launch/roboclaw_single.launch.xml">
+        <arg name="namespace" value="robot1"/>
+    </include>
+
+
+    <node pkg="roboclaw_ros2" exec="diffdrive_node" name="diffdrive" output="screen">
+        <param name="namespace" value="robot1"/>
+        <param name="roboclaws" value="1"/>
+        <param name="steps_per_meter" value="10814.0"/>
+        <param name="base_width" value="0.155"/>
+        <param name="swap_motors" value="false"/>
+        <param name="invert_motor_1" value="false"/>
+        <param name="invert_motor_2" value="false"/>
+        <param name="var_pos_x" value="0.01"/>
+        <param name="var_pos_y" value="0.01"/>
+        <param name="var_theta_z" value="0.01"/>
+        <param name="odom_tf_name" value="robot1/odom"/>  
+        <param name="base_tf_name" value="robot1/base_footprint"/>
+        <param name="use_runge_kutta" value="true"/>
+
+    </node>
+
+    <!-- depth camera driver (Intel RealSense D435) -->
+    <include file="$(find-pkg-share realsense2_camera)/launch/rs_launch.py">
+        <arg name="enable_depth" value="true"/>
+        <arg name="enable_color" value="true"/>
+        <arg name="align_depth.enable" value="true"/>
+        <arg name="pointcloud.enable" value="true"/>
+        <arg name="pointcloud.stream_filter" value="2"/>
+        <arg name="pointcloud.stream_index_filter" value="0"/>
+        <arg name="rgb_camera.color_profile" value="640x480x15"/>
+        <arg name="depth_module.depth_profile" value="640x480x15"/>
+        <arg name="camera_namespace" value="robot1"/>
+        <arg name="tf_prefix" value="robot1/"/>
+        <arg name="camera_name" value="camera"/>
+    </include>
+    
+
+    <!-- lidar driver -->
+    <!-- <node name="rp_lidar" pkg="rplidar_ros" exec="rplidar_composition"> -->
+        <!-- <param name="serial_port" value='/dev/ttyUSB0'/> -->
+        <!-- <param name="serial_baudrate" value="256000"/> -->
+        <!-- <param name="frame_id" value='laser_frame'/> -->
+        <!-- <param name="inverted" value="False"/> -->
+        <!-- <param name="flip_x_axis" value="False"/> -->
+        <!-- <param name="angle_compensate" value="True"/> -->
+    <!-- </node> -->
+
+    <!-- urdf -->
+    <include file="$(find-pkg-share fra2mo_description)/launch/fra2mo_bringup.launch.py"/>
+
+    <!-- slam -->
+    <!-- <include if="$(var use_slam)" file="$(find-pkg-share slam_toolbox)/launch/online_async_launch.py"> -->
+        <!-- <arg name="slam_params_file" value="$(find-pkg-share fra2mo_bringup)/config/copy_mapper_params_online_async.yaml"/> -->
+        <!-- <arg name="use_sim_time" value="false"/> -->
+    <!-- </include> -->
+
+    <!-- nav2 -->
+    <!-- <include unless="$(var use_slam)" file="$(find-pkg-share fra2mo_bringup)/launch/fra2mo_nav2.launch.py"/> -->
+    
+
+</launch>

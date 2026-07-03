@@ -1,0 +1,1 @@
+Invoking command in '/home/usainbot/org_repo/build/rover_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/usainbot/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake /home/usainbot/org_repo/src/pkg/rover_bringup -DCMAKE_INSTALL_PREFIX=/home/usainbot/org_repo/install/rover_bringup

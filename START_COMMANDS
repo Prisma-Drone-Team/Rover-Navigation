@@ -1,0 +1,134 @@
+#1
+cd ~/org_repo
+./docker_run.sh rover_lunar rover_container
+colcon build 
+source install/setup.bash
+ros2 launch gz_migration 2_robots_world.launch.py
+
+#2&3
+docker exec -it rover_container bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch gz_migration 1_leo_rtab.launch.py
+ros2 launch gz_migration 2_leo_rtab.launch.py
+
+#4&5
+docker exec -it rover_container bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch gz_migration leo1_rtabmap.launch.py
+ros2 launch gz_migration leo2_rtabmap.launch.py
+
+#6&7
+docker exec -it rover_container bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch gz_migration nav_bringup.launch.py namespace:=/robot1
+ros2 launch gz_migration nav_bringup.launch.py namespace:=/robot2 params_file:=$(ros2 pkg prefix gz_migration)/share/gz_migration/params/leo2_navigation_params.yaml
+ros2 launch gz_migration namespace_1.launch.py
+ros2 launch gz_migration namespace_2.launch.py
+
+#8&9
+docker exec -it rover_container bash
+source /opt/ros/humble/setup.bash
+source ~/ros2_ws/install/setup.bash
+ros2 launch rover_manager manager_robot1.launch.py
+ros2 launch rover_manager manager_robot2.launch.py
+
+#RVIZ
+ros2 run rviz2 rviz2 -d ~/ros2_ws/src/pkg/gz_migration/rviz/demo_2rover.rviz
+
+#TEST A3
+docker cp lossy_relay.py rover_container:/home/user/
+python3 /home/user/lossy_relay.py --ros-args -p drop_rate:=0.5 #0.0 , 0.3 0.7
+#BASE
+python3 /home/user/a3_test.py --ros-args -p n_copies:=1 -p n_trials:=100
+#RIDONDANTE
+python3 /home/user/org_repo/a3_test.py --ros-args -p n_copies:=3 -p n_trials:=100
+python3 /home/user/a3_test.py --ros-args -p n_copies:=1 -p n_trials:=500
+python3 /home/user/a3_test.py --ros-args -p n_copies:=3 -p n_trials:=500
+
+#TEST V2
+docker cp energy_monitor.py rover_container:/home/user/
+python3 /home/user/energy_monitor.py --ros-args \
+  -p budget:=20.0 -p c_roll:=1.0 -p c_climb:=8.0 \
+  -p map_frame:=robot1/map -p base_frame:=robot1/base_footprint \
+  -p state_topic:=/seed_pdt_rover1/state
+ros2 topic pub --once /seed_pdt_rover1/state std_msgs/msg/String "{data: 'battery_low'}"
+ros2 topic pub --once /seed_pdt_rover1/state std_msgs/msg/String "{data: 'map_target'}"
+ros2 topic pub --once /seed_pdt_rover2/state std_msgs/msg/String "{data: 'map_target'}"
+ros2 topic pub --once /seed_pdt_rover1/state std_msgs/msg/String "{data: 'cam1_faulted'}"
+%python3 lossy_relay.py --ros-args -p drop_rate:=0.5%
+docker cp 10e3b2afdc35:/home/user/rock_photos/. ~/org_repo/Photo/
+
+
+
+ros2 bag record -o demo_$(date +%Y%m%d_%H%M%S) /tf /tf_static /robot1/odom /robot2/odom /robot1/rock_pose /robot2/rock_pose /robot1/global_costmap/costmap /robot2/global_costmap/costmap /seed_pdt_rover1/command /seed_pdt_rover1/state /seed_pdt_rover2/command /seed_pdt_rover2/state /model/leo1/pose /model/leo2/pose
+~/record_demo.sh
+cat ~/record_demo.sh
+mkdir -p /home/usainbot/org_repo/bag_files
+ros2 topic echo /robot1/rock_pose
+ros2 topic echo /robot2/rock_pose
+ros2 bag record /robot1/rock_pose /robot2/rock_pose -o rock_poses_$(date +%Y%m%d_%H%M%S)
+
+#9&10
+cd seed
+./docker_run.sh seed_img seed_cnt
+docker exec -it seed_cnt bash
+cd ~/ros2_ws
+rm -rf build/seed install/seed
+colcon build --packages-select seed
+source install/setup.bash
+ros2 pkg list | grep seed_gui
+export ROS_DOMAIN_ID=42
+ros2 run seed seed pdt_rover1
+ros2 run seed_gui seed_gui pdt_rover1
+
+#11&12
+docker exec -it seed_cnt bash
+export ROS_DOMAIN_ID=42
+ros2 run seed seed pdt_rover2
+ros2 topic echo /seed_pdt_rover2/command
+ros2 run seed_gui seed_gui pdt_rover2
+
+
+#13&14 (Per testare il rover manager e la navigazione dei due rover insieme lancio)
+ros2 topic pub --once /robot1/seed_pdt_rover1/command std_msgs/msg/String "data: 'goto(-32.0,30.0,0.0)'"
+ros2 topic pub --once /seed_pdt_rover1/command std_msgs/msg/String "data: 'goto(31.0,47.0,0.0)'"
+
+ros2 topic pub --once /robot2/seed_pdt_rover2/command std_msgs/msg/String "data: 'goto(-13.0,17.0,0.0)'"
+
+
+mkdir -p ~/ros2_ws/demo_bags && cd ~/ros2_ws/demo_bags
+ros2 bag record -o demo_$(date +%Y%m%d_%H%M%S) \
+  /tf /tf_static /robot1/odom /robot2/odom \
+  /robot1/rock_pose /robot2/rock_pose \
+  /robot1/global_costmap/costmap /robot2/global_costmap/costmap \
+  /robot1/coverage_area /robot2/coverage_area \
+  /seed_pdt_rover1/command /seed_pdt_rover1/state \
+  /seed_pdt_rover2/command /seed_pdt_rover2/state \
+  /model/leo1/pose /model/leo2/pose
+
+
+/robot1/camera/aligned_depth_to_color/camera_info
+/robot1/camera/aligned_depth_to_color/image_raw
+
+
+/robot1/camera/color/camera_info
+/robot1/camera/color/image_raw
+/robot1/camera/color/metadata
+/robot1/camera/depth/camera_info
+/robot1/camera/depth/color/points
+/robot1/camera/depth/image_rect_raw
+/robot1/camera/depth/metadata
+/robot1/camera/extrinsics/depth_to_color
+/robot1/camera/extrinsics/depth_to_depth
+/robot1/cmd_vel_smooth
+/robot1/joint_states
+/robot1/motor_cmd_vel
+/robot1/motor_enc
+/robot1/odom
+/robot1/robot_description
+/rosout
+/tf
+/tf_static

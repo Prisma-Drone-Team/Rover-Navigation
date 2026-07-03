@@ -474,7 +474,7 @@ def generate_launch_description():
         DeclareLaunchArgument('rtabmap_viz',  default_value='false',  description='Launch RTAB-Map UI (optional).'),
         DeclareLaunchArgument('rviz',         default_value='false', description='Launch RVIZ (optional).'),
 
-        DeclareLaunchArgument('use_sim_time', default_value='true', description='Use simulation (Gazebo) clock if true'),
+        DeclareLaunchArgument('use_sim_time', default_value='false', description='Use simulation (Gazebo) clock if true'),
 
         DeclareLaunchArgument('log_level',    default_value='info', description="ROS logging level (debug, info, warn, error). For RTAB-Map\'s logger level, use \"args\" argument."),
 
@@ -510,9 +510,9 @@ def generate_launch_description():
         DeclareLaunchArgument('approx_sync_max_interval',  default_value='0.1', description='(sec) 0 means infinite interval duration (used with approx_sync=true)'),
 
         # RGB-D related topics
-        DeclareLaunchArgument('rgb_topic',           default_value='/robot2/color/image_raw',       description=''),
-        DeclareLaunchArgument('depth_topic',         default_value='/robot2/depth/image_raw', description=''),
-        DeclareLaunchArgument('camera_info_topic',   default_value='/robot2/color/camera_info',            description=''),
+        DeclareLaunchArgument('rgb_topic',           default_value='/robot2/camera/color/image_raw',       description=''),
+        DeclareLaunchArgument('depth_topic',         default_value='/robot2/camera/aligned_depth_to_color/image_raw', description=''),
+        DeclareLaunchArgument('camera_info_topic',   default_value='/robot2/camera/color/camera_info',            description=''),
         
         # Stereo related topics
         DeclareLaunchArgument('stereo_namespace',        default_value='/stereo_camera', description=''),
@@ -537,7 +537,7 @@ def generate_launch_description():
         DeclareLaunchArgument('subscribe_scan',       default_value='false',       description=''),
         DeclareLaunchArgument('scan_topic',           default_value='/robot2/scan',       description=''),
         DeclareLaunchArgument('subscribe_scan_cloud', default_value='true',       description=''),
-        DeclareLaunchArgument('scan_cloud_topic',     default_value='/robot2/depth/image_raw/points', description=''),
+        DeclareLaunchArgument('scan_cloud_topic',     default_value='/robot2/camera/depth/color/points', description=''),
         DeclareLaunchArgument('scan_normal_k',        default_value='0',           description=''),
         
         # Odometry

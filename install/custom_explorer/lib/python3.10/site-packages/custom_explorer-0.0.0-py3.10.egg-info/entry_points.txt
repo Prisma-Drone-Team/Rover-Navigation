@@ -1,0 +1,7 @@
+[console_scripts]
+coverage_node = custom_explorer.coverage_node:main
+follower = custom_explorer.follower:main
+lunar_explorer = custom_explorer.explorer:main
+point_of_interest = custom_explorer.poi:main
+simple_goal_pub = custom_explorer.simple_goal_pub:main
+

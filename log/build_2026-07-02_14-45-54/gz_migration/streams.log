@@ -1,0 +1,35 @@
+[0.140s] Invoking command in '/home/usainbot/org_repo/build/gz_migration': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/usainbot/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake /home/usainbot/org_repo/src/pkg/gz_migration -DCMAKE_INSTALL_PREFIX=/home/usainbot/org_repo/install/gz_migration
+[0.172s] -- The C compiler identification is GNU 11.4.0
+[0.209s] -- The CXX compiler identification is GNU 11.4.0
+[0.213s] -- Detecting C compiler ABI info
+[0.258s] -- Detecting C compiler ABI info - done
+[0.264s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.264s] -- Detecting C compile features
+[0.264s] -- Detecting C compile features - done
+[0.267s] -- Detecting CXX compiler ABI info
+[0.320s] -- Detecting CXX compiler ABI info - done
+[0.324s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.324s] -- Detecting CXX compile features
+[0.325s] -- Detecting CXX compile features - done
+[0.326s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.433s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.482s] -- Configuring incomplete, errors occurred!
+[0.482s] See also "/home/usainbot/org_repo/build/gz_migration/CMakeFiles/CMakeOutput.log".
+[0.482s] [31mCMake Error at CMakeLists.txt:9 (find_package):
+[0.482s]   By not providing "Findrtabmap_ros.cmake" in CMAKE_MODULE_PATH this project
+[0.483s]   has asked CMake to find a package configuration file provided by
+[0.483s]   "rtabmap_ros", but CMake did not find one.
+[0.483s] 
+[0.483s]   Could not find a package configuration file provided by "rtabmap_ros" with
+[0.483s]   any of the following names:
+[0.483s] 
+[0.483s]     rtabmap_rosConfig.cmake
+[0.483s]     rtabmap_ros-config.cmake
+[0.483s] 
+[0.483s]   Add the installation prefix of "rtabmap_ros" to CMAKE_PREFIX_PATH or set
+[0.483s]   "rtabmap_ros_DIR" to a directory containing one of the above files.  If
+[0.483s]   "rtabmap_ros" provides a separate development package or SDK, be sure it
+[0.483s]   has been installed.
+[0.483s] 
+[0.483s] [0m
+[0.484s] Invoked command in '/home/usainbot/org_repo/build/gz_migration' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/usainbot/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake /home/usainbot/org_repo/src/pkg/gz_migration -DCMAKE_INSTALL_PREFIX=/home/usainbot/org_repo/install/gz_migration

@@ -1,0 +1,34 @@
+[0.138s] Invoking command in '/home/usainbot/org_repo/build/rover_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/usainbot/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake /home/usainbot/org_repo/src/pkg/rover_bringup -DCMAKE_INSTALL_PREFIX=/home/usainbot/org_repo/install/rover_bringup
+[0.174s] -- The C compiler identification is GNU 11.4.0
+[0.213s] -- The CXX compiler identification is GNU 11.4.0
+[0.219s] -- Detecting C compiler ABI info
+[0.264s] -- Detecting C compiler ABI info - done
+[0.270s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.271s] -- Detecting C compile features
+[0.271s] -- Detecting C compile features - done
+[0.273s] -- Detecting CXX compiler ABI info
+[0.327s] -- Detecting CXX compiler ABI info - done
+[0.333s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.333s] -- Detecting CXX compile features
+[0.333s] -- Detecting CXX compile features - done
+[0.335s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.428s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.500s] [31mCMake Error at CMakeLists.txt:7 (find_package):
+[0.500s]   By not providing "Findcamera_info_manager.cmake" in CMAKE_MODULE_PATH this
+[0.500s]   project has asked CMake to find a package configuration file provided by
+[0.500s]   "camera_info_manager", but CMake did not find one.
+[0.500s] 
+[0.500s]   Could not find a package configuration file provided by
+[0.500s]   "camera_info_manager" with any of the following names:
+[0.500s] 
+[0.500s]     camera_info_managerConfig.cmake
+[0.500s]     camera_info_manager-config.cmake
+[0.500s] 
+[0.500s]   Add the installation prefix of "camera_info_manager" to CMAKE_PREFIX_PATH
+[0.500s]   or set "camera_info_manager_DIR" to a directory containing one of the above
+[0.500s]   files.  If "camera_info_manager" provides a separate development package or
+[0.500s]   SDK, be sure it has been installed.
+[0.500s] 
+[0.500s] -- Configuring incomplete, errors occurred!
+[0.500s] See also "/home/usainbot/org_repo/build/rover_bringup/CMakeFiles/CMakeOutput.log".
+[0.500s] [0m
