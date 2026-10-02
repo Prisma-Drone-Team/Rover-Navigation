@@ -1,0 +1,22 @@
+/**:
+  ros__parameters:
+    robot_namespace: "<robot_name>"
+    command_topic: "/<robot_name>/seed_pdt_rover/command"
+    feedback_topic: "/<robot_name>/seed_pdt_rover/state"
+    primitives: ["goto", "return_to_base", "cover_area", "read_pose", "take_photo"]
+    goto:
+      plugin: "rover_manager::GotoPrimitive"
+      goal_tolerance_xy: 0.25
+      goal_tolerance_yaw: 0.3
+    return_to_base:
+      plugin: "rover_manager::ReturnToBasePrimitive"
+      # home viene iniettato dal file perché ogni rover ha home diversa
+    cover_area:
+      plugin: "rover_manager::CoverAreaPrimitive"
+      swath_width: 2.0
+      sweep_angle: 90.0
+    read_pose:                                       
+      plugin: "rover_manager::ReadPosePrimitive"
+      lookup_timeout_sec: 3.0
+    take_photo:
+      plugin: "rover_manager::TakePhotoPrimitive"

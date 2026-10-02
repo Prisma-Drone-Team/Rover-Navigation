@@ -1,0 +1,606 @@
+#VRML_SIM R2025a utf8
+# license: Apache License 2.0
+# license url: http://www.apache.org/licenses/LICENSE-2.0
+# This is a proto file for Webots for the Rover
+# Extracted from: /home/user/ros2_ws/src/pkg/gz_migration/urdf/leo1_rtab.urdf
+
+PROTO Rover [
+  field  SFVec3f     translation     0 0 0
+  field  SFRotation  rotation        0 0 1 0
+  field  SFString    name            "Rover"  # Is `Robot.name`.
+  field  SFString    controller      "void"    # Is `Robot.controller`.
+  field  MFString    controllerArgs  []        # Is `Robot.controllerArgs`.
+  field  SFString    customData      ""        # Is `Robot.customData`.
+  field  SFBool      supervisor      TRUE      # Is `Robot.supervisor`, TRUE for absolute_odom_plugin, FALSE for diff_drive_plugin.
+  field  SFBool      synchronization TRUE      # Is `Robot.synchronization`.
+  field  SFBool      selfCollision   FALSE     # Is `Robot.selfCollision`.
+]
+{
+  Robot {
+    translation IS translation
+    rotation IS rotation
+    controller IS controller
+    controllerArgs IS controllerArgs
+    customData IS customData
+    supervisor IS supervisor
+    synchronization IS synchronization
+    selfCollision IS selfCollision
+    boundingObject Sphere { radius 0.001 }
+    physics Physics {
+      density -1
+      mass 0.001
+    }
+    children [
+      Solid {
+        translation 0.000000 0.000000 0.197830
+        children [
+          DEF Chassis_visual Shape {
+            castShadows FALSE
+            appearance PBRAppearance {
+              baseColor 0.8 0.8 0.8
+              roughness 0.5
+              metalness 0.1
+            }
+            geometry Mesh {
+              url "../meshes/Chassis.obj"
+            }
+          }
+          Solid {
+            translation 0.097100 0.017500 -0.042700
+            rotation 0.000000 1.000000 0.000000 0.209400
+            children [
+              Transform {
+                translation 0.014900 -0.017500 0.000000
+                rotation 0.577350 0.577350 0.577350 2.094395
+                scale 0.001 0.001 0.001
+                children [
+                  DEF d435_visual Shape {
+                    castShadows FALSE
+                    appearance PBRAppearance {
+                      baseColor 0.6 0.6 0.6
+                      roughness 0.5
+                      metalness 0.5
+                    }
+                    geometry Mesh {
+                      url "../meshes/d435.obj"
+                    }
+                  }
+                ]
+              }
+              Pose {
+                translation 0.01 0 0
+                rotation 0 0 0 0
+                children [
+                  Camera {
+                    name "d435_color"
+                    fieldOfView 1.486778
+                    width 640
+                    height 480
+                  }
+                ]
+              }
+              Pose {
+                translation 0.01 0 0
+                rotation 0 0 0 0
+                children [
+                  RangeFinder {
+                    name "d435_depth"
+                    fieldOfView 1.486778
+                    width 640
+                    height 480
+                    minRange 0.1
+                    maxRange 10.0
+                  }
+                ]
+              }
+
+            ]
+            name "camera_link"
+            boundingObject Pose {
+              translation 0.000000 -0.017500 0.000000
+              children [
+                Box {
+                  size 0.025050 0.090000 0.025000
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.564000
+              centerOfMass [ 0.000000 0.000000 0.000000 ]
+              inertiaMatrix [
+                3.881243e-03 4.989400e-04 3.879257e-03
+                0.000000e+00 0.000000e+00 0.000000e+00
+              ]
+            }
+          }
+          Solid {
+            translation 0.097100 0.000000 0.010000
+            children [
+              DEF livox_mid40_visual Shape {
+                castShadows FALSE
+                appearance PBRAppearance {
+                  baseColor 0.0 0.0 0.8
+                  roughness 0.5
+                  metalness 0.1
+                }
+                geometry Mesh {
+                  url "../meshes/livox_mid40.obj"
+                }
+              }
+              Solid {
+                translation -0.020000 0.000000 0.010000
+                children [
+                  Lidar {
+                    name "rplidar"
+                    horizontalResolution 1024
+                    fieldOfView 6.28318
+                    minRange 0.1
+                    maxRange 10.0
+                  }
+                ]
+                name "livox"
+                physics Physics {
+                  density -1
+                  mass 0.100000
+                  centerOfMass [ 0.000000 0.000000 0.000000 ]
+                  inertiaMatrix [
+                    1.000000e-02 1.000000e-02 1.000000e-02
+                    0.000000e+00 0.000000e+00 0.000000e+00
+                  ]
+                }
+              }
+            ]
+            name "livox_base"
+            boundingObject Pose {
+              translation -0.043000 0.000000 0.000000
+              children [
+                Box {
+                  size 0.090000 0.070000 0.065000
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.100000
+              centerOfMass [ 0.000000 0.000000 0.000000 ]
+              inertiaMatrix [
+                1.000000e-02 1.000000e-02 1.000000e-02
+                0.000000e+00 0.000000e+00 0.000000e+00
+              ]
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis -0.000000 -1.000000 0.000000
+              anchor 0.002630 0.141670 -0.047310
+              dampingConstant 0.1
+              staticFriction 1.0
+            }
+            device [
+              RotationalMotor {
+                name "rocker_L_joint"
+                maxVelocity 10.0
+                minPosition -0.5
+                maxPosition 0.5
+                maxTorque 100.0
+              }
+              PositionSensor {
+                name "rocker_L_joint_sensor"
+              }
+            ]
+            endPoint Solid {
+              translation 0.002630 0.141670 -0.047310
+              rotation 0.000000 0.000000 1.000000 3.141593
+              children [
+                DEF Rocker_visual Shape {
+                  castShadows FALSE
+                  appearance PBRAppearance {
+                    baseColor 0.15 0.15 0.15
+                    roughness 0.5
+                    metalness 0.1
+                  }
+                  geometry Mesh {
+                    url "../meshes/Rocker.obj"
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 -1.000000 0.000000
+                    anchor -0.152560 -0.082140 -0.088020
+                    dampingConstant 0.1
+                    staticFriction 0.3125
+                  }
+                  device [
+                    RotationalMotor {
+                      name "wheel_FL_joint"
+                      maxVelocity 2.0
+                      maxTorque 1000.0
+                    }
+                    PositionSensor {
+                      name "wheel_FL_joint_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation -0.152560 -0.082140 -0.088020
+                    children [
+                      DEF WheelA_visual Shape {
+                        castShadows FALSE
+                        appearance PBRAppearance {
+                          baseColor 0.1 0.1 0.1
+                          roughness 0.9
+                          metalness 0.1
+                        }
+                        geometry Mesh {
+                          url "../meshes/WheelA.obj"
+                        }
+                      }
+                    ]
+                    name "wheel_FL_link"
+                    boundingObject Group {
+                      children [
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.057
+                              height 0.07
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.0625
+                              height 0.04
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.067000 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.03
+                              height 0.14
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 1.283642
+                      centerOfMass [ 0.000000 0.030026 0.000000 ]
+                      inertiaMatrix [
+                        4.910000e-04 5.716000e-04 4.910000e-04
+                        1.239620e-06 5.525820e-07 -2.082042e-06
+                      ]
+                    }
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 -1.000000 0.000000
+                    anchor 0.152560 -0.082140 -0.088020
+                    dampingConstant 0.1
+                    staticFriction 0.3125
+                  }
+                  device [
+                    RotationalMotor {
+                      name "wheel_RL_joint"
+                      maxVelocity 2.0
+                      maxTorque 1000.0
+                    }
+                    PositionSensor {
+                      name "wheel_RL_joint_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.152560 -0.082140 -0.088020
+                    children [
+                      USE WheelA_visual
+                    ]
+                    name "wheel_RL_link"
+                    boundingObject Group {
+                      children [
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.057
+                              height 0.07
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.0625
+                              height 0.04
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.067000 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.03
+                              height 0.14
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 1.283642
+                      centerOfMass [ 0.000000 0.030026 0.000000 ]
+                      inertiaMatrix [
+                        4.910000e-04 5.716000e-04 4.910000e-04
+                        1.239620e-06 5.525820e-07 -2.082042e-06
+                      ]
+                    }
+                  }
+                }
+              ]
+              name "rocker_L_link"
+              physics Physics {
+                density -1
+                mass 1.387336
+                centerOfMass [ 0.000000 0.013460 -0.065060 ]
+                inertiaMatrix [
+                  2.956000e-03 2.924000e-02 2.832000e-02
+                  -1.489324e-06 -8.103407e-06 7.112000e-05
+                ]
+              }
+            }
+          }
+          HingeJoint {
+            jointParameters HingeJointParameters {
+              axis 0.000000 1.000000 0.000000
+              anchor 0.002630 -0.141670 -0.047310
+              dampingConstant 0.1
+              staticFriction 1.0
+            }
+            device [
+              RotationalMotor {
+                name "rocker_R_joint"
+                maxVelocity 10.0
+                minPosition -0.5
+                maxPosition 0.5
+                maxTorque 100.0
+              }
+              PositionSensor {
+                name "rocker_R_joint_sensor"
+              }
+            ]
+            endPoint Solid {
+              translation 0.002630 -0.141670 -0.047310
+              children [
+                USE Rocker_visual
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 1.000000 0.000000
+                    anchor 0.152560 -0.082140 -0.088020
+                    dampingConstant 0.1
+                    staticFriction 0.3125
+                  }
+                  device [
+                    RotationalMotor {
+                      name "wheel_FR_joint"
+                      maxVelocity 2.0
+                      maxTorque 1000.0
+                    }
+                    PositionSensor {
+                      name "wheel_FR_joint_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation 0.152560 -0.082140 -0.088020
+                    children [
+                      DEF WheelB_visual Shape {
+                        castShadows FALSE
+                        appearance PBRAppearance {
+                          baseColor 0.1 0.1 0.1
+                          roughness 0.9
+                          metalness 0.1
+                        }
+                        geometry Mesh {
+                          url "../meshes/WheelB.obj"
+                        }
+                      }
+                    ]
+                    name "wheel_FR_link"
+                    boundingObject Group {
+                      children [
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.057
+                              height 0.07
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.0625
+                              height 0.04
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.067000 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.03
+                              height 0.14
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 1.283642
+                      centerOfMass [ 0.000000 0.030026 0.000000 ]
+                      inertiaMatrix [
+                        4.910000e-04 5.716000e-04 4.910000e-04
+                        1.239620e-06 5.525820e-07 -2.082042e-06
+                      ]
+                    }
+                  }
+                }
+                HingeJoint {
+                  jointParameters HingeJointParameters {
+                    axis 0.000000 1.000000 0.000000
+                    anchor -0.152560 -0.082140 -0.088020
+                    dampingConstant 0.1
+                    staticFriction 0.3125
+                  }
+                  device [
+                    RotationalMotor {
+                      name "wheel_RR_joint"
+                      maxVelocity 2.0
+                      maxTorque 1000.0
+                    }
+                    PositionSensor {
+                      name "wheel_RR_joint_sensor"
+                    }
+                  ]
+                  endPoint Solid {
+                    translation -0.152560 -0.082140 -0.088020
+                    children [
+                      USE WheelB_visual
+                    ]
+                    name "wheel_RR_link"
+                    boundingObject Group {
+                      children [
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.057
+                              height 0.07
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.044850 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.0625
+                              height 0.04
+                            }
+                          ]
+                        }
+                        Pose {
+                          translation 0.000000 0.067000 0.000000
+                          rotation 1.000000 0.000000 0.000000 1.570796
+                          children [
+                            Cylinder {
+                              radius 0.03
+                              height 0.14
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                    physics Physics {
+                      density -1
+                      mass 1.283642
+                      centerOfMass [ 0.000000 0.030026 0.000000 ]
+                      inertiaMatrix [
+                        4.910000e-04 5.716000e-04 4.910000e-04
+                        1.239620e-06 5.525820e-07 -2.082042e-06
+                      ]
+                    }
+                  }
+                }
+              ]
+              name "rocker_R_link"
+              physics Physics {
+                density -1
+                mass 1.387336
+                centerOfMass [ 0.000000 0.013460 -0.065060 ]
+                inertiaMatrix [
+                  2.956000e-03 2.924000e-02 2.832000e-02
+                  -1.489324e-06 -8.103407e-06 7.112000e-05
+                ]
+              }
+            }
+          }
+          Solid {
+            translation -0.005200 0.056000 -0.006500
+            children [
+              DEF Antenna_visual Shape {
+                castShadows FALSE
+                appearance PBRAppearance {
+                  baseColor 0.1 0.1 0.1
+                  roughness 0.5
+                  metalness 0.1
+                }
+                geometry Mesh {
+                  url "../meshes/Antenna.obj"
+                }
+              }
+            ]
+            name "antenna_link"
+            boundingObject Pose {
+              translation 0.000000 0.000000 0.028000
+              children [
+                Cylinder {
+                  radius 0.0055
+                  height 0.056
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 0.001237
+              centerOfMass [ 0.000000 0.000000 0.028828 ]
+              inertiaMatrix [
+                2.552900e-07 2.552900e-07 1.354000e-08
+                0.000000e+00 0.000000e+00 0.000000e+00
+              ]
+            }
+          }
+        ]
+        name "base_link"
+        boundingObject Pose {
+          translation -0.025000 -0.003000 -0.040000
+          children [
+            Box {
+              size 0.320000 0.270000 0.100000
+            }
+          ]
+        }
+        physics Physics {
+          density -1
+          mass 1.584994
+          centerOfMass [ -0.019662 0.011643 -0.031802 ]
+          inertiaMatrix [
+            2.920000e-02 1.830000e-02 2.560000e-02
+            1.177000e-03 -8.871000e-04 2.226000e-04
+          ]
+        }
+      }
+    ]
+    name IS name
+  }
+}

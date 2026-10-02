@@ -56,7 +56,7 @@ RUN apt install ros-humble-teleop-twist-joy -y
 
 #install for gz sim
 RUN apt-get install -y ros-humble-ros-ign-bridge && \
-apt-get install -y ros-humble-ros-gz -y
+    apt-get install -y ros-humble-ros-gz -y
 RUN apt-get install ros-humble-controller-manager -y
 RUN apt-get install ros-humble-ros2-control -y
 RUN apt-get install ros-humble-ros2-controllers -y
@@ -76,6 +76,14 @@ RUN sudo apt install pip -y
 RUN pip3 install opencv-python opencv-contrib-python transforms3d
 RUN apt-get update && apt install ros-humble-tf-transformations -y
 #RUN apt-get update && apt-get install -y ros-humble-ros-gzharmonic -y
+
+# Webots
+RUN apt-get update && apt-get install -y wget
+RUN wget -qO- https://cyberbotics.com/Cyberbotics.asc | gpg --dearmor -o /usr/share/keyrings/cyberbotics.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cyberbotics.gpg] https://cyberbotics.com/debian/ binary-amd64/" | tee /etc/apt/sources.list.d/cyberbotics.list && \
+    apt-get update && apt-get install -y webots ros-humble-webots-ros2
+# urdf2webots può essere rimosso dopo aver completato il passaggio da Gazebo a Webots, serve solo per tradurre i file .urdf in .proto
+RUN pip3 install urdf2webots
 
 #RUN export GZ_SIM_RESOURCE_PATH=~/ros2_ws/src/ros2_iiwa/iiwa_description/gazebo/models
 ENV GZ_SIM_RESOURCE_PATH=~/ros2_ws/src/ros2_iiwa/iiwa_description/gazebo/models

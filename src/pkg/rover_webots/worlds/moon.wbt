@@ -1,0 +1,192 @@
+#VRML_SIM R2025a utf8
+
+IMPORTABLE EXTERNPROTO "../protos/Rover.proto"
+
+WorldInfo {
+  gravity 1.622
+}
+Viewpoint {
+  orientation 0.08953216751171957 0.6023006920994778 -0.7932325430018258 0.23921489461358683
+  position -9.473988038548688 3.913183346419944 16.068419778624804
+}
+Background {
+  skyColor [ 0.1 0.1 0.1 ]
+}
+DirectionalLight {
+  direction -0.5 0.5 -1
+  intensity 1.5
+  castShadows TRUE
+}
+Solid {
+  name "moon"
+  translation 0 0 4.93
+  rotation 1 0 0 1.5708
+  children [
+    DEF TERRENO Shape {
+      castShadows FALSE
+      appearance PBRAppearance {
+        baseColor 0.8 0.8 0.8
+        roughness 1
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "../meshes/apollo_11_normals.obj"
+        ]
+      }
+    }
+  ]
+  boundingObject Shape {
+    geometry Mesh {
+      url [
+        "../meshes/apollo_11_normals.obj"
+      ]
+    }
+  }
+}
+
+Robot {
+  name "Ros2Supervisor"
+  controller "<extern>"
+  supervisor TRUE
+}
+Solid {
+  translation -7 7 15.42
+  name "rock1"
+  children [
+    Transform {
+      scale 0.4 0.4 0.4
+      children [
+        Transform {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.5 0.5 0.5
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+                url [ "../meshes/Rock.stl" ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject Pose {
+    translation 0 0 0
+    children [
+      Shape {
+        geometry Sphere {
+          radius 0.4
+        }
+      }
+    ]
+  }
+}
+Solid {
+  translation 0 -15 14.61
+  name "rock2"
+  children [
+    Transform {
+      scale 0.4 0.4 0.4
+      children [
+        Transform {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.5 0.5 0.5
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+                url [ "../meshes/Rock.stl" ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject Pose {
+    translation 0 0 0
+    children [
+      Shape {
+        geometry Sphere {
+          radius 0.4
+        }
+      }
+    ]
+  }
+}
+Solid {
+  translation -21 29 15.77
+  name "rock3"
+  children [
+    Transform {
+      scale 0.5 0.5 0.5
+      children [
+        Transform {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.5 0.5 0.8
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+                url [ "../meshes/Rock_blu.stl" ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject Pose {
+    translation 0 0 0
+    children [
+      Shape {
+        geometry Sphere {
+          radius 0.5
+        }
+      }
+    ]
+  }
+}
+Solid {
+  translation -25 24 15.26
+  name "rock4"
+  children [
+    Transform {
+      scale 0.5 0.5 0.5
+      children [
+        Transform {
+          children [
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.5 0.8 0.5
+                roughness 1
+                metalness 0
+              }
+              geometry Mesh {
+                url [ "../meshes/Rock_green.stl" ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+  boundingObject Pose {
+    translation 0 0 0
+    children [
+      Shape {
+        geometry Sphere {
+          radius 0.5
+        }
+      }
+    ]
+  }
+}
