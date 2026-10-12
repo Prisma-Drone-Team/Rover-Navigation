@@ -39,14 +39,8 @@ void TakePhotoPrimitive::initialize(
   last_image_time_ = node_->now();
   request_time_    = node_->now();
 
-  // Continuous subscription: we keep the most recent frame around so that,
-  // when execute() is called, we only have to wait for the next fresh one.
-  image_sub_ = node_->create_subscription<sensor_msgs::msg::Image>(
-    image_topic_, rclcpp::SensorDataQoS(),
-    std::bind(&TakePhotoPrimitive::image_callback, this, std::placeholders::_1));
-
   RCLCPP_WARN(logger_,
-    "[TakePhotoPrimitive] initialized: topic='%s', dir='%s', timeout=%.1fs",
+    "[TakePhotoPrimitive] initialized: topic='%s', dir='%s', timeout=%.1fs (on-demand subscription)",
     image_topic_.c_str(), photo_dir_.c_str(), timeout_);
 }
 
@@ -70,8 +64,15 @@ bool TakePhotoPrimitive::execute(const std::vector<std::string> & args)
 
   label_        = args.empty() ? "photo" : args[0];
   request_time_ = node_->now();
+  have_image_   = false;
+  last_image_   = nullptr;
   status_       = PrimitiveStatus::RUNNING;
   feedback_msg_ = "Waiting for a fresh frame";
+
+  // Subscribe on-demand only when photo is requested to avoid streaming high-res images continuously
+  image_sub_ = node_->create_subscription<sensor_msgs::msg::Image>(
+    image_topic_, rclcpp::SensorDataQoS(),
+    std::bind(&TakePhotoPrimitive::image_callback, this, std::placeholders::_1));
 
   RCLCPP_WARN(logger_, "[TakePhotoPrimitive] capturing '%s'", label_.c_str());
   return true;
@@ -87,11 +88,12 @@ void TakePhotoPrimitive::tick()
     feedback_msg_ = "No frame received within timeout";
     RCLCPP_ERROR(logger_, "[TakePhotoPrimitive] timeout, no frame on '%s'",
                  image_topic_.c_str());
+    image_sub_.reset();
     return;
   }
 
   // Only accept a frame that arrived AFTER execute() (fresh viewpoint).
-  if (!have_image_ || last_image_time_ <= request_time_) return;
+  if (!have_image_ || !last_image_) return;
 
   cv_bridge::CvImagePtr cv_ptr;
   try {
@@ -100,6 +102,7 @@ void TakePhotoPrimitive::tick()
     status_       = PrimitiveStatus::FAILED;
     feedback_msg_ = std::string("cv_bridge error: ") + e.what();
     RCLCPP_ERROR(logger_, "[TakePhotoPrimitive] cv_bridge: %s", e.what());
+    image_sub_.reset();
     return;
   }
 
@@ -121,6 +124,9 @@ void TakePhotoPrimitive::tick()
     feedback_msg_ = "imwrite failed for " + path;
     RCLCPP_ERROR(logger_, "[TakePhotoPrimitive] imwrite failed: %s", path.c_str());
   }
+
+  // Image saved: unsubscribe immediately
+  image_sub_.reset();
 }
 
 void TakePhotoPrimitive::cancel()
@@ -128,7 +134,16 @@ void TakePhotoPrimitive::cancel()
   if (status_ != PrimitiveStatus::RUNNING) return;
   status_       = PrimitiveStatus::CANCELLED;
   feedback_msg_ = "Cancelled by manager";
+  image_sub_.reset();
   RCLCPP_WARN(logger_, "[TakePhotoPrimitive] cancelled");
+}
+
+void TakePhotoPrimitive::reset()
+{
+  PrimitiveBase::reset();
+  image_sub_.reset();
+  have_image_ = false;
+  last_image_ = nullptr;
 }
 
 }  // namespace rover_manager

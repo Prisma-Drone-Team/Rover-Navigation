@@ -40,6 +40,7 @@ public:
   bool execute(const std::vector<std::string> & args) override;
   void tick() override;
   void cancel() override;
+  void reset() override;
 
 private:
   void image_callback(const sensor_msgs::msg::Image::ConstSharedPtr msg);
